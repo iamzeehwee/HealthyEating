@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Healthy Eating</string>
+
+    <string name="title_Favourite">Favourite</string>
+    <string name="title_Eateries">Eateries</string>
+    <string name="title_Caterers">Caterers</string>
+    <string name="title_HCSProducts">HCS Products</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="sort_array">
+        <item>Map View</item>
+        <item>List View A - Z</item>
+        <item>List View Z - A</item>
+    </string-array>
+
+    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_asas">asas</string>
+    <string name="title_activity_eateries_list_view">EateriesListView</string>
+</resources>

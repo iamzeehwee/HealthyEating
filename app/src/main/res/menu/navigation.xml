@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_favourite"
+        android:icon="@drawable/ic_action_favourite"
+        android:title="@string/title_Favourite"
+        android:label="@string/title_Favourite" />
+
+    <item
+        android:id="@+id/navigation_eateries"
+        android:icon="@drawable/ic_action_eateries"
+        android:title="@string/title_Eateries"
+        android:label="@string/title_Eateries" />
+
+    <item
+        android:id="@+id/navigation_caterers"
+        android:icon="@drawable/ic_action_caterers"
+        android:title="@string/title_Caterers"
+        android:label="@string/title_Caterers" />
+
+    <item
+        android:id="@+id/navigation_HCSProduct"
+        android:icon="@drawable/ic_action_hcsproducts"
+        android:title="@string/title_HCSProducts"
+        android:label="@string/title_HCSProducts" />
+
+</menu>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#70ad47</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="bgBottomNavigation">#70ad47</color>
+
+    <color name="bgBottomNavigationClicked">#ffffff</color>
+    <color name="searchBar">#ffffff</color>
+    <color name="colorButton">#ED7D31</color>
+    <color name="sortColor">#E7E6E6</color>
+
+    <color name="black_overlay">#66000000</color>
+</resources>
