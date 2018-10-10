@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.healthyeating.healthyeating.Controller.SingletonManager;
-import com.example.healthyeating.healthyeating.Entity.Location;
+import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
 import com.example.healthyeating.healthyeating.R;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -48,10 +48,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.example.healthyeating.healthyeating.Controller.LocationsManager;
+
 import java.util.ArrayList;
+
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements SearchAndSlide.OnSearchSubmitListener,OnMapReadyCallback,LocationDetailsFragment.OnFragmentInteractionListener,SearchAndSlide.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements SearchAndSlide.OnSliderChangeListener, SearchAndSlide.OnSearchSubmitListener, OnMapReadyCallback, LocationDetailsFragment.OnFragmentInteractionListener, SearchAndSlide.OnFragmentInteractionListener {
     private ActionBar toolbar;
     private BottomNavigationView mBottomNavigation;
     private FrameLayout mMainFrame;
@@ -64,20 +66,21 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
     private HCSProductsFragment hcsProductsFragment;
     private LocationDetailsFragment ldf;
     SearchAndSlide searchSlide;
-    SearchView searchView ;
+    SearchView searchView;
     static int height = 0;
     int width = 0;
     LocationsManager lm;
     Marker prev_marker;
     GoogleMap mMap;
     String value;
-
+    String searchQuery = "";
     private Circle solidCircle;
     private Circle alphaCircle;
 
-
+    ArrayList<Marker> listOfMarkers;
     private LocationManager locationManager;
-    String latitude,longitude;
+    double latitude = 0;
+    double longitude = 0;
     private static final int REQUEST_LOCATION = 1;
 
 
@@ -89,15 +92,14 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
     }
 
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
-        ArrayList<Location> loc = new ArrayList<>();
+        ArrayList<HealthyLocation> loc = new ArrayList<>();
         if (value != null) {
 
-            Location clickLoc = lm.getLocation(Integer.parseInt(value));
+            HealthyLocation clickLoc = lm.getLocation(Integer.parseInt(value));
             loc.add(clickLoc);
             loadMapWithMarkers(loc);
 
@@ -106,22 +108,22 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
             String floor_number = clickLoc.getFloor();
             String unit_number = clickLoc.getUnit();
 
-            String display = "\r\n\tName : "+name+"\r\n"
-                    + "\tAddress : "+address+"\r\n"
-                    +"\tFloor No. : "+floor_number+"\r\n"
-                    +"\tUnit No. : "+unit_number+"\r\n";
+            String display = "\r\n\tName : " + name + "\r\n"
+                    + "\tAddress : " + address + "\r\n"
+                    + "\tFloor No. : " + floor_number + "\r\n"
+                    + "\tUnit No. : " + unit_number + "\r\n";
 
             //Set infomration box to be visible
             toggleInformationBox(true);
             btmTextView.setText(display);
 
-        }
-        else {
-            loc = lm.getListOfLocation("Eateries");
+        } else {
+
+            loc = lm.getListOfLocation();
             loadMapWithMarkers(loc);
         }
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198 ), 11.0f));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198), 11.0f));
 
 
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
@@ -131,29 +133,28 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
 
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             getLocation();
+            LatLng latLng = new LatLng(latitude, longitude);
+            //mMap.addMarker(new MarkerOptions().position(latLng));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            // mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+
+
+            lm.setCurrentLatLng(latitude, longitude);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            mMap.setMyLocationEnabled(true);
         }
 
-        LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
-        //mMap.addMarker(new MarkerOptions().position(latLng));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
-        //To test, you can use set your own location lat long in the emulator settings
-         mMap.addCircle(new CircleOptions()
-                .center(latLng)
-                .radius(20)
-                 .strokeWidth(1)
-                 .strokeColor(Color.WHITE)
-                .fillColor(Color.argb(255, 0, 0, 255))
-                .clickable(true));
-
-        mMap.addCircle(new CircleOptions()
-                .center(latLng)
-                .radius(30)
-                .strokeWidth(0)
-                .strokeColor(Color.BLUE)
-                .fillColor(Color.argb(60, 0, 0, 255))
-                .clickable(true));
 
     }
 
@@ -193,11 +194,36 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.navigation_eateries:
-                        return loadFragment(searchSlide);
                     case R.id.navigation_favourite:
                         return loadFragment(favouriteFragment);
+
+                    case R.id.navigation_eateries:
+                        if(!lm.getLocationType().equals("Eateries")){
+                            //Changing from other tab to eateries, reload the markers
+                            lm.setLocationType("Eateries");
+                            removeAllMarkersFromMap();
+                            //Not sure if want to reset slider value and reset textfield..
+                             searchSlide.resetSliderAndTextBox();
+                            ArrayList<HealthyLocation> loc = new ArrayList<>();
+                            loc = lm.getListOfLocation();
+                            loadMapWithMarkers(loc);
+
+                        }
+
+
+                        return loadFragment(searchSlide);
+
                     case R.id.navigation_caterers:
+                        if(!lm.getLocationType().equals("Caterers")){
+                            //Changing from other tab to caterers, reload the markers
+                            lm.setLocationType("Caterers");
+                            removeAllMarkersFromMap();
+                            searchSlide.resetSliderAndTextBox();
+                            ArrayList<HealthyLocation> loc = new ArrayList<>();
+                            loc = lm.getListOfLocation();
+                            loadMapWithMarkers(loc);
+                        }
+
                         return loadFragment(searchSlide);
                     case R.id.navigation_HCSProduct:
                         return loadFragment(hcsProductsFragment);
@@ -218,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
         btn_close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 toggleInformationBox(false);
-                loadMapWithMarkers(lm.getListOfLocation("Eateries"));
+                loadMapWithMarkers(lm.getListOfLocation());
             }
         });
 
@@ -243,6 +269,11 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
         //Hide information box
         toggleInformationBox(false);
 
+
+
+        //Init arrayList
+        listOfMarkers = new ArrayList<Marker>();
+
     }
 
 
@@ -254,23 +285,30 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
         btn_save.setAlpha(value);
         btn_close.setAlpha(value);
     }
-
-    private void loadMapWithMarkers(ArrayList<Location> loc){
-        mMap.clear();
+   private void removeAllMarkersFromMap(){
+        //Created this function because if we use mMap.clear(), the current location circle will be cleared too.
+        for(int i = 0; i<listOfMarkers.size();i++){
+            listOfMarkers.get(i).remove();
+        }
+        listOfMarkers.clear();
+   }
+    private void loadMapWithMarkers(ArrayList<HealthyLocation> loc){
+        //mMap.clear();
+        removeAllMarkersFromMap();
         Log.d("SearchBar","Cleared");
         for(int i = 0 ; i<loc.size();i++){
             LatLng ll = new LatLng(loc.get(i).getLatitude(), loc.get(i).getLongitude());
-            mMap.addMarker(new MarkerOptions().position(ll)
-                    .snippet(""+loc.get(i).getId()));
+             listOfMarkers.add(mMap.addMarker(new MarkerOptions().position(ll)
+                    .snippet(""+loc.get(i).getId())));
 
         }
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Toast.makeText(MainActivity.this, "Clicked on LocationID "+marker.getSnippet(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, "Clicked on LocationID "+marker.getSnippet(), Toast.LENGTH_LONG).show();
 
-                Location clickLoc = lm.getLocation(Integer.parseInt(marker.getSnippet()));
+                HealthyLocation clickLoc = lm.getLocation(Integer.parseInt(marker.getSnippet()));
 
                 String address = clickLoc.getAddress();
                 String name = clickLoc.getName();
@@ -322,29 +360,23 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
             android.location.Location passive_provider_location = locationManager.getLastKnownLocation(LocationManager. PASSIVE_PROVIDER);
 
             if (network_provider_location != null) {
-                double latti = network_provider_location.getLatitude();
-                double longi = network_provider_location.getLongitude();
-                latitude = String.valueOf(latti);
-                longitude = String.valueOf(longi);
+                latitude = network_provider_location.getLatitude();
+                longitude = network_provider_location.getLongitude();
 
                 Log.d("LOCA11","Your current location is"+ "\n" + "Lattitude = " + latitude
                         + "\n" + "Longitude = " + longitude);
 
             } else  if (gps_provider_location != null) {
-                double latti = gps_provider_location.getLatitude();
-                double longi = gps_provider_location.getLongitude();
-                latitude = String.valueOf(latti);
-                longitude = String.valueOf(longi);
+                latitude = gps_provider_location.getLatitude();
+                longitude = gps_provider_location.getLongitude();
 
                 Log.d("LOCA12","Your current location is"+ "\n" + "Lattitude = " + latitude
                         + "\n" + "Longitude = " + longitude);
 
 
             } else  if (passive_provider_location != null) {
-                double latti = passive_provider_location.getLatitude();
-                double longi = passive_provider_location.getLongitude();
-                latitude = String.valueOf(latti);
-                longitude = String.valueOf(longi);
+                latitude =  passive_provider_location.getLatitude();
+                longitude = passive_provider_location.getLongitude();
 
                Log.d("LOCA13","Your current location is"+ "\n" + "Lattitude = " + latitude
                         + "\n" + "Longitude = " + longitude);
@@ -427,8 +459,28 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
     @Override
     public void searchSubmit(String query) {
         Log.d("SearchBar","This called");
-        loadMapWithMarkers(lm.searchLocations("Eateries",query));
+        searchQuery = query;
+        loadMapWithMarkers(lm.searchLocations(searchQuery));
 
         Toast.makeText(MainActivity.this, "Clicked "+ query, Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    public void onSliderRelease(double dis) {
+        Log.d("Slider1","In here with distance "+dis);
+        lm.setLimitDistance(dis);
+        ArrayList<HealthyLocation> loc = new ArrayList<>();
+
+        loadMapWithMarkers(lm.searchLocations(searchQuery));
+
+
+    }
+
+    @Override
+    public void onSliderHoldDown() {
+        //clear map markers first
+        removeAllMarkersFromMap();
+    }
+
+
 }

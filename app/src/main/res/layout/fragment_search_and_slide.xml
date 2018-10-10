@@ -69,8 +69,8 @@
             android:layout_marginStart="60dp"
             android:layout_marginTop="100dp"
             android:layout_weight="10"
-            android:max="5000"
-            android:progress="5000"
+            android:max="30000"
+            android:progress="30000"
             android:progressDrawable="@drawable/red_scrubber_progress"
             android:thumb="@drawable/custom_distance" />
 
@@ -83,7 +83,7 @@
             android:layout_marginStart="337dp"
             android:layout_marginLeft="340dp"
             android:layout_weight="1"
-            android:text="5.0km"
+            android:text="30.0km"
             android:textColorLink="@color/colorPrimaryDark" />
     </RelativeLayout>
 

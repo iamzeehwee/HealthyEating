@@ -3,6 +3,7 @@ package com.example.healthyeating.healthyeating.Boundary;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,11 +19,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.AdapterView;
 
-import com.example.healthyeating.healthyeating.Entity.Location;
+import com.example.healthyeating.healthyeating.Controller.LocationsManager;
+import com.example.healthyeating.healthyeating.Controller.SingletonManager;
 import com.example.healthyeating.healthyeating.R;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,7 +43,10 @@ public class SearchAndSlide extends Fragment {
     private String mParam1;
     private String mParam2;
     SearchView searchView;
+    SeekBar seek;
     Activity activity;
+    private double seekBarValue = 0;
+    private static final int MAX_SEEKBAR_VALUE = 50000;
     private OnFragmentInteractionListener mListener;
     Spinner spinner;
 
@@ -68,6 +72,11 @@ public class SearchAndSlide extends Fragment {
         return fragment;
     }
 
+    public void resetSliderAndTextBox(){
+        searchView.setQuery("",false);
+        seek.setProgress(MAX_SEEKBAR_VALUE);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +93,7 @@ public class SearchAndSlide extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_search_and_slide, container, false);
-
+        seek = (SeekBar) v.findViewById(R.id.seekBar2);
          searchView = (SearchView) v.findViewById(R.id.searchBar);
          searchView.setQuery("", false);
          searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -104,7 +113,6 @@ public class SearchAndSlide extends Fragment {
             public boolean onQueryTextSubmit(String query) {
 
                Log.d("SearchBar", "OnQueryTextSubmitcalled   "+ query);
-                // Do your task here
                 try{
                     ((OnSearchSubmitListener)getContext() ).searchSubmit(query);
                 }catch (ClassCastException cce){
@@ -122,6 +130,7 @@ public class SearchAndSlide extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 TextView t=(TextView)v.findViewById(R.id.textView4);
                 //t.setText(String.valueOf(i));
+
                 int val = (i * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
                 double dis = (double)i/1000.0;
                 if(dis<1.0)
@@ -129,16 +138,32 @@ public class SearchAndSlide extends Fragment {
                 else
                     t.setText(f.format((double)i/1000.0)+"km");
                 t.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
+                seekBarValue = dis;
+
+
+
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+                 Log.d("Slider1","Hold down");
+                try{
+                    ((OnSliderChangeListener)getContext() ).onSliderHoldDown();
+                }catch (ClassCastException cce){
 
+                }
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.d("Slider1","Release");
+                //Interact with MainActivity when slider change so that MainActivity can interact with the LocationsManager
 
+                try{
+                    ((OnSliderChangeListener)getContext() ).onSliderRelease(seekBarValue);
+                }catch (ClassCastException cce){
+
+                }
             }
         });
 
@@ -225,5 +250,14 @@ public class SearchAndSlide extends Fragment {
     public interface OnSearchSubmitListener{
         public void searchSubmit(String query);
     }
+
+    public interface OnSliderChangeListener{
+        public void onSliderRelease(double dis);
+        public void onSliderHoldDown();
+
+
+
+    }
+
 
 }

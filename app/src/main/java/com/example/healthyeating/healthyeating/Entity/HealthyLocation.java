@@ -1,6 +1,6 @@
 package com.example.healthyeating.healthyeating.Entity;
 
-public class Location {
+public class HealthyLocation {
 
     private int id;
     private String name;
@@ -16,7 +16,7 @@ public class Location {
     private String locationType;
 
 
-    public Location(int id,String name, String address, String zipCode, String floor, String unit, double longitude, double latitude, String locationType){
+    public HealthyLocation(int id, String name, String address, String zipCode, String floor, String unit, double longitude, double latitude, String locationType){
         this.id = id;
         this.name = name;
         this.address= address;

@@ -2,8 +2,6 @@ package com.example.healthyeating.healthyeating.Boundary;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +12,7 @@ import android.view.View;
 
 import com.example.healthyeating.healthyeating.Controller.LocationsManager;
 import com.example.healthyeating.healthyeating.Controller.SingletonManager;
+import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
 import com.example.healthyeating.healthyeating.R;
 
 import java.io.BufferedReader;
@@ -21,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -203,9 +201,9 @@ public class SplashScreen extends AppCompatActivity {
        //Init controller here first
         lm = SingletonManager.getLocationManagerInstance();
        readKMLCreateObj();
-       ArrayList<com.example.healthyeating.healthyeating.Entity.Location> res = lm.searchLocations("Eateries","Subway Tam");
-       for(int i = 0; i<res.size();i++)
-           Log.d("Searching ", res.get(i).getName()+" Address :"+res.get(i).getAddress());
+      // ArrayList<HealthyLocation> res = lm.searchLocations("Subway Tam");
+     //  for(int i = 0; i<res.size();i++)
+       //    Log.d("Searching ", res.get(i).getName()+" Address :"+res.get(i).getAddress());
 
    }
 

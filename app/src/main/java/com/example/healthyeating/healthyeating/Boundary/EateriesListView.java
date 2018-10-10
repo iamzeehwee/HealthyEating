@@ -16,12 +16,10 @@ import android.support.v4.app.Fragment;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.RelativeLayout;
-import android.view.MotionEvent;
 
 import com.example.healthyeating.healthyeating.Controller.LocationsManager;
 import com.example.healthyeating.healthyeating.Controller.SingletonManager;
-import com.example.healthyeating.healthyeating.Entity.Location;
+import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
 import com.example.healthyeating.healthyeating.R;
 import java.util.ArrayList;
 
@@ -41,8 +39,8 @@ public class EateriesListView extends AppCompatActivity {
     String value;
 
     LocationsManager lm = SingletonManager.getLocationManagerInstance();
-    ArrayList<Location> loc = lm.getListOfLocation("Eateries");
-    ArrayAdapter<Location> adapter;
+    ArrayList<HealthyLocation> loc = lm.getListOfLocation();
+    ArrayAdapter<HealthyLocation> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,14 +86,14 @@ public class EateriesListView extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.eateriesListView);
 
         loc = lm.sortList(loc);
-        adapter = new ArrayAdapter<Location>(this, android.R.layout.simple_list_item_1, loc);
+        adapter = new ArrayAdapter<HealthyLocation>(this, android.R.layout.simple_list_item_1, loc);
         listView.setAdapter(adapter);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                loc = lm.searchLocations("Eateries",query);
-                adapter = new ArrayAdapter<Location>(EateriesListView.this, android.R.layout.simple_list_item_1, loc);
+                loc = lm.searchLocations(query);
+                adapter = new ArrayAdapter<HealthyLocation>(EateriesListView.this, android.R.layout.simple_list_item_1, loc);
                 listView.setAdapter(adapter);
                 return false;
             }
@@ -160,7 +158,7 @@ public class EateriesListView extends AppCompatActivity {
                 String locationDetails = listItem.toString();
                 int endIndex =  locationDetails.indexOf("\r\nAddress: ");//locationDetails.indexOf(":") + 1;
                 String address = locationDetails.substring(0, endIndex);
-                int selectedLocID = lm.searchLocationID("Eateries", address);
+                int selectedLocID = lm.searchLocationID(address);
 
                 Intent i = null;
                 i = new Intent(EateriesListView.this, MainActivity.class);
