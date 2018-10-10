@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
          mMap.addCircle(new CircleOptions()
                 .center(latLng)
                 .radius(20)
+                 .strokeWidth(1)
                  .strokeColor(Color.WHITE)
                 .fillColor(Color.argb(255, 0, 0, 255))
                 .clickable(true));
