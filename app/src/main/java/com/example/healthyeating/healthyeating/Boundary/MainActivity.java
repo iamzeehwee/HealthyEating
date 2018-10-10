@@ -28,6 +28,7 @@ import com.example.healthyeating.healthyeating.Controller.SingletonManager;
 import com.example.healthyeating.healthyeating.Entity.Location;
 import com.example.healthyeating.healthyeating.R;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
     static int height = 0;
     int width = 0;
     LocationsManager lm;
-
+    Marker prev_marker;
     GoogleMap mMap;
     String value;
 
@@ -236,7 +237,23 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
                 toggleInformationBox(true);
 
                 btmTextView.setText(display);
+                //Set marker to blue on selected
+                //Issues : If location marker is in same location, i.e Shopping Mall have Koufu, McDonalds, etc, marker will have some issues changing colour,
 
+                if(prev_marker==null){
+                    prev_marker = marker;
+                }
+                else{
+                    prev_marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    prev_marker = marker;
+                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                }
+
+                mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng( 65.07213,-2.109375))
+                        .title("This is my title")
+                        .snippet("and snippet")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
                 return true;
             }
         });
