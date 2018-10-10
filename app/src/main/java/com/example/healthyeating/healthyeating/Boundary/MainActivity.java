@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
         }
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        mMap.setPadding(0, 1000, 0, 300);
+        mMap.setPadding(0, (int)(height*0.418f), 0, (int)(height*0.1254f));
     }
 
     @Override
