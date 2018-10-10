@@ -2,6 +2,7 @@ package com.example.healthyeating.healthyeating.Boundary;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +28,7 @@ import com.example.healthyeating.healthyeating.R;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
 
-public class EateriesListView extends AppCompatActivity {
+public class EateriesListView extends AppCompatActivity implements SearchAndSlide.OnFragmentInteractionListener {
 
     private BottomNavigationView mBottomNavigation;
     private FavouriteFragment favouriteFragment;
@@ -77,11 +78,22 @@ public class EateriesListView extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_eateries:
-                        return loadFragment(searchSlide);
+                        //startActivity(new Intent(EateriesListView.this, settings.class));
+                        lm.setLocationType("Eateries");
+                        loc = lm.getListOfLocation();
+                        adapter = new ArrayAdapter<HealthyLocation>(EateriesListView.this, android.R.layout.simple_list_item_1, loc);
+                        listView.setAdapter(adapter);
+                        //return loadFragment(searchSlide);
+                         return true;
                     case R.id.navigation_favourite:
                         return loadFragment(favouriteFragment);
                     case R.id.navigation_caterers:
-                        return loadFragment(searchSlide);
+                        lm.setLocationType("Caterers");
+                        loc = lm.getListOfLocation();
+                        adapter = new ArrayAdapter<HealthyLocation>(EateriesListView.this, android.R.layout.simple_list_item_1, loc);
+                        listView.setAdapter(adapter);
+                        //return loadFragment(searchSlide);
+                       return true;
                     case R.id.navigation_HCSProduct:
                         return loadFragment(hcsProductsFragment);
                     default:
@@ -268,5 +280,10 @@ public class EateriesListView extends AppCompatActivity {
         }
         else
             return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

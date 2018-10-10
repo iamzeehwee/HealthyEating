@@ -33,7 +33,7 @@ import java.text.DecimalFormat;
  * Use the {@link SearchAndSlide#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchAndSlide extends Fragment {
+public class SearchAndSlide extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -230,6 +230,7 @@ public class SearchAndSlide extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
 
 
