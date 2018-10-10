@@ -6,22 +6,26 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.support.v4.app.Fragment;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.view.inputmethod.InputMethodManager;
 
 import com.example.healthyeating.healthyeating.Controller.LocationsManager;
 import com.example.healthyeating.healthyeating.Controller.SingletonManager;
 import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
 import com.example.healthyeating.healthyeating.R;
 import java.util.ArrayList;
+import java.text.DecimalFormat;
 
 public class EateriesListView extends AppCompatActivity {
 
@@ -37,6 +41,12 @@ public class EateriesListView extends AppCompatActivity {
     ListView listView;
     Spinner spinner;
     String value;
+    SeekBar seek;
+    private double seekBarValue = 0;
+    private static final int MAX_SEEKBAR_VALUE = 50000;
+    DecimalFormat f = new DecimalFormat("##.0");
+    TextView tvSearchResult;
+    LinearLayout resultLayout;
 
     LocationsManager lm = SingletonManager.getLocationManagerInstance();
     ArrayList<HealthyLocation> loc = lm.getListOfLocation();
@@ -84,6 +94,8 @@ public class EateriesListView extends AppCompatActivity {
 
         searchView = (SearchView) findViewById(R.id.searchView);
         listView = (ListView) findViewById(R.id.eateriesListView);
+        resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
+        resultLayout.setVisibility(View.GONE);
 
         loc = lm.sortList(loc);
         adapter = new ArrayAdapter<HealthyLocation>(this, android.R.layout.simple_list_item_1, loc);
@@ -94,14 +106,73 @@ public class EateriesListView extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 loc = lm.searchLocations(query);
                 adapter = new ArrayAdapter<HealthyLocation>(EateriesListView.this, android.R.layout.simple_list_item_1, loc);
-                listView.setAdapter(adapter);
+                if (loc.isEmpty()) {
+                    resultLayout.setVisibility(View.VISIBLE);
+                }
+                else {
+                    Toast.makeText(EateriesListView.this, "Toast 2", Toast.LENGTH_SHORT).show();
+                    resultLayout.setVisibility(View.GONE);
+                    listView.setAdapter(adapter);
+                }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+                boolean searchResult = searchSubmit(newText);
+                if (searchResult == true) {
+                    resultLayout.setVisibility(View.GONE);
+                    listView.setVisibility(View.VISIBLE);
+                } else {
+                    resultLayout.setVisibility(View.VISIBLE);
+                    listView.setVisibility(View.GONE);
+                }
                 return false;
+            }
+        });
+
+        SeekBar sk = (SeekBar) findViewById(R.id.seekBar2);
+        sk.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                TextView t=(TextView)findViewById(R.id.textView4);
+
+                int val = (i * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
+                double dis = (double)i/1000.0;
+                if(dis<1.0)
+                    t.setText(i+"m");
+                else
+                    t.setText(f.format((double)i/1000.0)+"km");
+                    t.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
+                seekBarValue = dis;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.d("Slider1","Hold down");
+                try{
+                    listView.setVisibility(View.GONE);
+                }catch (ClassCastException cce){
+
+                }
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.d("Slider1","Release");
+                //Interact with MainActivity when slider change so that MainActivity can interact with the LocationsManager
+
+                try{
+                    Log.d("Slider1","In here with distance "+ seekBarValue);
+
+                    lm.setLimitDistance(seekBarValue);
+                    loc = lm.searchLocations("");
+                    adapter = new ArrayAdapter<HealthyLocation>(EateriesListView.this, android.R.layout.simple_list_item_1, loc);
+                    listView.setAdapter(adapter);
+                    listView.setVisibility(View.VISIBLE);
+                }catch (ClassCastException cce){
+
+                }
             }
         });
 
@@ -182,9 +253,20 @@ public class EateriesListView extends AppCompatActivity {
         return false;
     }
 
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    public void resetSliderAndTextBox(){
+        searchView.setQuery("",false);
+        seek.setProgress(MAX_SEEKBAR_VALUE);
     }
 
+    public boolean searchSubmit(String query){
+        loc = lm.searchLocations(query);
+        adapter = new ArrayAdapter<HealthyLocation>(EateriesListView.this, android.R.layout.simple_list_item_1, loc);
+        listView.setAdapter(adapter);
+
+        if (loc.isEmpty()) {
+            return false;
+        }
+        else
+            return true;
+    }
 }

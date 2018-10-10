@@ -19,4 +19,5 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_asas">asas</string>
     <string name="title_activity_eateries_list_view">EateriesListView</string>
+    <string name="NoResults">No Results Found.</string>
 </resources>

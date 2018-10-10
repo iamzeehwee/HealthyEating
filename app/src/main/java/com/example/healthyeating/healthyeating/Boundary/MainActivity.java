@@ -153,9 +153,7 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
             }
             mMap.setMyLocationEnabled(true);
         }
-
-
-
+        mMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
     @Override
@@ -269,22 +267,19 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
         //Hide information box
         toggleInformationBox(false);
 
-
-
         //Init arrayList
         listOfMarkers = new ArrayList<Marker>();
-
     }
 
 
 
     private void toggleInformationBox(boolean toggle){
-
         float value = toggle? 1.0f:0.0f;
         btmTextView.setAlpha(value);
         btn_save.setAlpha(value);
         btn_close.setAlpha(value);
     }
+
    private void removeAllMarkersFromMap(){
         //Created this function because if we use mMap.clear(), the current location circle will be cleared too.
         for(int i = 0; i<listOfMarkers.size();i++){
@@ -470,10 +465,7 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
         Log.d("Slider1","In here with distance "+dis);
         lm.setLimitDistance(dis);
         ArrayList<HealthyLocation> loc = new ArrayList<>();
-
         loadMapWithMarkers(lm.searchLocations(searchQuery));
-
-
     }
 
     @Override
