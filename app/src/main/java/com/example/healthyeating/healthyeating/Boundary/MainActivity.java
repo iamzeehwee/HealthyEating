@@ -1,13 +1,20 @@
 package com.example.healthyeating.healthyeating.Boundary;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.hardware.input.InputManager;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +23,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -29,6 +35,8 @@ import com.example.healthyeating.healthyeating.Entity.Location;
 import com.example.healthyeating.healthyeating.R;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.Marker;
 
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -42,8 +50,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.example.healthyeating.healthyeating.Controller.LocationsManager;
 import java.util.ArrayList;
 import android.view.View;
-
-import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity implements SearchAndSlide.OnSearchSubmitListener,OnMapReadyCallback,LocationDetailsFragment.OnFragmentInteractionListener,SearchAndSlide.OnFragmentInteractionListener {
     private ActionBar toolbar;
@@ -65,6 +71,14 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
     Marker prev_marker;
     GoogleMap mMap;
     String value;
+
+    private Circle solidCircle;
+    private Circle alphaCircle;
+
+
+    private LocationManager locationManager;
+    String latitude,longitude;
+    private static final int REQUEST_LOCATION = 1;
 
 
     @Override
@@ -109,11 +123,45 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198 ), 11.0f));
 
+
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+
+        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            getLocation();
+        }
+
+        LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+        //mMap.addMarker(new MarkerOptions().position(latLng));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+        //To test, you can use set your own location lat long in the emulator settings
+         mMap.addCircle(new CircleOptions()
+                .center(latLng)
+                .radius(20)
+                 .strokeColor(Color.WHITE)
+                .fillColor(Color.argb(255, 0, 0, 255))
+                .clickable(true));
+
+        mMap.addCircle(new CircleOptions()
+                .center(latLng)
+                .radius(30)
+                .strokeWidth(0)
+                .strokeColor(Color.BLUE)
+                .fillColor(Color.argb(60, 0, 0, 255))
+                .clickable(true));
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         //Get LocationManager Instance
         lm = SingletonManager.getLocationManagerInstance();
 
@@ -249,15 +297,82 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
                     marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                 }
 
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng( 65.07213,-2.109375))
-                        .title("This is my title")
-                        .snippet("and snippet")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
                 return true;
             }
         });
 
+    }
+
+
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
+                (MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+
+        } else {
+
+            android.location.Location network_provider_location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            android.location.Location gps_provider_location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            android.location.Location passive_provider_location = locationManager.getLastKnownLocation(LocationManager. PASSIVE_PROVIDER);
+
+            if (network_provider_location != null) {
+                double latti = network_provider_location.getLatitude();
+                double longi = network_provider_location.getLongitude();
+                latitude = String.valueOf(latti);
+                longitude = String.valueOf(longi);
+
+                Log.d("LOCA11","Your current location is"+ "\n" + "Lattitude = " + latitude
+                        + "\n" + "Longitude = " + longitude);
+
+            } else  if (gps_provider_location != null) {
+                double latti = gps_provider_location.getLatitude();
+                double longi = gps_provider_location.getLongitude();
+                latitude = String.valueOf(latti);
+                longitude = String.valueOf(longi);
+
+                Log.d("LOCA12","Your current location is"+ "\n" + "Lattitude = " + latitude
+                        + "\n" + "Longitude = " + longitude);
+
+
+            } else  if (passive_provider_location != null) {
+                double latti = passive_provider_location.getLatitude();
+                double longi = passive_provider_location.getLongitude();
+                latitude = String.valueOf(latti);
+                longitude = String.valueOf(longi);
+
+               Log.d("LOCA13","Your current location is"+ "\n" + "Lattitude = " + latitude
+                        + "\n" + "Longitude = " + longitude);
+
+            }else{
+
+                Toast.makeText(this,"Unble to get your location",Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    }
+
+    protected void buildAlertMessageNoGps() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please Turn ON your GPS Connection")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
