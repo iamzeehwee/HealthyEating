@@ -25,7 +25,7 @@ public class LocationsManager {
         Collections.sort(loc, new Comparator<Location>() {
             public int compare(Location o1, Location o2) {
                 if(sortFilter==0)
-                return o1.getName().compareTo(o2.getName());
+                    return o1.getName().compareTo(o2.getName());
                 else if(sortFilter==1)
                     return o2.getName().compareTo(o1.getName());
                 else
@@ -102,8 +102,8 @@ public class LocationsManager {
         address = address_building_name+","+address_blk_no+" "+address_street_name+" S"+postal_code;
         if(address.startsWith(","))
             address = address.substring(1);
-       // Log.d("Location Details : ", name+" Address : "+address);
-       // Log.d("Location coordinate :", longitude+","+latitude);
+        // Log.d("Location Details : ", name+" Address : "+address);
+        // Log.d("Location coordinate :", longitude+","+latitude);
 
         Location loc = new Location(listOfLocation.size(),name,address,postal_code,  floor,  unit,  longitude,  latitude, "Eateries");
         listOfLocation.add(loc);
@@ -146,26 +146,26 @@ public class LocationsManager {
     }
 
     public ArrayList<Location> searchLocations(String type, String address){
-       ArrayList<Location> results = new ArrayList<Location>();
-       address = address.toLowerCase();
-       for(int i = 0 ; i<listOfLocation.size();i++){
+        ArrayList<Location> results = new ArrayList<Location>();
+        address = address.toLowerCase();
+        for(int i = 0 ; i<listOfLocation.size();i++){
             if(listOfLocation.get(i).getLocationType().equals(type)) {
-             String concat = listOfLocation.get(i).getName()+" "+listOfLocation.get(i).getAddress()+" "+listOfLocation.get(i).getZipCode();
-             concat = concat.toLowerCase();
-             String[] addressSplit = address.split(" ");
-             boolean found = true;
-             for(int j = 0; j<addressSplit.length;j++) {
-                 if (concat.indexOf(addressSplit[j])==-1)
-                       found = false;
-             }
+                String concat = listOfLocation.get(i).getName()+" "+listOfLocation.get(i).getAddress()+" "+listOfLocation.get(i).getZipCode();
+                concat = concat.toLowerCase();
+                String[] addressSplit = address.split(" ");
+                boolean found = true;
+                for(int j = 0; j<addressSplit.length;j++) {
+                    if (concat.indexOf(addressSplit[j])==-1)
+                        found = false;
+                }
                 if(found)
-                results.add(listOfLocation.get(i));
+                    results.add(listOfLocation.get(i));
+            }
         }
-       }
 
         results = sortList(results);
 
-       return results;
+        return results;
     }
 
     public int searchLocationID (String type, String address){
@@ -190,7 +190,7 @@ public class LocationsManager {
 
         for(int i = 0 ; i<listOfLocation.size();i++){
             if(listOfLocation.get(i).getId() == ID) {
-               results.add(listOfLocation.get(i));
+                results.add(listOfLocation.get(i));
             }
         }
         return results;

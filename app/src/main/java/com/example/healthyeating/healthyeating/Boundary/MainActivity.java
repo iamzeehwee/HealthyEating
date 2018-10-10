@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
     LocationsManager lm;
 
     GoogleMap mMap;
-String value;
+    String value;
 
 
     @Override
@@ -75,70 +75,39 @@ String value;
 
 
 
-
-
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
-
+        ArrayList<Location> loc = new ArrayList<>();
         if (value != null) {
-            ArrayList<Location> loc = lm.getSearchLocationID(Integer.parseInt(value));
-            loadMapWithSelectedMarkers(loc);
+
+            Location clickLoc = lm.getLocation(Integer.parseInt(value));
+            loc.add(clickLoc);
+            loadMapWithMarkers(loc);
+
+            String address = clickLoc.getAddress();
+            String name = clickLoc.getName();
+            String floor_number = clickLoc.getFloor();
+            String unit_number = clickLoc.getUnit();
+
+            String display = "\r\n\tName : "+name+"\r\n"
+                    + "\tAddress : "+address+"\r\n"
+                    +"\tFloor No. : "+floor_number+"\r\n"
+                    +"\tUnit No. : "+unit_number+"\r\n";
+
+            //Set infomration box to be visible
+            toggleInformationBox(true);
+            btmTextView.setText(display);
+
         }
         else {
-            ArrayList<Location> loc = lm.getListOfLocation("Eateries");
+            loc = lm.getListOfLocation("Eateries");
             loadMapWithMarkers(loc);
         }
-//        for(int i = 0 ; i<loc.size();i++){
-//            LatLng ll = new LatLng(loc.get(i).getLatitude(), loc.get(i).getLongitude());//1.315119,103.8909238,17.92z
-//            googleMap.addMarker(new MarkerOptions().position(ll)
-//                    .snippet(""+loc.get(i).getId()));
-//
-//        }
-//        KmlLayer kmlLayer= null;
-//
-//        try {
-//            kmlLayer = new KmlLayer(googleMap, R.raw.eateries,getApplicationContext());
-//            kmlLayer.addLayerToMap();
-//        } catch (XmlPullParserException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198 ), 11.0f));
-       //googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
-
-
-//        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//            @Override
-//            public boolean onMarkerClick(Marker marker) {
-//                Toast.makeText(MainActivity.this, "Clicked on LocationID "+marker.getSnippet(), Toast.LENGTH_LONG).show();
-//
-//                Location clickLoc = lm.getLocation(Integer.parseInt(marker.getSnippet()));
-//
-//                String address = clickLoc.getAddress();
-//                String name = clickLoc.getName();
-//                String floor_number = clickLoc.getFloor();
-//                String unit_number = clickLoc.getUnit();
-//
-//                String display = "\r\n\tName : "+name+"\r\n"
-//                        + "\tAddress : "+address+"\r\n"
-//
-//                        +"\tFloor No. : "+floor_number+"\r\n"
-//                        +"\tUnit No. : "+unit_number;
-//
-//                btmTextView.setText(display);
-//                btmTextView.setY(((float)height-800.0f));
-//                btn_save.setY(((float)height-500.0f));
-//
-//                return true;
-//            }
-//        });
-         //mMap = googleMap;
     }
 
     @Override
@@ -184,36 +153,45 @@ String value;
                         return loadFragment(hcsProductsFragment);
                     default:
                         return loadFragment(searchSlide);
-                        //return false;
+                    //return false;
                 }
             }
         });
 
         mBottomNavigation.getMenu().getItem(1).setChecked(true);
-        btmTextView = (TextView)findViewById(R.id.btm_textView);
-        btn_save = (Button)findViewById(R.id.button_save);
-        btn_close = (Button)findViewById(R.id.button_close);
-        btmTextView.setY(2500.0f);
-        btn_save.setY(2500.0f);
-        btn_close.setY(2000.0f);
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        height = displayMetrics.heightPixels;
-        width = displayMetrics.widthPixels;
-
+        init();
         loadFragment(searchSlide);
 
         //When click close btn, set the information to be invisible
         btn_close = findViewById(R.id.button_close);
         btn_close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                btmTextView.setAlpha(0.0f);
-                btn_save.setAlpha(0.0f);
-                btn_close.setAlpha(0.0f);
+                toggleInformationBox(false);
                 loadMapWithMarkers(lm.getListOfLocation("Eateries"));
             }
         });
+
+    }
+
+    private void init(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        height = displayMetrics.heightPixels;
+        width = displayMetrics.widthPixels;
+
+        //Find element
+        btmTextView = (TextView)findViewById(R.id.btm_textView);
+        btn_save = (Button)findViewById(R.id.button_save);
+        btn_close = (Button)findViewById(R.id.button_close);
+        Log.d("HEIGHT",""+height);
+        //Set coordinate
+        btmTextView.setY(height*0.04180602006688963210702341137124f);
+        btn_save.setY(((float)height-(height*0.271739f)));
+        btn_close.setY(((float)height-(height*0.271739f)));
+
+        //Hide information box
+        toggleInformationBox(false);
 
     }
 
@@ -225,30 +203,17 @@ String value;
             mMap.addMarker(new MarkerOptions().position(ll)
                     .snippet(""+loc.get(i).getId()));
 
-            Location clickLoc = lm.getLocation(loc.get(i).getId());
 
-            String address = clickLoc.getAddress();
-            String name = clickLoc.getName();
-            String floor_number = clickLoc.getFloor();
-            String unit_number = clickLoc.getUnit();
-
-            String display = "\r\n\tName : "+name+"\r\n"
-                    + "\tAddress : "+address+"\r\n"
-                    +"\tFloor No. : "+floor_number+"\r\n"
-                    +"\tUnit No. : "+unit_number+"\r\n";
-
-            //Set infomration box to be visible
-            btmTextView.setAlpha(1.0f);
-            btn_save.setAlpha(1.0f);
-            btn_close.setAlpha(1.0f);
-
-            btmTextView.setText(display);
-            btmTextView.setY(((float)height-(height*0.397157f)));
-            //  btmTextView.setY(((float)height-800.0f));
-            btn_save.setY(((float)height-(height*0.271739f)));
-            btn_close.setY(((float)height-(height*0.271739f)));
 
         }
+    }
+
+    private void toggleInformationBox(boolean toggle){
+
+        float value = toggle? 1.0f:0.0f;
+        btmTextView.setAlpha(value);
+        btn_save.setAlpha(value);
+        btn_close.setAlpha(value);
     }
 
     private void loadMapWithMarkers(ArrayList<Location> loc){
@@ -279,15 +244,10 @@ String value;
                         +"\tUnit No. : "+unit_number+"\r\n";
 
                 //Set infomration box to be visible
-                btmTextView.setAlpha(1.0f);
-                btn_save.setAlpha(1.0f);
-                btn_close.setAlpha(1.0f);
+                toggleInformationBox(true);
 
                 btmTextView.setText(display);
-                btmTextView.setY(((float)height-(height*0.397157f)));
-              //  btmTextView.setY(((float)height-800.0f));
-                btn_save.setY(((float)height-(height*0.271739f)));
-                btn_close.setY(((float)height-(height*0.271739f)));
+
                 return true;
             }
         });
@@ -312,7 +272,7 @@ String value;
                 //mBottomNavigation.setSelected(false);
                 startActivity(new Intent(MainActivity.this, settings.class));
                 return true;
-                //startActivity(new Intent(this, About.class));
+            //startActivity(new Intent(this, About.class));
             default:
                 startActivity(new Intent(MainActivity.this, settings.class));
                 return super.onOptionsItemSelected(item);
