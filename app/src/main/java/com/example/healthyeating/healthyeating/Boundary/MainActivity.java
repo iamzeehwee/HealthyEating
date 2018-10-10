@@ -156,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
             mMap.setMyLocationEnabled(true);
         }
         mMap.getUiSettings().setZoomControlsEnabled(true);
-
         mMap.setPadding(0, (int)(height*0.418f), 0, (int)(height*0.1254f));
     }
 

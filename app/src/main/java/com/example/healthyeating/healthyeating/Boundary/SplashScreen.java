@@ -200,15 +200,13 @@ public class SplashScreen extends AppCompatActivity {
 
        //Init controller here first
         lm = SingletonManager.getLocationManagerInstance();
-       readKMLCreateObj();
-      // ArrayList<HealthyLocation> res = lm.searchLocations("Subway Tam");
-     //  for(int i = 0; i<res.size();i++)
-       //    Log.d("Searching ", res.get(i).getName()+" Address :"+res.get(i).getAddress());
+       readEateriesKMLCreateObj();
+       readCaterersKMLCreateObj();
 
    }
 
 
-    private String readKMLCreateObj(){
+    private String readEateriesKMLCreateObj(){
          boolean start = false;
 
          ArrayList<String> data = new ArrayList();
@@ -230,7 +228,7 @@ public class SplashScreen extends AppCompatActivity {
                         if(start && line.equals("</Point>"))
                         {
                             start = false;
-                            lm.createLocation(data);
+                            lm.createLocation(data,"Eateries");
                             data.clear();
                         }
 
@@ -251,4 +249,58 @@ public class SplashScreen extends AppCompatActivity {
         }
         return "@@@";
     }
+
+
+
+    private String readCaterersKMLCreateObj(){
+        boolean start = false;
+
+        ArrayList<String> data = new ArrayList();
+        try {
+            InputStream inputStream =  getResources().openRawResource(R.raw.caterers);
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                try {
+                    StringBuilder result = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null) {
+                        if(!start && line.equals("<SchemaData schemaUrl=\"#kml_schema_ft_HEALTHIERCATERERS\">"))
+                        {
+
+                            start = true;
+                            line = reader.readLine();
+                        }
+                        if(start && line.equals("</Point>"))
+                        {
+                            start = false;
+                            lm.createLocation(data,"Caterers");
+                            data.clear();
+                        }
+
+                        if(start){
+                            data.add(line);
+                        }
+                        result.append(line);
+                    }
+                    return result.toString();
+                } finally {
+                    reader.close();
+                }
+            } finally {
+                inputStream.close();
+            }
+        } catch (IOException e) {
+            // process exception
+        }
+        return "@@@";
+    }
+
+
+
+
+
+
+
+
 }

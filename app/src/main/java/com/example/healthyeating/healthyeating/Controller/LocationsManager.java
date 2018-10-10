@@ -61,7 +61,7 @@ public class LocationsManager {
     public String getLocationType(){
         return locationType;
     }
-    public void createLocation(ArrayList<String> data){
+    public void createLocation(ArrayList<String> data, String locationType){
         //We assume that there is not much changes to the KML data format
         String address_building_name="";
         String address_blk_no="";
@@ -112,7 +112,7 @@ public class LocationsManager {
             address = address.substring(1);
 
 
-        HealthyLocation loc = new HealthyLocation(listOfHealthyLocation.size(),name,address,postal_code,  floor,  unit,  longitude,  latitude, "Eateries");
+        HealthyLocation loc = new HealthyLocation(listOfHealthyLocation.size(),name,address,postal_code,  floor,  unit,  longitude,  latitude, locationType);
         listOfHealthyLocation.add(loc);
 
     }
