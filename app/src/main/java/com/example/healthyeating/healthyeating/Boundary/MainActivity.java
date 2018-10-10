@@ -195,18 +195,7 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
 
     }
 
-    private void loadMapWithSelectedMarkers(ArrayList<Location> loc) {
-        mMap.clear();
-        Log.d("SearchBar","Cleared");
-        for(int i = 0 ; i<loc.size();i++){
-            LatLng ll = new LatLng(loc.get(i).getLatitude(), loc.get(i).getLongitude());
-            mMap.addMarker(new MarkerOptions().position(ll)
-                    .snippet(""+loc.get(i).getId()));
 
-
-
-        }
-    }
 
     private void toggleInformationBox(boolean toggle){
 
