@@ -112,6 +112,6 @@ public class HealthyLocation {
         else unit = "";
 
 
-        return this.name + "\r\nAddress: " + this.address + floor + unit;
+        return "\n"+this.name + "\r\nAddress: " + this.address + floor + unit+"\n";
     }
 }

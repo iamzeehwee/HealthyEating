@@ -11,16 +11,27 @@ public class LocationsManager {
 
     private ArrayList<HealthyLocation> listOfHealthyLocation;
     private int sortFilter = 0; //0 = A-Z, 1 = Z-A
-    private double limitDistance = 15.0;
+    private double limitDistance = 50000.0;
     private String locationType = "Eateries";
     private double current_lat = -1;
     private double current_long = -1;
     private boolean isLatLngSet = false;
 
+
+
     public LocationsManager(){
         listOfHealthyLocation = new ArrayList<>();
 
     }
+
+    public double getCurrent_lat() {
+        return current_lat;
+    }
+
+    public double getCurrent_long() {
+        return current_long;
+    }
+
 
     public ArrayList<HealthyLocation> sortList(ArrayList<HealthyLocation> loc){
         ArrayList<HealthyLocation> sortedList = new ArrayList<HealthyLocation>();
@@ -119,14 +130,21 @@ public class LocationsManager {
 
 
 
-   public void setCurrentLatLng(double lat, double longitude){
+   public boolean setCurrentLatLng(double lat, double longitude){
         //Validation of lat long.
+       boolean changed = false;
         if( (lat>=0 && lat<=90) && (longitude >=0 && longitude<=180)) {
+            if (lat != current_lat || longitude != current_long) {
+                changed = true;
+            }
             current_lat = lat;
             current_long = longitude;
-            isLatLngSet=true;
+            isLatLngSet = true;
+
+
         }
 
+        return changed;
    }
 
 
