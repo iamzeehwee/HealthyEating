@@ -193,18 +193,12 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
 
                 //String address1 = clickLoc.getAddress();
                 String name = clickLoc.getName();
-                String floor_number = clickLoc.getFloor();
-                String unit_number = clickLoc.getUnit();
 
-                String display = "\r\n\tName : " + name + "\r\n"
-                        + "\tAddress : " + address + "\r\n"
-                        + "\tFloor No. : " + floor_number + "\r\n"
-                        + "\tUnit No. : " + unit_number + "\r\n";
 
                 //Set infomration box to be visible
                 searchSlide.setSpinnerValue(0);
 
-                btmTextView.setText(display);
+                btmTextView.setText(getInformationBoxText(clickLoc));
                 searchSlide.setSearchBoxText(name);
 
                 toggleInformationBox(true);
@@ -369,20 +363,11 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
 
                 HealthyLocation clickLoc = lm.getLocation(Integer.parseInt(marker.getSnippet()));
 
-                String address = clickLoc.getAddress();
-                String name = clickLoc.getName();
-                String floor_number = clickLoc.getFloor();
-                String unit_number = clickLoc.getUnit();
-
-                String display = "\r\n\tName : "+name+"\r\n"
-                        + "\tAddress : "+address+"\r\n"
-                        +"\tFloor No. : "+floor_number+"\r\n"
-                        +"\tUnit No. : "+unit_number+"\r\n";
 
                 //Set infomration box to be visible
                 toggleInformationBox(true);
 
-                btmTextView.setText(display);
+                btmTextView.setText(getInformationBoxText(clickLoc));
                 //Set marker to blue on selected
                 //Issues : If location marker is in same location, i.e Shopping Mall have Koufu, McDonalds, etc, marker will have some issues changing colour,
 
@@ -402,7 +387,23 @@ public class MainActivity extends AppCompatActivity implements SearchAndSlide.On
 
     }
 
+    private String getInformationBoxText(HealthyLocation clickLoc){
+        String address = clickLoc.getAddress();
+        String name = clickLoc.getName();
+        String floor_number = clickLoc.getFloor();
+        String unit_number = clickLoc.getUnit();
+        if(floor_number.length()==0)
+            floor_number = "No floor number";
+        if(unit_number.length()==0)
+            unit_number = "No unit number";
 
+        String display = "\r\n\tName : "+name+"\r\n"
+                + "\tAddress : "+address+"\r\n"
+                +"\tFloor No. : "+floor_number+"\r\n"
+                +"\tUnit No. : "+unit_number+"\r\n";
+
+        return display;
+    }
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
