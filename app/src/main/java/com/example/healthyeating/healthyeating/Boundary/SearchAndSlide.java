@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
@@ -48,7 +49,8 @@ public class SearchAndSlide extends Fragment  {
     private double seekBarValue = 0;
     private static final int MAX_SEEKBAR_VALUE = 50000;
     private OnFragmentInteractionListener mListener;
-    Spinner spinner;
+   Spinner spinner;
+    private int current_index = 0;
 
     public SearchAndSlide() {
         // Required empty public constructor
@@ -72,6 +74,9 @@ public class SearchAndSlide extends Fragment  {
         return fragment;
     }
 
+    public int getSpinnerValue(){
+        return spinner.getSelectedItemPosition();
+    }
     public void resetSliderAndTextBox(){
         searchView.setQuery("",false);
         seek.setProgress(MAX_SEEKBAR_VALUE);
@@ -167,7 +172,7 @@ public class SearchAndSlide extends Fragment  {
             }
         });
 
-        spinner = (Spinner)v.findViewById(R.id.sortSpinner);
+        spinner = (Spinner) v.findViewById(R.id.sortSpinner);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity().getApplicationContext(),
@@ -178,29 +183,57 @@ public class SearchAndSlide extends Fragment  {
         spinner.setAdapter(adapter);
 
         spinner.setSelection(0,false);
+        spinner.setOnTouchListener(new View.OnTouchListener(){
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+               // Log.d("SpinnerChange",""+event);
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                   // Toast.makeText(this,"down",Toast.LENGTH_LONG).show();
+                    // Load your spinner here
+//                    try{
+//                        ((OnSpinnerChangeListener)getContext() ).onSpinnerChange(4);
+//                    }catch (ClassCastException cce){
+//
+//                    }
+                }
+
+                return false;
+            }
+
+        });
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 Toast.makeText(parent.getContext(),
                         "OnItemSelectedListener : " + "Check " + pos + "Check " + parent.getItemAtPosition(pos).toString(), Toast.LENGTH_SHORT).show();
                         // For passing sortFilter value when choose the sort condition
-                        Intent i = new Intent(getActivity(), EateriesListView.class);
-                        if (pos == 2) {
-                            i.putExtra("key", "1");
-                            startActivity(i);
-                        }
-                        if (pos == 1) {
-                            i.putExtra("key", "0");
-                            startActivity(i);
-                        }
 
-                         // Remove animation when switch activity
-                         ((Activity) getActivity()).overridePendingTransition(0,0);
+//                        Intent i = new Intent(getActivity(), EateriesListView.class);
+//                        if (pos == 2) {
+//                            i.putExtra("key", "1");
+//                            startActivity(i);
+//                        }
+//                        if (pos == 1) {
+//                            i.putExtra("key", "0");
+//                            startActivity(i);
+//                        }
+//
+//                         // Remove animation when switch activity
+//                         ((Activity) getActivity()).overridePendingTransition(0,0);
+
+                try{
+                    ((OnSpinnerChangeListener)getContext() ).onSpinnerChange(pos);
+                }catch (ClassCastException cce){
+
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Intent i = new Intent(getActivity(), MainActivity.class);
-                startActivity(i);
+                //Intent i = new Intent(getActivity(), MainActivity.class);
+                //startActivity(i);
+                Log.d("Spinner","NTH");
+
             }
         });
 
@@ -214,6 +247,14 @@ public class SearchAndSlide extends Fragment  {
         }
     }
 
+    public void setSearchBoxText(String s){
+        searchView.setQuery(s,true);
+    }
+
+
+    public void setSpinnerValue(int index){
+        spinner.setSelection(index);
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -255,9 +296,10 @@ public class SearchAndSlide extends Fragment  {
     public interface OnSliderChangeListener{
         public void onSliderRelease(double dis);
         public void onSliderHoldDown();
+    }
 
-
-
+    public interface OnSpinnerChangeListener{
+        public void onSpinnerChange(int index);
     }
 
 
