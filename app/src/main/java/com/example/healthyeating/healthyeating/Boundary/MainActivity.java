@@ -95,7 +95,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     double latitude = 0;
     double longitude = 0;
     private static final int REQUEST_LOCATION = 1;
-
+    float default_map_pin_color = 200.0f;
+    float selected_map_pin_color = BitmapDescriptorFactory.HUE_RED;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -263,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 toggleInformationBox(false);
                 searchSlide.setSearchBoxText("");
                 if(prev_marker!=null)
-                    prev_marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    prev_marker.setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
             }
         });
 
@@ -361,13 +362,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         //mMap.clear();
         removeAllMarkersFromMap();
         Log.d("SearchBar","Cleared");
-        for(int i = 0 ; i<loc.size();i++){
+        for(int i = 0 ; i<loc.size();i++) {
             LatLng ll = new LatLng(loc.get(i).getLatitude(), loc.get(i).getLongitude());
-             listOfMarkers.add(mMap.addMarker(new MarkerOptions().position(ll)
-                    .snippet(""+loc.get(i).getId())));
+            listOfMarkers.add(mMap.addMarker(new MarkerOptions().position(ll)
+                    .snippet("" + loc.get(i).getId())));
 
+            listOfMarkers.get(i).setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
         }
-
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -384,9 +385,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                     prev_marker = marker;
                 }
                 else{
-                    prev_marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    prev_marker.setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
                     prev_marker = marker;
-                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(selected_map_pin_color));
 
                     LatLng coordinate = new LatLng(clickLoc.getLatitude(),clickLoc.getLongitude());
                     CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, mMap.getCameraPosition().zoom);

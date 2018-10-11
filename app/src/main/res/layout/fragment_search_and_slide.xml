@@ -11,9 +11,10 @@
     <!-- TODO: Update blank fragment layout -->
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/searchBar">
+        android:background="#f0eef0">
 
         <SearchView
             android:id="@+id/searchBar"
