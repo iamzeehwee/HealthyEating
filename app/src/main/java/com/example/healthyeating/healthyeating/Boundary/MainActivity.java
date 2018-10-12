@@ -56,6 +56,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.example.healthyeating.healthyeating.Controller.LocationsManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.view.View;
 
@@ -67,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     //For location details
     TextView btmTextView;
     Button btn_save,btn_close;
+    Button btn_left,btn_right;
+    private String[] snippet;
+    private int currentPageNo=1;
 
     //Fragments
     private FavouriteFragment favouriteFragment;
@@ -93,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private ListView list;
     ArrayAdapter<HealthyLocation> adapter;
     private LinearLayout resultLayout;
+
+
 
     //Screen related
     static int height = 0;
@@ -192,6 +198,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 toggleInformationBox(true);
                 getBestView();
 
+
+
+
             }
         });
 
@@ -270,6 +279,31 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             }
         });
 
+        btn_left.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+               if(currentPageNo>1) {
+                   Log.d("PageNo1 is ", "Page" + currentPageNo+"/"+snippet
+                   .length);
+                   currentPageNo--;
+                   btmTextView.setText(getInformationBoxText(lm.getLocation(Integer.parseInt(snippet[currentPageNo-1]))));
+               }
+            }
+        });
+
+        btn_right.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(currentPageNo<snippet.length) {
+                    Log.d("PageNo1 is ", "Page" + currentPageNo+"/"+snippet
+                            .length);
+                    currentPageNo++;
+                    btmTextView.setText(getInformationBoxText(lm.getLocation(Integer.parseInt(snippet[currentPageNo-1]))));
+                }
+            }
+        });
+
+
+
+
     }
 
     private void initGoogleMapLocation(int time){
@@ -316,6 +350,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         btmTextView = (TextView)findViewById(R.id.btm_textView);
         btn_save = (Button)findViewById(R.id.button_save);
         btn_close = (Button)findViewById(R.id.button_close);
+        btn_left = (Button)findViewById(R.id.btn_left);
+        btn_right = (Button)findViewById(R.id.btn_right);
         resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
 
         //Set coordinate
@@ -329,15 +365,26 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         //Hide resultLayout
         resultLayout.setVisibility(View.GONE);
 
+        //Hide page button
+        togglePageButton(false);
+
         //Init arrayList
         listOfMarkers = new ArrayList<Marker>();
     }
 
-
+   private void togglePageButton(boolean toggle){
+       if(toggle){
+           btn_left.setVisibility(View.VISIBLE);
+           btn_right.setVisibility(View.VISIBLE);
+       }
+       else{
+           btn_left.setVisibility(View.INVISIBLE);
+           btn_right.setVisibility(View.INVISIBLE);
+       }
+   }
    private void toggleNoResultsFound(boolean toggle){
        if(toggle){
            resultLayout.setVisibility(View.VISIBLE);
-
        }
        else{
 
@@ -373,46 +420,69 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
    }
     private void displayOnMap(ArrayList<HealthyLocation> loc){
         //mMap.clear();
+         HashMap<LatLng,Marker> existingLatLng = new HashMap<>();
+
         removeAllMarkersFromMap();
 
         for(int i = 0 ; i<loc.size();i++) {
             LatLng ll = new LatLng(loc.get(i).getLatitude(), loc.get(i).getLongitude());
-            listOfMarkers.add(mMap.addMarker(new MarkerOptions().position(ll)
-                    .snippet("" + loc.get(i).getId())));
 
-            listOfMarkers.get(i).setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
+            if(existingLatLng.get(ll)==null){
+                Marker m = mMap.addMarker(new MarkerOptions().position(ll)
+                        .snippet("" + loc.get(i).getId()));
+                existingLatLng.put(ll,m);
+
+                listOfMarkers.add(m);
+                m.setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
+            }
+            else{
+                String temp = existingLatLng.get(ll).getSnippet();
+                existingLatLng.get(ll).setSnippet(temp+","+loc.get(i).getId());
+            }
+
+//              listOfMarkers.add(mMap.addMarker(new MarkerOptions().position(ll)
+//                    .snippet("" + loc.get(i).getId())));
+
+            //listOfMarkers.get(i).setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
         }
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-
-                HealthyLocation clickLoc = lm.getLocation(Integer.parseInt(marker.getSnippet()));
-                //Set infomration box to be visible
-                toggleInformationBox(true);
-
-                btmTextView.setText(getInformationBoxText(clickLoc));
-                //Set marker to blue on selected
-                //Issues : If location marker is in same location, i.e Shopping Mall have Koufu, McDonalds, etc, marker will have some issues changing colour,
-
-                if(prev_marker==null){
+               snippet = marker.getSnippet().split(",");
+                if (prev_marker == null) {
                     prev_marker = marker;
-                }
-                else{
+                } else {
                     prev_marker.setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
                     prev_marker = marker;
                     marker.setIcon(BitmapDescriptorFactory.defaultMarker(selected_map_pin_color));
 
-                    LatLng coordinate = new LatLng(clickLoc.getLatitude(),clickLoc.getLongitude());
+                    LatLng coordinate = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
                     CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, mMap.getCameraPosition().zoom);
                     mMap.animateCamera(yourLocation);
                 }
-                return true;
+                HealthyLocation clickLoc = lm.getLocation(Integer.parseInt(snippet[0]));
+                //Set infomration box to be visible
+                toggleInformationBox(true);
+
+                btmTextView.setText(getInformationBoxText(clickLoc));
+
+                togglePageButton(false);
+                if (snippet.length > 1) {
+
+                    togglePageButton(true);
+
+
+                }
+               return true;
             }
+
         });
+        //searchSameLatLngMarkers();
 
     }
 
     private String getInformationBoxText(HealthyLocation clickLoc){
+
         String address = clickLoc.getAddress();
         String name = clickLoc.getName();
         String floor_number = clickLoc.getFloor();
@@ -430,6 +500,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         return display;
     }
 
+
+    private void searchSameLatLngMarkers(){
+//        int count = 0;
+//        Marker tempMarker;
+//        for(int i =0 ;i<listOfMarkers.size();i++){
+//            tempMarker = listOfMarkers.get(i);
+//
+//            for(int j = i; j<listOfMarkers.size();j++){
+//                if(!(listOfMarkers.get(j).getSnippet().equals(tempMarker.getSnippet())) && ((listOfMarkers.get(j).getPosition().latitude==tempMarker.getPosition().latitude) && (listOfMarkers.get(j).getPosition().longitude==tempMarker.getPosition().longitude))){
+//                    Log.d("POSSAME","Marker "+lm.getLocation(Integer.parseInt(tempMarker.getSnippet())) + "same as " +lm.getLocation(Integer.parseInt(listOfMarkers.get(j).getSnippet())));
+//                }
+//            }
+//        }
+    }
 
     private void getBestView(){
         int padding = 200; // offset from edges of the map in pixels
