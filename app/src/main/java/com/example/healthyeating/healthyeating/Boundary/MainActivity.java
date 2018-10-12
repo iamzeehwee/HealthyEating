@@ -1,14 +1,12 @@
 package com.example.healthyeating.healthyeating.Boundary;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,8 +29,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,11 +41,7 @@ import com.example.healthyeating.healthyeating.R;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 
@@ -66,37 +60,44 @@ import java.util.ArrayList;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity implements LocationListener, SearchAndSlide.OnSpinnerChangeListener, SearchAndSlide.OnSliderChangeListener, SearchAndSlide.OnSearchSubmitListener, OnMapReadyCallback, LocationDetailsFragment.OnFragmentInteractionListener, SearchAndSlide.OnFragmentInteractionListener {
-    private ActionBar toolbar;
+
     private BottomNavigationView mBottomNavigation;
     private FrameLayout mMainFrame;
+
+    //For location details
     TextView btmTextView;
-    Button btn_save;
-    Button btn_close;
+    Button btn_save,btn_close;
+
+    //Fragments
     private FavouriteFragment favouriteFragment;
-    private EateriesFragment eateriesFragment;
-    private CaterersFragment caterersFragment;
     private HCSProductsFragment hcsProductsFragment;
-    private LocationDetailsFragment ldf;
-    SearchAndSlide searchSlide;
-    SearchView searchView;
-    MapFragment mapFragment;
+    private SearchAndSlide searchSlide;
+
+    //Controller
+    LocationsManager lm; //This is our LocationsManager(Controller)
+
+    //Google Maps
+    private Marker prev_marker;
+    private GoogleMap mMap;
+    private LocationManager locationManager; //Pls do not confuse this with our locationManager.
+    private ArrayList<Marker> listOfMarkers;
+    private double latitude = 0;
+    private double longitude = 0;
+    private static final int REQUEST_LOCATION = 1;
+    private float default_map_pin_color = 200.0f;
+    private float selected_map_pin_color = BitmapDescriptorFactory.HUE_RED;
+
+    //For searching
+    private int prev_index = 0;
+    private String searchQuery = "";
+    private ListView list;
+    ArrayAdapter<HealthyLocation> adapter;
+    private LinearLayout resultLayout;
+
+    //Screen related
     static int height = 0;
     int width = 0;
-    LocationsManager lm; //This is our LocationsManager(Controller)
-    Marker prev_marker;
-    GoogleMap mMap;
-    int prev_index = 0;
-    String searchQuery = "";
-    ListView list;
 
-    ArrayAdapter<HealthyLocation> adapter;
-    ArrayList<Marker> listOfMarkers;
-    private LocationManager locationManager; //Pls do not confuse this with our locationManager.
-    double latitude = 0;
-    double longitude = 0;
-    private static final int REQUEST_LOCATION = 1;
-    float default_map_pin_color = 200.0f;
-    float selected_map_pin_color = BitmapDescriptorFactory.HUE_RED;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         ArrayList<HealthyLocation> loc = new ArrayList<>();
 
         loc = lm.getListOfLocation();
-        loadMapWithMarkers(loc);
+        displayOnMap(loc);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198), 11.0f));
 
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
       //For listview in mainactivity
         ArrayList<HealthyLocation> loc = lm.getListOfLocation();
         loc = lm.sortList(loc);
-        setListViewItems(loc);
+        displayOnList(loc);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 ArrayList<HealthyLocation> loc = new ArrayList<HealthyLocation>();
                 HealthyLocation clickLoc = lm.getLocation(selectedLocID);
                 loc.add(clickLoc);
-                loadMapWithMarkers(loc);
+                displayOnMap(loc);
 
                 String name = clickLoc.getName();
 
@@ -212,15 +213,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                             lm.setLocationType("Eateries");
                             searchSlide.resetSliderAndTextBox();
                             toggleInformationBox(false);
+
                             ArrayList<HealthyLocation> loc = new ArrayList<>();
                             loc = lm.getListOfLocation();
 
                                 removeAllMarkersFromMap();
-                                loadMapWithMarkers(loc);
+                                displayOnMap(loc);
 
 
-                                setListViewItems(lm.sortList(loc));
-
+                                displayOnList(lm.sortList(loc));
+                            toggleNoResultsFound(false);
                         }
 
 
@@ -231,15 +233,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                             //Changing from other tab to caterers, reload the markers
                             lm.setLocationType("Caterers");
                             toggleInformationBox(false);
+
                             searchSlide.resetSliderAndTextBox();
                             ArrayList<HealthyLocation> loc = new ArrayList<>();
                             loc = lm.getListOfLocation();
 
                                 removeAllMarkersFromMap();
-                                loadMapWithMarkers(loc);
-
-                                setListViewItems(lm.sortList(loc));
-
+                                displayOnMap(loc);
+                                displayOnList(lm.sortList(loc));
+                            toggleNoResultsFound(false);
                         }
 
                         return loadFragment(searchSlide);
@@ -306,17 +308,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         //Init fragments
         favouriteFragment = new FavouriteFragment();
-        eateriesFragment = new EateriesFragment();
-        caterersFragment = new CaterersFragment();
         hcsProductsFragment = new HCSProductsFragment();
         searchSlide = new SearchAndSlide();
-        ldf = new LocationDetailsFragment();
 
 
         //Find element
         btmTextView = (TextView)findViewById(R.id.btm_textView);
         btn_save = (Button)findViewById(R.id.button_save);
         btn_close = (Button)findViewById(R.id.button_close);
+        resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
 
         //Set coordinate
         btmTextView.setY(height*0.04180602006688963210702341137124f);
@@ -326,11 +326,24 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         //Hide information box
         toggleInformationBox(false);
 
+        //Hide resultLayout
+        resultLayout.setVisibility(View.GONE);
+
         //Init arrayList
         listOfMarkers = new ArrayList<Marker>();
     }
 
 
+   private void toggleNoResultsFound(boolean toggle){
+       if(toggle){
+           resultLayout.setVisibility(View.VISIBLE);
+
+       }
+       else{
+
+           resultLayout.setVisibility(View.INVISIBLE);
+       }
+   }
 
     private void toggleInformationBox(boolean toggle){
         float value = toggle? 1.0f:0.0f;
@@ -358,10 +371,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         listOfMarkers.clear();
         prev_marker = null;
    }
-    private void loadMapWithMarkers(ArrayList<HealthyLocation> loc){
+    private void displayOnMap(ArrayList<HealthyLocation> loc){
         //mMap.clear();
         removeAllMarkersFromMap();
-        Log.d("SearchBar","Cleared");
+
         for(int i = 0 ; i<loc.size();i++) {
             LatLng ll = new LatLng(loc.get(i).getLatitude(), loc.get(i).getLongitude());
             listOfMarkers.add(mMap.addMarker(new MarkerOptions().position(ll)
@@ -392,10 +405,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                     LatLng coordinate = new LatLng(clickLoc.getLatitude(),clickLoc.getLongitude());
                     CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, mMap.getCameraPosition().zoom);
                     mMap.animateCamera(yourLocation);
-
                 }
-
-
                 return true;
             }
         });
@@ -437,11 +447,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
 
         LatLngBounds bounds = builder.build();
-
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         mMap.animateCamera(cu);
-
-
 
     }
 
@@ -552,7 +559,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         return false;
     }
 
-    private void setListViewItems(ArrayList<HealthyLocation> loc){
+    private void displayOnList(ArrayList<HealthyLocation> loc){
         adapter = new ArrayAdapter<HealthyLocation>(getApplicationContext(), android.R.layout.simple_list_item_1, loc);
         list.setAdapter(adapter);
     }
@@ -567,11 +574,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     public void searchSubmit(String query) {
 
         searchQuery = query;
+        ArrayList<HealthyLocation> loc = lm.searchLocations(searchQuery);
+        displayOnMap(loc);
+        displayOnList(loc);
+        if(searchSlide.getSpinnerValue()!=0) { //We want to show in List View only
+            if (loc.size() == 0) {
+                toggleNoResultsFound(true);
+            } else
+                toggleNoResultsFound(false);
+        }
 
-        loadMapWithMarkers(lm.searchLocations(searchQuery));
-         setListViewItems(lm.searchLocations(searchQuery));
-
-        Toast.makeText(MainActivity.this, "Clicked "+ query, Toast.LENGTH_LONG).show();
+        //Toast.makeText(MainActivity.this, "Clicked "+ query, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -579,14 +592,25 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         lm.setLimitDistance(dis);
         ArrayList<HealthyLocation> loc = lm.searchLocations(searchQuery);
-        if(searchQuery.length()>0) {
-            if (loc.size() == 0)
-                toggleInformationBox(false);
-            else
-                toggleInformationBox(true);
+        if(searchSlide.getSpinnerValue()==0) { //We want to do this in Map View only
+            if (searchQuery.length() > 0) {
+                if (loc.size() == 0)
+                    toggleInformationBox(false);
+                else
+                    toggleInformationBox(true);
+            }
         }
-        loadMapWithMarkers(loc);
-            setListViewItems(loc);
+
+        if(searchSlide.getSpinnerValue()!=0) { //We want to show in List View only
+            if (loc.size() == 0) {
+                toggleNoResultsFound(true);
+            } else
+                toggleNoResultsFound(false);
+        }
+
+
+        displayOnMap(loc);
+        displayOnList(loc);
 
     }
 
@@ -603,7 +627,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         if(index == 0){
             toggleMapView(true);
-           // loadMapWithMarkers(lm.searchLocations(searchQuery));
+            toggleNoResultsFound(false);
+           // displayOnMap(lm.searchLocations(searchQuery));
         }
         else{
             if(prev_index==0) {
@@ -621,7 +646,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             }
 
 
-            setListViewItems(lm.sortList(lm.searchLocations(searchQuery)));
+            displayOnList(lm.sortList(lm.searchLocations(searchQuery)));
 
         }
 
@@ -635,8 +660,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     //    Log.i("Message: ","Location changed, " + location.getAccuracy() + " , " + location.getLatitude()+ "," + location.getLongitude());
          if(lm.setCurrentLatLng(location.getLatitude(),location.getLongitude())){
              ArrayList<HealthyLocation> loc = lm.searchLocations(searchQuery);
-             loadMapWithMarkers(loc);
-             setListViewItems(loc);
+             displayOnMap(loc);
+             displayOnList(loc);
          }
     }
 
