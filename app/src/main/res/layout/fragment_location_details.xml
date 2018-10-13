@@ -51,9 +51,10 @@
 
             <TextView
                 android:id="@+id/textView_addr"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_centerInParent="true"
                 android:paddingLeft = "12dp"
                 android:paddingTop="18dp"
                 android:paddingBottom="6dp"
@@ -66,12 +67,10 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/textView_addr"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginStart="140dp"
-            android:layout_marginLeft="140dp"
-            android:layout_marginBottom="5dp"
+
+             android:layout_toLeftOf="@id/textView_addr"
+            android:layout_alignBottom="@id/textView_addr"
+            android:layout_alignTop="@id/textView_addr"
             android:drawableStart="@drawable/ic_location"
             android:drawableLeft="@drawable/ic_location"
             android:src="@drawable/ic_location" />
