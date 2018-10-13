@@ -26,14 +26,8 @@
 
 
 
-
-
-
-
-
-
         <RelativeLayout
-
+            android:id="@+id/location_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -68,7 +62,7 @@
                 android:id="@+id/listViewTest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/seekBar2"
+
                 android:layout_above="@+id/navigation"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
@@ -115,6 +109,16 @@
             android:orientation="vertical">
 
         </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fragment_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_above="@+id/navigation"
+                android:orientation="vertical">
+
+            </LinearLayout>
 
 
 

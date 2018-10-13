@@ -33,6 +33,7 @@ import android.widget.FrameLayout;
 
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private BottomNavigationView mBottomNavigation;
     private FrameLayout mMainFrame;
 
-
+    private RelativeLayout loc_frame;
 
     //Fragments
     private FavouriteFragment favouriteFragment;
@@ -200,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_favourite:
+
                         return loadFragment(favouriteFragment);
 
                     case R.id.navigation_eateries:
@@ -241,6 +243,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
                         return loadFragment(searchSlide);
                     case R.id.navigation_HCSProduct:
+//                        FragmentManager manager = getSupportFragmentManager();//create an instance of fragment manager
+//                        FragmentTransaction transaction = manager.beginTransaction();//create an instance of Fragment-transaction
+//                        transaction.add(R.id.fragment_layout, hcsProductsFragment, "frag_layout");
+//                        transaction.commit();
+//                        //return true;
                         return loadFragment(hcsProductsFragment);
                     default:
                         return loadFragment(searchSlide);
@@ -303,6 +310,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         //Find layout
         resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
+        loc_frame = (RelativeLayout) findViewById(R.id.location_frame);
 
         //Hide information box
         toggleInformationBox(false);
@@ -497,7 +505,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     private boolean loadFragment(Fragment fragment){
         if(fragment !=null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_layout,fragment).commit();
             return true;
         }
         return false;
