@@ -1,6 +1,7 @@
 package com.example.healthyeating.healthyeating.Boundary;
 
 import android.content.Context;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -35,7 +37,8 @@ public class LocationDetailsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     TextView pageText;
-    Button btnLeft,btnRight,btn_save,btn_close;
+    ImageButton btnLeft,btnRight;
+    Button btn_save,btn_close;
 
     private int current_pageNumber= 0 ;
     private int max_pageNumber = 0;
@@ -90,8 +93,8 @@ public class LocationDetailsFragment extends Fragment {
         address = (TextView) v.findViewById(R.id.address);
         name = (TextView) v.findViewById(R.id.textView);
         pageText = (TextView) v.findViewById(R.id.emptyTextView);
-        btnLeft =(Button) v.findViewById(R.id.button_left);
-        btnRight =(Button) v.findViewById(R.id.button_right);
+        btnLeft =(ImageButton) v.findViewById(R.id.button_left);
+        btnRight =(ImageButton) v.findViewById(R.id.button_right);
         btn_save =(Button) v.findViewById(R.id.button_save);
         btn_close =(Button) v.findViewById(R.id.button_close);
 

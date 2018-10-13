@@ -34,10 +34,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\ZiHui\Downloads\icons8-search-100.png" />
-                                      <entry key="outputName" value="ic_action_search" />
+                                      <entry key="imageAsset" value="C:\Users\ZiHui\Downloads\baseline-chevron_right-black-18\2x\baseline_chevron_right_black_18dp.png" />
+                                      <entry key="outputName" value="ic_next_location" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="050d12" />
+                                      <entry key="themeColor" value="03090c" />
                                     </map>
                                   </option>
                                 </PersistentState>

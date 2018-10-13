@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private double latitude = 0;
     private double longitude = 0;
     private static final int REQUEST_LOCATION = 1;
-    private float default_map_pin_color = 200.0f;
+    private float default_map_pin_color = BitmapDescriptorFactory.HUE_AZURE;//200.0f;
     private float selected_map_pin_color = BitmapDescriptorFactory.HUE_RED;
 
     //For searching
