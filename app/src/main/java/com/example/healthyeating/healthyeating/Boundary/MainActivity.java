@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             mMap.setMyLocationEnabled(true);
         }
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.setPadding(0, 600, 0, 700);
+        mMap.setPadding(0, (int)(height*0.25), 0, (int)(height*0.293));
     }
 
     @Override
