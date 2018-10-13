@@ -118,7 +118,19 @@ public class LocationsManager {
 
         }
 
-        address = address_building_name+","+address_blk_no+" "+address_street_name+" S"+postal_code;
+        address = address_building_name+", "+address_blk_no+" "+address_street_name;
+        if(floor.length()>0 || unit.length()>0) {
+            address += " #";
+            if(floor.length()>0){
+                address+= String.format("%2s", floor).replace(' ', '0');
+            }
+            if(unit.length()>0){
+                address+="-"+String.format("%2s", unit).replace(' ', '0');;
+
+            }
+        }
+
+          address+=" S"+postal_code;
         if(address.startsWith(","))
             address = address.substring(1);
 

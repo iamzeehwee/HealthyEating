@@ -17,6 +17,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -60,22 +62,18 @@ import java.util.HashMap;
 
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements LocationListener, SearchAndSlide.OnSpinnerChangeListener, SearchAndSlide.OnSliderChangeListener, SearchAndSlide.OnSearchSubmitListener, OnMapReadyCallback, LocationDetailsFragment.OnFragmentInteractionListener, SearchAndSlide.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements LocationListener,LocationDetailsFragment.OnLocationDetailListener, SearchAndSlide.OnSpinnerChangeListener, SearchAndSlide.OnSliderChangeListener, SearchAndSlide.OnSearchSubmitListener, OnMapReadyCallback, LocationDetailsFragment.OnFragmentInteractionListener, SearchAndSlide.OnFragmentInteractionListener {
 
     private BottomNavigationView mBottomNavigation;
     private FrameLayout mMainFrame;
 
-    //For location details
-    TextView btmTextView;
-    Button btn_save,btn_close;
-    Button btn_left,btn_right;
-    private String[] snippet;
-    private int currentPageNo=1;
+
 
     //Fragments
     private FavouriteFragment favouriteFragment;
     private HCSProductsFragment hcsProductsFragment;
     private SearchAndSlide searchSlide;
+    private LocationDetailsFragment ldf;
 
     //Controller
     LocationsManager lm; //This is our LocationsManager(Controller)
@@ -133,20 +131,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             getLocation();
             LatLng latLng = new LatLng(latitude, longitude);
-            //mMap.addMarker(new MarkerOptions().position(latLng));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            // mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
 
             lm.setCurrentLatLng(latitude, longitude);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             mMap.setMyLocationEnabled(true);
@@ -158,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
          initGoogleMapLocation(1000);
          init();
@@ -193,13 +181,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
                 searchSlide.setSpinnerValue(0);
 
-                btmTextView.setText(getInformationBoxText(clickLoc));
+                ldf.setInformation(loc);
+
                 searchSlide.setSearchBoxText(name);
                 toggleInformationBox(true);
                 getBestView();
-
-
-
 
             }
         });
@@ -268,38 +254,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         loadFragment(searchSlide);
 
-        //When click close btn, set the information to be invisible
-      //  btn_close = findViewById(R.id.button_close);
-        btn_close.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                toggleInformationBox(false);
-                searchSlide.setSearchBoxText("");
-                if(prev_marker!=null)
-                    prev_marker.setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
-            }
-        });
 
-        btn_left.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-               if(currentPageNo>1) {
-                   Log.d("PageNo1 is ", "Page" + currentPageNo+"/"+snippet
-                   .length);
-                   currentPageNo--;
-                   btmTextView.setText(getInformationBoxText(lm.getLocation(Integer.parseInt(snippet[currentPageNo-1]))));
-               }
-            }
-        });
 
-        btn_right.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if(currentPageNo<snippet.length) {
-                    Log.d("PageNo1 is ", "Page" + currentPageNo+"/"+snippet
-                            .length);
-                    currentPageNo++;
-                    btmTextView.setText(getInformationBoxText(lm.getLocation(Integer.parseInt(snippet[currentPageNo-1]))));
-                }
-            }
-        });
+        //add location detail fragment to activity
+        FragmentManager manager = getSupportFragmentManager();//create an instance of fragment manager
+        FragmentTransaction transaction = manager.beginTransaction();//create an instance of Fragment-transaction
+        transaction.add(R.id.informationLayout, ldf, "Frag_btm_tag");
+        transaction.commit();
+        ldf.hide();
 
 
 
@@ -318,13 +280,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, time, 0, this);
@@ -344,20 +299,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         favouriteFragment = new FavouriteFragment();
         hcsProductsFragment = new HCSProductsFragment();
         searchSlide = new SearchAndSlide();
+        ldf = new LocationDetailsFragment();
 
-
-        //Find element
-        btmTextView = (TextView)findViewById(R.id.btm_textView);
-        btn_save = (Button)findViewById(R.id.button_save);
-        btn_close = (Button)findViewById(R.id.button_close);
-        btn_left = (Button)findViewById(R.id.btn_left);
-        btn_right = (Button)findViewById(R.id.btn_right);
+        //Find layout
         resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
-
-        //Set coordinate
-        btmTextView.setY(height*0.04180602006688963210702341137124f);
-        btn_save.setY(((float)height-(height*0.271739f)));
-        btn_close.setY(((float)height-(height*0.271739f)));
 
         //Hide information box
         toggleInformationBox(false);
@@ -365,38 +310,26 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         //Hide resultLayout
         resultLayout.setVisibility(View.GONE);
 
-        //Hide page button
-        togglePageButton(false);
-
         //Init arrayList
         listOfMarkers = new ArrayList<Marker>();
+
+
     }
 
-   private void togglePageButton(boolean toggle){
-       if(toggle){
-           btn_left.setVisibility(View.VISIBLE);
-           btn_right.setVisibility(View.VISIBLE);
-       }
-       else{
-           btn_left.setVisibility(View.INVISIBLE);
-           btn_right.setVisibility(View.INVISIBLE);
-       }
-   }
-   private void toggleNoResultsFound(boolean toggle){
-       if(toggle){
-           resultLayout.setVisibility(View.VISIBLE);
-       }
-       else{
 
+   private void toggleNoResultsFound(boolean toggle){
+       if(toggle)
+           resultLayout.setVisibility(View.VISIBLE);
+       else
            resultLayout.setVisibility(View.INVISIBLE);
-       }
+
    }
 
     private void toggleInformationBox(boolean toggle){
-        float value = toggle? 1.0f:0.0f;
-        btmTextView.setAlpha(value);
-        btn_save.setAlpha(value);
-        btn_close.setAlpha(value);
+      if(!toggle)
+          ldf.hide();
+      if(toggle)
+         ldf.show();
     }
 
     private void toggleMapView(boolean toggle){
@@ -440,15 +373,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 existingLatLng.get(ll).setSnippet(temp+","+loc.get(i).getId());
             }
 
-//              listOfMarkers.add(mMap.addMarker(new MarkerOptions().position(ll)
-//                    .snippet("" + loc.get(i).getId())));
-
-            //listOfMarkers.get(i).setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
         }
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-               snippet = marker.getSnippet().split(",");
+                String[] snippet = marker.getSnippet().split(",");
                 if (prev_marker == null) {
                     prev_marker = marker;
                 } else {
@@ -460,59 +389,22 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                     CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, mMap.getCameraPosition().zoom);
                     mMap.animateCamera(yourLocation);
                 }
-                HealthyLocation clickLoc = lm.getLocation(Integer.parseInt(snippet[0]));
+
+                ArrayList<HealthyLocation> clickLocs = new ArrayList<>();
+                for(int i = 0; i<snippet.length;i++){
+                    clickLocs.add(lm.getLocation(Integer.parseInt(snippet[i])));
+                }
+                ldf.setInformation(clickLocs);
+
                 //Set infomration box to be visible
                 toggleInformationBox(true);
 
-                btmTextView.setText(getInformationBoxText(clickLoc));
-
-                togglePageButton(false);
-                if (snippet.length > 1) {
-
-                    togglePageButton(true);
-
-
-                }
                return true;
             }
 
         });
-        //searchSameLatLngMarkers();
-
-    }
-
-    private String getInformationBoxText(HealthyLocation clickLoc){
-
-        String address = clickLoc.getAddress();
-        String name = clickLoc.getName();
-        String floor_number = clickLoc.getFloor();
-        String unit_number = clickLoc.getUnit();
-        if(floor_number.length()==0)
-            floor_number = "No floor number";
-        if(unit_number.length()==0)
-            unit_number = "No unit number";
-
-        String display = "\r\n\tName : "+name+"\r\n"
-                + "\tAddress : "+address+"\r\n"
-                +"\tFloor No. : "+floor_number+"\r\n"
-                +"\tUnit No. : "+unit_number+"\r\n";
-
-        return display;
-    }
 
 
-    private void searchSameLatLngMarkers(){
-//        int count = 0;
-//        Marker tempMarker;
-//        for(int i =0 ;i<listOfMarkers.size();i++){
-//            tempMarker = listOfMarkers.get(i);
-//
-//            for(int j = i; j<listOfMarkers.size();j++){
-//                if(!(listOfMarkers.get(j).getSnippet().equals(tempMarker.getSnippet())) && ((listOfMarkers.get(j).getPosition().latitude==tempMarker.getPosition().latitude) && (listOfMarkers.get(j).getPosition().longitude==tempMarker.getPosition().longitude))){
-//                    Log.d("POSSAME","Marker "+lm.getLocation(Integer.parseInt(tempMarker.getSnippet())) + "same as " +lm.getLocation(Integer.parseInt(listOfMarkers.get(j).getSnippet())));
-//                }
-//            }
-//        }
     }
 
     private void getBestView(){
@@ -616,10 +508,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         //respond to menu item selection
         switch (item.getItemId()) {
             case R.id.navigation_settings:
-                //mBottomNavigation.setSelected(false);
                 startActivity(new Intent(MainActivity.this, settings.class));
                 return true;
-            //startActivity(new Intent(this, About.class));
             default:
                 startActivity(new Intent(MainActivity.this, settings.class));
                 return super.onOptionsItemSelected(item);
@@ -649,9 +539,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
+    public void onFragmentInteraction(Uri uri) { }
 
 
     @Override
@@ -667,8 +555,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             } else
                 toggleNoResultsFound(false);
         }
-
-        //Toast.makeText(MainActivity.this, "Clicked "+ query, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -692,7 +578,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 toggleNoResultsFound(false);
         }
 
-
         displayOnMap(loc);
         displayOnList(loc);
 
@@ -708,7 +593,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @Override
     public void onSpinnerChange(int index) {
 
-
         if(index == 0){
             toggleMapView(true);
             toggleNoResultsFound(false);
@@ -721,19 +605,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             }
             toggleMapView(false);
             toggleInformationBox(false);
-
             if(index==1){
                 lm.setSortFilter(0);
             }
-            else if(index == 2){
+            else if(index == 2) {
                 lm.setSortFilter(1);
             }
-
-
             displayOnList(lm.sortList(lm.searchLocations(searchQuery)));
-
         }
-
         if(index!=prev_index){
              prev_index = index;
         }
@@ -761,6 +640,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onCloseBtnPress() {
+        toggleInformationBox(false);
+                searchSlide.setSearchBoxText("");
+                if(prev_marker!=null)
+                    prev_marker.setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
+    }
+
+    @Override
+    public void onSaveButtonPressed(int id) {
+        Log.d("SAVING","NEED TO SAVE ID " +id);
 
     }
 }
