@@ -1,363 +1,395 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Boundary.HCSProductsFragment">
 
-    <SearchView
-        android:id="@+id/HCSSearchView"
-        android:layout_width="380dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="15dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginEnd="0dp"
-        android:layout_marginRight="0dp"
-        android:iconifiedByDefault="false"
-        android:queryHint="Tap here to search"
-        android:background="@drawable/sort_customshape"
-        android:focusableInTouchMode="true"/>
-
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
-    <TableLayout
-        android:layout_width="400dp"
-        android:layout_height="500dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="35dp">
+        <TableLayout
+            android:layout_width="400dp"
+            android:layout_height="500dp">
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:weightSum="1">
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
-
-                <Button
-                    android:id="@+id/beveragesButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginLeft="100dp"
-                    android:layout_marginTop="0dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Beverages"
-                    android:textSize="18sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
+                <SearchView
+                    android:id="@+id/HCSSearchView"
+                    android:layout_width="400dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginRight="0dp"
+                    android:background="@drawable/sort_customshape"
+                    android:focusableInTouchMode="true"
+                    android:iconifiedByDefault="false"
+                    android:queryHint="Tap here to search for products" />
+            </TableRow>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:weightSum="1">
 
-                <Button
-                    android:id="@+id/cerealButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Cereal"
-                    android:textSize="18sp" />
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
+                    <Button
+                        android:id="@+id/beveragesButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Beverages"
+                        android:drawableTop="@drawable/ic_action_hsc_beverages"
+                        android:textSize="18sp"/>
 
-        </TableRow>
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:drawableTop="@drawable/ic_action_hsc_beverages"/>
+                </RelativeLayout>
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:weightSum="1">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+                    <Button
+                        android:id="@+id/cerealButton"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Cereal"
+                        android:textSize="18sp" />
 
-                <Button
-                    android:id="@+id/CrispButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Crisp"
-                    android:textSize="18sp" />
+                    <ImageView
+                        android:id="@+id/imageViewBeverages"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
+            </TableRow>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:weightSum="1">
 
-                <Button
-                    android:id="@+id/dairyProductButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Dairy Product"
-                    android:textSize="18sp" />
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
-        </TableRow>
+                    <Button
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Crisp"
+                        android:textSize="18sp" />
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:weightSum="1">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                <Button
-                    android:id="@+id/eggProductButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Egg and Egg Products"
-                    android:textSize="18sp" />
+                    <Button
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Dairy Product"
+                        android:textSize="18sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
+            </TableRow>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:weightSum="1">
 
-                <Button
-                    android:id="@+id/fatsAndOilButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Fats and Oil"
-                    android:textSize="18sp" />
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
-        </TableRow>
+                    <Button
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Egg and Egg Products"
+                        android:textSize="18sp" />
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:weightSum="1">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                <Button
-                    android:id="@+id/fruitsAndVegButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Fruits and Vegetables"
-                    android:textSize="18sp" />
+                    <Button
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Fats and Oil"
+                        android:textSize="18sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
+            </TableRow>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:weightSum="1">
 
-                <Button
-                    android:id="@+id/iceCreamButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Ice Cream"
-                    android:textSize="18sp" />
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
-        </TableRow>
+                    <Button
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Fruits and Vegetables"
+                        android:textSize="18sp" />
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:weightSum="1">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                <Button
-                    android:id="@+id/legumesNutsSeedsButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Legumes, Nuts, and Seeds"
-                    android:textSize="18sp" />
+                    <Button
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Ice Cream"
+                        android:textSize="18sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
+            </TableRow>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:weightSum="1">
 
-                <Button
-                    android:id="@+id/meatAndPoultryButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Meat and Poultry"
-                    android:textSize="18sp" />
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
-        </TableRow>
+                    <Button
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Legumes, Nuts, and Seeds"
+                        android:textSize="18sp" />
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:weightSum="1">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                <Button
-                    android:id="@+id/miscellaneousButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Miscellaneous"
-                    android:textSize="18sp" />
+                    <Button
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Meat and Poultry"
+                        android:textSize="18sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
+            </TableRow>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:weightSum="1">
 
-                <Button
-                    android:id="@+id/saucesSoupRecipemiButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Sauces, Soups and Recipe Mixes"
-                    android:textSize="18sp" />
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
-        </TableRow>
+                    <Button
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Miscellaneous"
+                        android:textSize="18sp" />
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:weightSum="1">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                <Button
-                    android:id="@+id/seafoodButton"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:gravity="center|bottom"
-                    android:paddingBottom="10dp"
-                    android:singleLine="false"
-                    android:text="Seafood"
-                    android:textSize="18sp" />
+                    <Button
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Sauces, Soups and Recipe Mixes"
+                        android:textSize="18sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
+            </TableRow>
 
-          </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:weightSum="1">
 
-    </TableLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
+
+                    <Button
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center|bottom"
+                        android:paddingBottom="10dp"
+                        android:singleLine="false"
+                        android:text="Seafood"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+                </RelativeLayout>
+
+            </TableRow>
+
+
+        </TableLayout>
     </ScrollView>
-</android.support.constraint.ConstraintLayout>
+
+</RelativeLayout>
