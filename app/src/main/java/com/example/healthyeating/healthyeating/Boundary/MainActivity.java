@@ -58,6 +58,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.example.healthyeating.healthyeating.Controller.LocationsManager;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -610,7 +620,51 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onSaveButtonPressed(int id) {
-        Log.d("SAVING","NEED TO SAVE ID " +id);
+        String filename = "FavouriteListData";
 
+        //check if file existes
+        File file = new File(this.getFilesDir(), filename);
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //read file
+        FileInputStream inputStream;
+        try{
+            inputStream = openFileInput(filename);
+            BufferedReader bR = new BufferedReader(new InputStreamReader(inputStream));
+            ArrayList<Integer> saved = new ArrayList<>();
+            for (String line; (line = bR.readLine()) != null; ) {
+                Log.d("FAVOURITE LIST", "ID: " + line);
+                saved.add(Integer.parseInt(line));
+            }
+            bR.close();
+            inputStream.close();
+
+            if(!saved.contains(id)){ //write to file if the id not yet saved
+                FileOutputStream outputStream;
+                try {
+                    outputStream = openFileOutput(filename, MODE_APPEND);
+                    BufferedWriter bW = new BufferedWriter(new OutputStreamWriter(outputStream));
+                    bW.write(Integer.toString(id));
+                    bW.newLine();
+                    bW.close();
+                    outputStream.close();
+                    Log.d("SAVED", "Saved: " + id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else{
+                Log.d("SAVED ADY", "This is saved ady");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

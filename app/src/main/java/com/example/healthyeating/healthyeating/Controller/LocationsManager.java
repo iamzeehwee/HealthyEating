@@ -21,7 +21,6 @@ public class LocationsManager {
 
     public LocationsManager(){
         listOfHealthyLocation = new ArrayList<>();
-
     }
 
     public double getCurrent_lat() {
