@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private LocationDetailsFragment ldf;
 
     //Controller
-    LocationsManager lm; //This is our LocationsManager(Controller)
+    public LocationsManager lm; //This is our LocationsManager(Controller)
 
     //Google Maps
     private Marker prev_marker;
