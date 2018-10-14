@@ -126,6 +126,7 @@ public class LocationDetailsFragment extends Fragment {
 
         btn_close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                loc = null;
                 try{
                     ((OnLocationDetailListener)getContext() ).onCloseBtnPress();
                 }catch (ClassCastException cce){
@@ -188,8 +189,13 @@ public class LocationDetailsFragment extends Fragment {
         current_pageNumber = 0;
         displayInfo(current_pageNumber);//Display the very first one
 
+    }
 
-
+    public HealthyLocation getInformation(){
+        if(loc!=null)
+        return loc.get(0);
+        else
+            return null;
     }
 
     public void hide(){
@@ -197,13 +203,13 @@ public class LocationDetailsFragment extends Fragment {
             relativeLayout.setVisibility(View.INVISIBLE);
                 togglePageButton(false,false);
 
+
         }
     }
 
     public void show(){
         if(relativeLayout!=null) {
             relativeLayout.setVisibility(View.VISIBLE);
-
 
             if(loc.size()>1){
 

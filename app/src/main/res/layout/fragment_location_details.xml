@@ -55,11 +55,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_centerInParent="true"
-                android:paddingLeft = "12dp"
+                android:paddingLeft = "3dp"
                 android:paddingTop="18dp"
                 android:paddingBottom="6dp"
-                android:textSize="13sp"
-                android:fontFamily="sans-serif-smallcaps"
+                android:textSize="14sp"
+
                 android:text="ADDRESS"
                 android:layout_below="@+id/textView"/>
 

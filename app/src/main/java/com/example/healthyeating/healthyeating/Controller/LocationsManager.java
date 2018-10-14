@@ -164,8 +164,12 @@ public class LocationsManager {
 
         ArrayList<HealthyLocation> res = new ArrayList<>();
         for(int i = 0; i< listOfHealthyLocation.size(); i++){
-            if(listOfHealthyLocation.get(i).getLocationType().equals(locationType))
-                res.add(listOfHealthyLocation.get(i));
+            if(listOfHealthyLocation.get(i).getLocationType().equals(locationType)) {
+                if(isWithinRange(listOfHealthyLocation.get(i))){
+                    res.add(listOfHealthyLocation.get(i));
+                }
+
+            }
         }
         return res;
     }
@@ -174,23 +178,17 @@ public class LocationsManager {
         this.listOfHealthyLocation = listOfHealthyLocation;
     }
 
-    public int getSortFilter() {
-        return sortFilter;
-    }
 
     public void setSortFilter(int sortFilter) {
         this.sortFilter = sortFilter;
     }
 
-    public double getLimitDistance() {
-        return limitDistance;
-    }
 
     public void setLimitDistance(double limitDistance) {
         this.limitDistance = limitDistance;
     }
 
-    private boolean isWithinRange(HealthyLocation h_loc2){
+    public boolean isWithinRange(HealthyLocation h_loc2){
 
         Location loc1 = new Location("currentLoc");
         loc1.setLatitude(current_lat);
@@ -238,7 +236,7 @@ public class LocationsManager {
         return results;
     }
 
-    public int searchLocationID (String address){
+    public int searchLocationIDByAddress (String address){
 
         address = address.toLowerCase();
         for(int i = 0; i< listOfHealthyLocation.size(); i++){
@@ -254,15 +252,6 @@ public class LocationsManager {
         return -1;
     }
 
-    public ArrayList<HealthyLocation> getSearchLocationID(int ID){
-        ArrayList<HealthyLocation> results = new ArrayList<HealthyLocation>();
 
-        for(int i = 0; i< listOfHealthyLocation.size(); i++){
-            if(listOfHealthyLocation.get(i).getId() == ID) {
-                results.add(listOfHealthyLocation.get(i));
-            }
-        }
-        return results;
-    }
 
 }

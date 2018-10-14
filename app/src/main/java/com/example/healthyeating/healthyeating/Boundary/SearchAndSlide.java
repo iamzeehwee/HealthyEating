@@ -77,10 +77,7 @@ public class SearchAndSlide extends Fragment  {
     public int getSpinnerValue(){
         return spinner.getSelectedItemPosition();
     }
-    public void resetSliderAndTextBox(){
-        searchView.setQuery("",false);
-        seek.setProgress(MAX_SEEKBAR_VALUE);
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
