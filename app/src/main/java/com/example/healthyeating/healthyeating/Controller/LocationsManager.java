@@ -1,5 +1,6 @@
 package com.example.healthyeating.healthyeating.Controller;
 
+import com.example.healthyeating.healthyeating.Boundary.MainActivity;
 import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
 
 import java.io.BufferedReader;
@@ -328,9 +329,8 @@ public class LocationsManager {
         return saveFavouriteList();
     }
 
-    public ArrayList<HealthyLocation> getFavouriteList(HealthyLocation location){
+    public ArrayList<HealthyLocation> getFavouriteList(){
         return favouriteList;
     }
-
 
 }
