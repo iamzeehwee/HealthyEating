@@ -75,7 +75,8 @@ public class FavouriteFragment extends Fragment implements LocationDetailsFragme
                 categoryChosen = parent.getItemAtPosition(position).toString();
 
                 // put locations into list view depending on chosen location category
-                ArrayList<HealthyLocation> favouritesList = getFavourites();
+                LocationsManager lm = ((MainActivity)getActivity()).getLocationsManager();
+                ArrayList<HealthyLocation> favouritesList = lm.getFavourites();
                 ArrayList<HealthyLocation> displayedList = new ArrayList<HealthyLocation>();
 
                 // show only favourite eateries
@@ -135,34 +136,6 @@ public class FavouriteFragment extends Fragment implements LocationDetailsFragme
         });*/
 
         return view;
-    }
-
-    public ArrayList<HealthyLocation> getFavourites(){
-
-        LocationsManager locationsManager = ((MainActivity)getActivity()).lm;
-        ArrayList<HealthyLocation> healthyLocations = new ArrayList<>();
-        String filename = "FavouriteListData";
-
-        //read file
-        FileInputStream inputStream;
-        try{
-            inputStream = getContext().openFileInput(filename);
-            BufferedReader bR = new BufferedReader(new InputStreamReader(inputStream));
-            ArrayList<Integer> saved = new ArrayList<>();
-            for (String line; (line = bR.readLine()) != null; ) {
-                int id = Integer.parseInt(line);
-                HealthyLocation healthyLocation = locationsManager.getLocation(id);
-                healthyLocations.add(healthyLocation);
-            }
-            bR.close();
-            inputStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return healthyLocations;
     }
 
     @Override
