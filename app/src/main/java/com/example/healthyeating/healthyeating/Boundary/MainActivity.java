@@ -625,4 +625,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         else
             Log.d("ERROR", "failed to save");
     }
+
+    // return the instance of LocationsManager
+    public LocationsManager getLocationsManager() {
+        return this.lm;
+    }
 }
