@@ -65,7 +65,7 @@ public class FavouriteFragment extends Fragment implements LocationDetailsFragme
         categoryAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryAdapter);
 
-        // get input from dropdown menu and adjust favourites shown
+        // get input from dropdown menu and display favourites depending on chosen category
         categoryChosen = "All Favourite";
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -83,9 +83,9 @@ public class FavouriteFragment extends Fragment implements LocationDetailsFragme
                     favouritesList = lm.getFavouriteCaterers();
                 }
 
-                // set adapter for list view
                 CustomListAdapter favouritesAdapter = new CustomListAdapter(getActivity().getApplicationContext(), R.layout.list_item, favouritesList);
                 favouritesView.setAdapter(favouritesAdapter);
+
                 categoryTextView.setText(categoryChosen);
             }
 
@@ -128,7 +128,7 @@ public class FavouriteFragment extends Fragment implements LocationDetailsFragme
     @Override
     public void onFragmentInteraction(Uri uri) { }
 
-    // custom adapter for complex views
+    // custom adapter for complex views in favourite tab
     private class CustomListAdapter extends ArrayAdapter<HealthyLocation> {
         private int layout;
         private List<HealthyLocation> locationList;
