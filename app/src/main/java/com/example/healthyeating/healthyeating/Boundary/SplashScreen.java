@@ -199,9 +199,10 @@ public class SplashScreen extends AppCompatActivity {
        // by using getResource() which is only available in Activity .
 
        //Init controller here first
-        lm = SingletonManager.getLocationManagerInstance();
+       lm = SingletonManager.getLocationManagerInstance();
        readEateriesKMLCreateObj();
        readCaterersKMLCreateObj();
+       lm.initFavouriteList(this);
 
    }
 

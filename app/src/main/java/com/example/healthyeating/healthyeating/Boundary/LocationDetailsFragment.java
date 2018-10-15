@@ -141,7 +141,7 @@ public class LocationDetailsFragment extends Fragment {
         btn_save.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try{
-                    ((OnLocationDetailListener)getContext() ).onSaveButtonPressed(loc.get(current_pageNumber).getId());
+                    ((OnLocationDetailListener)getContext() ).onSaveButtonPressed(loc.get(current_pageNumber));
                 }catch (ClassCastException cce){
 
                 }
@@ -245,7 +245,7 @@ public class LocationDetailsFragment extends Fragment {
 
     public interface OnLocationDetailListener{
         void onCloseBtnPress();
-        void onSaveButtonPressed(int id);
+        void onSaveButtonPressed(HealthyLocation location);
 
     }
 

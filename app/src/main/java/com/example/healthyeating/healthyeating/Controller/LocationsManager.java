@@ -1,14 +1,29 @@
 package com.example.healthyeating.healthyeating.Controller;
 
 import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import android.content.Context;
 import android.location.Location;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 
 public class LocationsManager {
 
+    private Context context;
     private ArrayList<HealthyLocation> listOfHealthyLocation;
     private int sortFilter = 0; //0 = A-Z, 1 = Z-A
     private double limitDistance = 50000.0;
@@ -16,11 +31,12 @@ public class LocationsManager {
     private double current_lat = -1;
     private double current_long = -1;
     private boolean isLatLngSet = false;
-
-
+    private String favFileName = "FavouriteListData";
+    private ArrayList<HealthyLocation> favouriteList;
 
     public LocationsManager(){
         listOfHealthyLocation = new ArrayList<>();
+        favouriteList = new ArrayList<>();
     }
 
     public double getCurrent_lat() {
@@ -30,7 +46,6 @@ public class LocationsManager {
     public double getCurrent_long() {
         return current_long;
     }
-
 
     public ArrayList<HealthyLocation> sortList(ArrayList<HealthyLocation> loc){
         ArrayList<HealthyLocation> sortedList = new ArrayList<HealthyLocation>();
@@ -139,9 +154,7 @@ public class LocationsManager {
 
     }
 
-
-
-   public boolean setCurrentLatLng(double lat, double longitude){
+    public boolean setCurrentLatLng(double lat, double longitude){
         //Validation of lat long.
        boolean changed = false;
         if( (lat>=0 && lat<=90) && (longitude >=0 && longitude<=180)) {
@@ -157,7 +170,6 @@ public class LocationsManager {
 
         return changed;
    }
-
 
     public ArrayList<HealthyLocation> getListOfLocation() {
 
@@ -177,11 +189,9 @@ public class LocationsManager {
         this.listOfHealthyLocation = listOfHealthyLocation;
     }
 
-
     public void setSortFilter(int sortFilter) {
         this.sortFilter = sortFilter;
     }
-
 
     public void setLimitDistance(double limitDistance) {
         this.limitDistance = limitDistance;
@@ -251,6 +261,76 @@ public class LocationsManager {
         return -1;
     }
 
+    public void initFavouriteList(Context c){
+        context = c;
+
+        //check if file existes
+        File file = new File( context.getFilesDir(), favFileName);
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //read file
+        FileInputStream inputStream;
+        try{
+            inputStream = context.openFileInput(favFileName);
+            BufferedReader bR = new BufferedReader(new InputStreamReader(inputStream));
+            for (String line; (line = bR.readLine()) != null; ) {
+                favouriteList.add(getLocation(Integer.parseInt(line)));     //add location to favourite list
+            }
+            bR.close();
+            inputStream.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean saveFavouriteList(){
+        FileOutputStream outputStream;
+        try {
+            outputStream = context.openFileOutput(favFileName, Context.MODE_PRIVATE);
+            BufferedWriter bW = new BufferedWriter(new OutputStreamWriter(outputStream));
+            for (HealthyLocation fav: favouriteList) {
+                bW.write(Integer.toString(fav.getId()));
+                bW.newLine();
+            }
+            bW.close();
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean addToFavourite(HealthyLocation location){
+        if(!favouriteList.contains(location)){
+            favouriteList.add(location);
+        }else{
+            return false; //already added
+        }
+        return saveFavouriteList();
+    }
+
+    public boolean removeFavourite(HealthyLocation location){
+        if(favouriteList.contains(location)){
+            favouriteList.remove(location);
+        }else{
+            return false;  //the item is not saved yet
+        }
+        return saveFavouriteList();
+    }
+
+    public ArrayList<HealthyLocation> getFavouriteList(HealthyLocation location){
+        return favouriteList;
+    }
 
 
 }

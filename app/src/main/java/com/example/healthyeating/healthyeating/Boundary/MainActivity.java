@@ -619,52 +619,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     @Override
-    public void onSaveButtonPressed(int id) {
-        String filename = "FavouriteListData";
-
-        //check if file existes
-        File file = new File(this.getFilesDir(), filename);
-        if(!file.exists()){
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //read file
-        FileInputStream inputStream;
-        try{
-            inputStream = openFileInput(filename);
-            BufferedReader bR = new BufferedReader(new InputStreamReader(inputStream));
-            ArrayList<Integer> saved = new ArrayList<>();
-            for (String line; (line = bR.readLine()) != null; ) {
-                Log.d("FAVOURITE LIST", "ID: " + line);
-                saved.add(Integer.parseInt(line));
-            }
-            bR.close();
-            inputStream.close();
-
-            if(!saved.contains(id)){ //write to file if the id not yet saved
-                FileOutputStream outputStream;
-                try {
-                    outputStream = openFileOutput(filename, MODE_APPEND);
-                    BufferedWriter bW = new BufferedWriter(new OutputStreamWriter(outputStream));
-                    bW.write(Integer.toString(id));
-                    bW.newLine();
-                    bW.close();
-                    outputStream.close();
-                    Log.d("SAVED", "Saved: " + id);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }else{
-                Log.d("SAVED ADY", "This is saved ady");
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void onSaveButtonPressed(HealthyLocation location) {
+        if(lm.addToFavourite(location))
+            Log.d("SUCCESS", "successfully saved");
+        else
+            Log.d("ERROR", "failed to save");
     }
 }
