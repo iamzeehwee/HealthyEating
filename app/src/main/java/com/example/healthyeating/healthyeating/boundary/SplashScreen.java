@@ -199,8 +199,9 @@ public class SplashScreen extends AppCompatActivity {
 
        //Init controller here first
        lm = SingletonManager.getLocationManagerInstance();
-       lm.initFavouriteList(this);
        lm.initHealthyLocationList(this);
+       lm.initFavouriteList(this);
+
 
 
 
