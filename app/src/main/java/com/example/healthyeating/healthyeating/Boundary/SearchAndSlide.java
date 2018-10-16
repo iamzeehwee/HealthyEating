@@ -1,15 +1,10 @@
 package com.example.healthyeating.healthyeating.Boundary;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
@@ -17,23 +12,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.AdapterView;
 
-import com.example.healthyeating.healthyeating.Controller.LocationsManager;
-import com.example.healthyeating.healthyeating.Controller.SingletonManager;
+import com.example.healthyeating.healthyeating.Interfaces.ILocationListener;
 import com.example.healthyeating.healthyeating.R;
 
 import java.text.DecimalFormat;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchAndSlide.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SearchAndSlide#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class SearchAndSlide extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,12 +31,11 @@ public class SearchAndSlide extends Fragment  {
     private String mParam2;
     SearchView searchView;
     SeekBar seek;
-    Activity activity;
     private double seekBarValue = 0;
     private static final int MAX_SEEKBAR_VALUE = 50000;
-    private OnFragmentInteractionListener mListener;
+    private ILocationListener locListener;
    Spinner spinner;
-    private int current_index = 0;
+
 
     public SearchAndSlide() {
         // Required empty public constructor
@@ -102,11 +87,9 @@ public class SearchAndSlide extends Fragment  {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.d("SearchBar", "onQueryTextChange "+newText);
-                try{
-                    ((OnSearchSubmitListener)getContext() ).searchSubmit(newText);
-                }catch (ClassCastException cce){
 
+                if (locListener != null) {
+                    locListener.searchSubmit(newText);
                 }
                 return false;
             }
@@ -114,12 +97,11 @@ public class SearchAndSlide extends Fragment  {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-               Log.d("SearchBar", "OnQueryTextSubmitcalled   "+ query);
-                try{
-                    ((OnSearchSubmitListener)getContext() ).searchSubmit(query);
-                }catch (ClassCastException cce){
 
+                if (locListener != null) {
+                    locListener.searchSubmit(query);
                 }
+
                 return false;
             }
 
@@ -148,24 +130,24 @@ public class SearchAndSlide extends Fragment  {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                 Log.d("Slider1","Hold down");
-                try{
-                    ((OnSliderChangeListener)getContext() ).onSliderHoldDown();
-                }catch (ClassCastException cce){
 
+                if (locListener != null) {
+                    locListener.onSliderHoldDown();
                 }
+
+
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Log.d("Slider1","Release");
-                //Interact with MainActivity when slider change so that MainActivity can interact with the LocationsManager
 
-                try{
-                    ((OnSliderChangeListener)getContext() ).onSliderRelease(seekBarValue);
-                }catch (ClassCastException cce){
 
+                if (locListener != null) {
+                    locListener.onSliderRelease(seekBarValue);
                 }
+
+
             }
         });
 
@@ -180,56 +162,23 @@ public class SearchAndSlide extends Fragment  {
         spinner.setAdapter(adapter);
 
         spinner.setSelection(0,false);
-        spinner.setOnTouchListener(new View.OnTouchListener(){
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-               // Log.d("SpinnerChange",""+event);
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                   // Toast.makeText(this,"down",Toast.LENGTH_LONG).show();
-                    // Load your spinner here
-//                    try{
-//                        ((OnSpinnerChangeListener)getContext() ).onSpinnerChange(4);
-//                    }catch (ClassCastException cce){
-//
-//                    }
-                }
-
-                return false;
-            }
-
-        });
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                Toast.makeText(parent.getContext(),
-                        "OnItemSelectedListener : " + "Check " + pos + "Check " + parent.getItemAtPosition(pos).toString(), Toast.LENGTH_SHORT).show();
-                        // For passing sortFilter value when choose the sort condition
+//                Toast.makeText(parent.getContext(),
+//                        "OnItemSelectedListener : " + "Check " + pos + "Check " + parent.getItemAtPosition(pos).toString(), Toast.LENGTH_SHORT).show();
 
-//                        Intent i = new Intent(getActivity(), EateriesListView.class);
-//                        if (pos == 2) {
-//                            i.putExtra("key", "1");
-//                            startActivity(i);
-//                        }
-//                        if (pos == 1) {
-//                            i.putExtra("key", "0");
-//                            startActivity(i);
-//                        }
-//
-//                         // Remove animation when switch activity
-//                         ((Activity) getActivity()).overridePendingTransition(0,0);
 
-                try{
-                    ((OnSpinnerChangeListener)getContext() ).onSpinnerChange(pos);
-                }catch (ClassCastException cce){
 
+
+                if (locListener != null) {
+                    locListener.onSpinnerChange(pos);
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                //Intent i = new Intent(getActivity(), MainActivity.class);
-                //startActivity(i);
-                Log.d("Spinner","NTH");
+
 
             }
         });
@@ -237,11 +186,21 @@ public class SearchAndSlide extends Fragment  {
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ILocationListener) {
+            locListener = (ILocationListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement ILocationListener");
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        locListener = null;
     }
 
     public void setSearchBoxText(String s){
@@ -252,52 +211,10 @@ public class SearchAndSlide extends Fragment  {
     public void setSpinnerValue(int index){
         spinner.setSelection(index);
     }
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
 
 
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-    public interface OnSearchSubmitListener{
-        public void searchSubmit(String query);
-    }
-
-    public interface OnSliderChangeListener{
-        public void onSliderRelease(double dis);
-        public void onSliderHoldDown();
-    }
-
-    public interface OnSpinnerChangeListener{
-        public void onSpinnerChange(int index);
-    }
 
 
 }

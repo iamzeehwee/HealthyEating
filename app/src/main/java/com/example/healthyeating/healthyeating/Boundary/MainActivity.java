@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -19,7 +18,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
@@ -28,22 +26,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.healthyeating.healthyeating.Controller.SingletonManager;
 import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
+import com.example.healthyeating.healthyeating.Interfaces.ILocationListener;
 import com.example.healthyeating.healthyeating.R;
 
 import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -58,22 +52,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.example.healthyeating.healthyeating.Controller.LocationsManager;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements LocationListener,LocationDetailsFragment.OnLocationDetailListener, SearchAndSlide.OnSpinnerChangeListener, SearchAndSlide.OnSliderChangeListener, SearchAndSlide.OnSearchSubmitListener, OnMapReadyCallback, LocationDetailsFragment.OnFragmentInteractionListener, SearchAndSlide.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements LocationListener,
+        ILocationListener,
+                                                               OnMapReadyCallback {
 
     private BottomNavigationView mBottomNavigation;
     private FrameLayout mMainFrame;
@@ -165,14 +151,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 String locationDetails = listItem.toString().trim();
                 int endIndex =  locationDetails.indexOf("\r\nAddress: ");//locationDetails.indexOf(":") + 1;
                 String address = locationDetails.substring(0, endIndex);
-                int selectedLocID = lm.searchLocationIDByAddress(address);
+                //int selectedLocID = lm.searchLocationIDByAddress(address);
 
-                ArrayList<HealthyLocation> loc = new ArrayList<HealthyLocation>();
-                HealthyLocation clickLoc = lm.getLocation(selectedLocID);
-                loc.add(clickLoc);
+                ArrayList<HealthyLocation> loc = lm.searchLocations(address);//new ArrayList<HealthyLocation>();
+               // HealthyLocation clickLoc = lm.searchLocations(address);
+                //HealthyLocation clickLoc = lm.getLocation(selectedLocID);
+                //loc.add(clickLoc);
                 displayOnMap(loc);
 
-                String name = clickLoc.getName();
+                String name = loc.get(0).getName();
                 searchSlide.setSpinnerValue(0);
 
                 ldf.setInformation(loc);
@@ -292,9 +279,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
       //We want to display on both map and list to cater for the case where user switch from:
       // - eateries list view -> caterer list view or vice versa
       // - eateries map view -> caterer list view or vice versa
-      displayOnMap(loc);
-      displayOnList(lm.sortList(loc));
       toggleNoResultsFound(false);
+      lm.setSortFilter(0);
+      displayOnMap(loc);
+      displayOnList(loc);
+
   }
 
    private void toggleNoResultsFound(boolean toggle){
@@ -336,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 listOfMarkers.add(m);
                 m.setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
                 if(selectedHealthyLocation!=null){
+                  //  Log.d("Selecteddd","HERE" +selectedHealthyLocation.getId() +"   "+ loc.get(i).getId());
                     if(selectedHealthyLocation.getId() == loc.get(i).getId()){
                         m.setIcon(BitmapDescriptorFactory.defaultMarker(selected_map_pin_color));
                     }
@@ -365,6 +355,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
                 ArrayList<HealthyLocation> clickLocs = new ArrayList<>();
                 for(int i = 0; i<snippet.length;i++){
+
                     clickLocs.add(lm.getLocation(Integer.parseInt(snippet[i])));
                 }
                 ldf.setInformation(clickLocs);
@@ -505,10 +496,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private void displayOnList(ArrayList<HealthyLocation> loc){
         adapter = new ArrayAdapter<HealthyLocation>(getApplicationContext(), android.R.layout.simple_list_item_1, loc);
         list.setAdapter(adapter);
+        if(searchSlide.getSpinnerValue()!=0) { //We want to show in List View only
+            if (loc.size() == 0) {
+                toggleNoResultsFound(true);
+            } else
+                toggleNoResultsFound(false);
+        }
+
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) { }
+
 
 
     @Override
@@ -518,12 +515,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         ArrayList<HealthyLocation> loc = lm.searchLocations(searchQuery);
         displayOnMap(loc);
         displayOnList(loc);
-        if(searchSlide.getSpinnerValue()!=0) { //We want to show in List View only
-            if (loc.size() == 0) {
-                toggleNoResultsFound(true);
-            } else
-                toggleNoResultsFound(false);
-        }
+
     }
 
     @Override
@@ -532,18 +524,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         lm.setLimitDistance(dis);
         ArrayList<HealthyLocation> loc = lm.searchLocations(searchQuery);
         HealthyLocation getSelectedLocation = ldf.getInformation();
-        if(getSelectedLocation!=null){
-                 toggleInformationBox(lm.isWithinRange(getSelectedLocation));
-                 //listOfMarkers.get()
-        }
+
         if(searchSlide.getSpinnerValue()==0) { //We want to do this in Map View only
             if (searchQuery.length() > 0) {
                     toggleInformationBox(loc.size() == 0? false:true);
             }
-        }
-
-        if(searchSlide.getSpinnerValue()!=0) { //We want to show in List View only
-            toggleNoResultsFound(loc.size() == 0);
+            if(getSelectedLocation!=null){
+                toggleInformationBox(lm.isWithinRange(getSelectedLocation));
+            }
         }
 
         displayOnMap(loc);
@@ -573,12 +561,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             toggleMapView(false);
             toggleInformationBox(false);
             if(index==1){
+                Log.d("SPINNN","HERE");
                 lm.setSortFilter(0);
             }
             else if(index == 2) {
                 lm.setSortFilter(1);
             }
-            displayOnList(lm.sortList(lm.searchLocations(searchQuery)));
+            displayOnList(lm.searchLocations(searchQuery));
         }
         if(index!=prev_index){
              prev_index = index;

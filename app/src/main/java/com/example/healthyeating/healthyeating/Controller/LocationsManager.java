@@ -2,6 +2,8 @@ package com.example.healthyeating.healthyeating.Controller;
 
 import com.example.healthyeating.healthyeating.Boundary.MainActivity;
 import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
+import com.example.healthyeating.healthyeating.Entity.HealthyLocationStorage;
+import com.example.healthyeating.healthyeating.Interfaces.DAO;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,9 +25,9 @@ import android.util.Log;
 
 
 public class LocationsManager {
-
+    private DAO<HealthyLocation> locationDAO;
     private Context context;
-    private ArrayList<HealthyLocation> listOfHealthyLocation;
+    //private ArrayList<HealthyLocation> listOfHealthyLocation;
     private int sortFilter = 0; //0 = A-Z, 1 = Z-A
     private double limitDistance = 50000.0;
     private String locationType = "Eateries";
@@ -33,12 +35,17 @@ public class LocationsManager {
     private double current_long = -1;
     private boolean isLatLngSet = false;
     private String favFileName = "FavouriteListData";
-    private ArrayList<HealthyLocation> favouriteList;
+   private ArrayList<HealthyLocation> favouriteList;
 
     public LocationsManager(){
-        listOfHealthyLocation = new ArrayList<>();
+     //   listOfHealthyLocation = new ArrayList<>();
         favouriteList = new ArrayList<>();
+        locationDAO = new HealthyLocationStorage();
     }
+
+
+
+
 
     public double getCurrent_lat() {
         return current_lat;
@@ -48,21 +55,21 @@ public class LocationsManager {
         return current_long;
     }
 
-    public ArrayList<HealthyLocation> sortList(ArrayList<HealthyLocation> loc){
-        ArrayList<HealthyLocation> sortedList = new ArrayList<HealthyLocation>();
-        Collections.sort(loc, new Comparator<HealthyLocation>() {
-            public int compare(HealthyLocation o1, HealthyLocation o2) {
-                if(sortFilter==0)
-                    return o1.getName().compareTo(o2.getName());
-                else if(sortFilter==1)
-                    return o2.getName().compareTo(o1.getName());
-                else
-                    return o1.getName().compareTo(o2.getName());
-            }
-        });
-
-        return loc;
-    }
+//    public ArrayList<HealthyLocation> sortList(ArrayList<HealthyLocation> loc){
+//        ArrayList<HealthyLocation> sortedList = new ArrayList<HealthyLocation>();
+//        Collections.sort(loc, new Comparator<HealthyLocation>() {
+//            public int compare(HealthyLocation o1, HealthyLocation o2) {
+//                if(sortFilter==0)
+//                    return o1.getName().compareTo(o2.getName());
+//                else if(sortFilter==1)
+//                    return o2.getName().compareTo(o1.getName());
+//                else
+//                    return o1.getName().compareTo(o2.getName());
+//            }
+//        });
+//
+//        return loc;
+//    }
 
     private String extractDetails(String msg,String searchTag, String endTag){
         String tempData = "";
@@ -78,7 +85,7 @@ public class LocationsManager {
     }
 
     public HealthyLocation getLocation(int id){
-        return listOfHealthyLocation.get(id);
+        return locationDAO.retrieveByID(id);
     }
 
     public void setLocationType(String locationType){
@@ -87,6 +94,7 @@ public class LocationsManager {
     public String getLocationType(){
         return locationType;
     }
+
     public void createLocation(ArrayList<String> data, String locationType){
         //We assume that there is not much changes to the KML data format
         String address_building_name="";
@@ -150,8 +158,8 @@ public class LocationsManager {
             address = address.substring(1);
 
 
-        HealthyLocation loc = new HealthyLocation(listOfHealthyLocation.size(),name,address,postal_code,  floor,  unit,  longitude,  latitude, locationType);
-        listOfHealthyLocation.add(loc);
+        HealthyLocation loc = new HealthyLocation(name,address,postal_code,  floor,  unit,  longitude,  latitude, locationType);
+        locationDAO.add(loc);
 
     }
 
@@ -174,25 +182,21 @@ public class LocationsManager {
 
     public ArrayList<HealthyLocation> getListOfLocation() {
 
-        ArrayList<HealthyLocation> res = new ArrayList<>();
-        for(int i = 0; i< listOfHealthyLocation.size(); i++){
-            if(listOfHealthyLocation.get(i).getLocationType().equals(locationType)) {
-                if(isWithinRange(listOfHealthyLocation.get(i))){
-                    res.add(listOfHealthyLocation.get(i));
-                }
+        ArrayList<HealthyLocation> res = locationDAO.getListOfHealthyLocation(sortFilter, locationType);
 
-            }
+        if(!isLatLngSet)
+            return res;
+        for(int i = 0; i< res.size(); i++){
+                if(!isWithinRange(res.get(i))) {
+                    res.remove(res.get(i));
+                    i--;
+                }
         }
         return res;
     }
 
-    public void setListOfHealthyLocation(ArrayList<HealthyLocation> listOfHealthyLocation) {
-        this.listOfHealthyLocation = listOfHealthyLocation;
-    }
 
-    public void setSortFilter(int sortFilter) {
-        this.sortFilter = sortFilter;
-    }
+
 
     public void setLimitDistance(double limitDistance) {
         this.limitDistance = limitDistance;
@@ -215,52 +219,49 @@ public class LocationsManager {
         return false;
     }
 
-    public ArrayList<HealthyLocation> searchLocations(String address){
-        ArrayList<HealthyLocation> results = new ArrayList<HealthyLocation>();
-        address = address.toLowerCase().replace("-"," ");
-        for(int i = 0; i< listOfHealthyLocation.size(); i++){
-            if(listOfHealthyLocation.get(i).getLocationType().equals(locationType)) {
-                String concat = listOfHealthyLocation.get(i).getName() + " " + listOfHealthyLocation.get(i).getAddress() + " " + listOfHealthyLocation.get(i).getZipCode();
-                concat = concat.toLowerCase();
-                String[] addressSplit = address.split(" ");
-                boolean found = true;
-                for (int j = 0; j < addressSplit.length; j++) {
-                    if (concat.indexOf(addressSplit[j]) == -1)
-                        found = false;
-                }
-                if (found) {
+    public ArrayList<HealthyLocation> searchLocations(String name){
 
-                    if(!isLatLngSet)
-                    results.add(listOfHealthyLocation.get(i));
-                    else{
-                        if(isWithinRange(listOfHealthyLocation.get(i))){
-                            results.add(listOfHealthyLocation.get(i));
-                        }
-                    }
+        ArrayList<HealthyLocation> locList = locationDAO.retrieveByName(name,sortFilter,locationType);
+
+        //We check if the Location is within the range of the current user because it is not the job of
+        //the Storage to check
+        //Storage should handle manipulations of data.
+        if(!isLatLngSet)
+            return locList;
+        for(int i = 0; i<locList.size();i++){
+                if(!isWithinRange(locList.get(i))){
+                    locList.remove(locList.get(i));
+                    i--;
                 }
-            }
+
         }
 
-        results = sortList(results);
 
-        return results;
+
+        return locList;
     }
 
-    public int searchLocationIDByAddress (String address){
+//    public int searchLocationIDByAddress (String address){
+//
+//        address = address.toLowerCase();
+//        for(int i = 0; i< listOfHealthyLocation.size(); i++){
+//            if(listOfHealthyLocation.get(i).getLocationType().equals(locationType)) {
+//                String concat = listOfHealthyLocation.get(i).getName();
+//                concat = concat.toLowerCase();
+//
+//                if (address.equals(concat)) {
+//                    return listOfHealthyLocation.get(i).getId();
+//                }
+//            }
+//        }
+//        return -1;
+//    }
 
-        address = address.toLowerCase();
-        for(int i = 0; i< listOfHealthyLocation.size(); i++){
-            if(listOfHealthyLocation.get(i).getLocationType().equals(locationType)) {
-                String concat = listOfHealthyLocation.get(i).getName();
-                concat = concat.toLowerCase();
 
-                if (address.equals(concat)) {
-                    return listOfHealthyLocation.get(i).getId();
-                }
-            }
-        }
-        return -1;
-    }
+
+public void setSortFilter(int sortFilter){
+        this.sortFilter = sortFilter;
+}
 
     public void initFavouriteList(Context c){
         context = c;

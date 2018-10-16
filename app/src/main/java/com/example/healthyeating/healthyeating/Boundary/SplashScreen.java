@@ -200,65 +200,26 @@ public class SplashScreen extends AppCompatActivity {
 
        //Init controller here first
        lm = SingletonManager.getLocationManagerInstance();
-       readEateriesKMLCreateObj();
-       readCaterersKMLCreateObj();
+
+       //I am doing read here because in Controller, I can't do a getResource without passing a Context,
+       // I do not want to pass Context to controller just to read the file
+       initLocationList();
        lm.initFavouriteList(this);
+
 
    }
 
-
-    private String readEateriesKMLCreateObj(){
-         boolean start = false;
-
-         ArrayList<String> data = new ArrayList();
-        try {
-            InputStream inputStream =  getResources().openRawResource(R.raw.eateries);
-            try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                try {
-                    StringBuilder result = new StringBuilder();
-                    String line;
-
-                    while ((line = reader.readLine()) != null) {
-                       if(!start && line.equals("<SchemaData schemaUrl=\"#kml_schema_ft_HEALTHIERDINING\">"))
-                       {
-
-                        start = true;
-                        line = reader.readLine();
-                       }
-                        if(start && line.equals("</Point>"))
-                        {
-                            start = false;
-                            lm.createLocation(data,"Eateries");
-                            data.clear();
-                        }
-
-                       if(start){
-                           data.add(line);
-                       }
-                        result.append(line);
-                    }
-                    return result.toString();
-                } finally {
-                    reader.close();
-                }
-            } finally {
-                inputStream.close();
-            }
-        } catch (IOException e) {
-            // process exception
-        }
-        return "@@@";
+    private void initLocationList(){
+        readKMLFile(R.raw.eateries,"<SchemaData schemaUrl=\"#kml_schema_ft_HEALTHIERDINING\">","Eateries");
+        readKMLFile(R.raw.caterers,"<SchemaData schemaUrl=\"#kml_schema_ft_HEALTHIERCATERERS\">","Caterers");
     }
 
+    private void readKMLFile(int file, String tag, String locationType){
 
-
-    private String readCaterersKMLCreateObj(){
         boolean start = false;
-
         ArrayList<String> data = new ArrayList();
         try {
-            InputStream inputStream =  getResources().openRawResource(R.raw.caterers);
+            InputStream inputStream =  getResources().openRawResource(file);
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 try {
@@ -266,7 +227,7 @@ public class SplashScreen extends AppCompatActivity {
                     String line;
 
                     while ((line = reader.readLine()) != null) {
-                        if(!start && line.equals("<SchemaData schemaUrl=\"#kml_schema_ft_HEALTHIERCATERERS\">"))
+                        if(!start && line.equals(tag))
                         {
 
                             start = true;
@@ -275,7 +236,7 @@ public class SplashScreen extends AppCompatActivity {
                         if(start && line.equals("</Point>"))
                         {
                             start = false;
-                            lm.createLocation(data,"Caterers");
+                            lm.createLocation(data,locationType);
                             data.clear();
                         }
 
@@ -284,7 +245,7 @@ public class SplashScreen extends AppCompatActivity {
                         }
                         result.append(line);
                     }
-                    return result.toString();
+
                 } finally {
                     reader.close();
                 }
@@ -294,8 +255,9 @@ public class SplashScreen extends AppCompatActivity {
         } catch (IOException e) {
             // process exception
         }
-        return "@@@";
+
     }
+
 
 
 
