@@ -16,8 +16,8 @@ public class HealthyLocation {
     private String locationType;
 
 
-    public HealthyLocation(int id, String name, String address, String zipCode, String floor, String unit, double longitude, double latitude, String locationType){
-        this.id = id;
+    public HealthyLocation( String name, String address, String zipCode, String floor, String unit, double longitude, double latitude, String locationType){
+
         this.name = name;
         this.address= address;
         this.zipCode = zipCode;
@@ -94,6 +94,9 @@ public class HealthyLocation {
 
     public int getId() {
         return id;
+    }
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

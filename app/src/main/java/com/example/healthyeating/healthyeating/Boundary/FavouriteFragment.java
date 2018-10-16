@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FavouriteFragment extends Fragment implements LocationDetailsFragment.OnFragmentInteractionListener, SearchAndSlide.OnFragmentInteractionListener {
+public class FavouriteFragment extends Fragment {
 
     private static final String TAG = "Favourite";
 
@@ -125,8 +125,8 @@ public class FavouriteFragment extends Fragment implements LocationDetailsFragme
         return view;
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) { }
+//    @Override
+//    public void onFragmentInteraction(Uri uri) { }
 
     // custom adapter for complex views in favourite tab
     private class CustomListAdapter extends ArrayAdapter<HealthyLocation> {
