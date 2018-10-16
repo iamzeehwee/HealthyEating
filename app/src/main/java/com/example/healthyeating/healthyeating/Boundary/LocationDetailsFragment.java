@@ -173,6 +173,12 @@ public class LocationDetailsFragment extends Fragment {
 
     }
 
+    public void reset(){
+        loc = null;
+        current_pageNumber = 0;
+
+    }
+
     public HealthyLocation getInformation(){
         if(loc!=null)
         return loc.get(0);

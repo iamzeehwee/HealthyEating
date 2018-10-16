@@ -34,6 +34,8 @@ import android.widget.Toast;
 
 import com.example.healthyeating.healthyeating.Controller.SingletonManager;
 import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
+import com.example.healthyeating.healthyeating.Interfaces.IFavouriteListener;
+import com.example.healthyeating.healthyeating.Interfaces.IHCSListener;
 import com.example.healthyeating.healthyeating.Interfaces.ILocationListener;
 import com.example.healthyeating.healthyeating.R;
 
@@ -58,7 +60,7 @@ import java.util.HashMap;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity implements LocationListener,
-        ILocationListener,
+        ILocationListener,IFavouriteListener,IHCSListener,
                                                                OnMapReadyCallback {
 
     private BottomNavigationView mBottomNavigation;
@@ -276,10 +278,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
       toggleInformationBox(false);
       searchSlide.setSearchBoxText("");
       removeAllMarkersFromMap();
+
       //We want to display on both map and list to cater for the case where user switch from:
       // - eateries list view -> caterer list view or vice versa
       // - eateries map view -> caterer list view or vice versa
       toggleNoResultsFound(false);
+      ldf.reset();
       lm.setSortFilter(0);
       displayOnMap(loc);
       displayOnList(loc);
@@ -325,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 listOfMarkers.add(m);
                 m.setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
                 if(selectedHealthyLocation!=null){
-                  //  Log.d("Selecteddd","HERE" +selectedHealthyLocation.getId() +"   "+ loc.get(i).getId());
+
                     if(selectedHealthyLocation.getId() == loc.get(i).getId()){
                         m.setIcon(BitmapDescriptorFactory.defaultMarker(selected_map_pin_color));
                     }
@@ -346,12 +350,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 } else {
                     prev_marker.setIcon(BitmapDescriptorFactory.defaultMarker(default_map_pin_color));
                     prev_marker = marker;
-                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(selected_map_pin_color));
 
-                    LatLng coordinate = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
-                    CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, mMap.getCameraPosition().zoom);
-                    mMap.animateCamera(yourLocation);
                 }
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(selected_map_pin_color));
+
+                LatLng coordinate = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
+                CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, mMap.getCameraPosition().zoom);
+                mMap.animateCamera(yourLocation);
 
                 ArrayList<HealthyLocation> clickLocs = new ArrayList<>();
                 for(int i = 0; i<snippet.length;i++){
