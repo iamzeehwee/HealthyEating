@@ -1,4 +1,4 @@
-package com.example.healthyeating.healthyeating.Entity;
+package com.example.healthyeating.healthyeating.entity;
 
 public class HCSProducts {
 
