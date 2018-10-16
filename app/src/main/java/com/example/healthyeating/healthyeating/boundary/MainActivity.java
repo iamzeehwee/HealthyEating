@@ -525,20 +525,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onSliderRelease(double dis) {
-
         lm.setLimitDistance(dis);
         ArrayList<HealthyLocation> loc = lm.searchLocations(searchQuery);
         HealthyLocation getSelectedLocation = ldf.getInformation();
 
         if(searchSlide.getSpinnerValue()==0) { //We want to do this in Map View only
-            if (searchQuery.length() > 0) {
+            if (searchQuery.length() > 0)
                     toggleInformationBox(loc.size() == 0? false:true);
-            }
-            if(getSelectedLocation!=null){
+            if(getSelectedLocation!=null)
                 toggleInformationBox(lm.isWithinRange(getSelectedLocation));
-            }
         }
-
         displayOnMap(loc);
         displayOnList(loc);
 
@@ -559,29 +555,25 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             toggleNoResultsFound(false);
         }
         else{
-            if(prev_index==0) {
+            if(prev_index==0)
                 //From Map View to ListView,
                 searchSlide.setSearchBoxText("");
-            }
+
             toggleMapView(false);
             toggleInformationBox(false);
-            if(index==1){
-                Log.d("SPINNN","HERE");
+            if(index==1)
                 lm.setSortFilter(0);
-            }
-            else if(index == 2) {
+            else if(index == 2)
                 lm.setSortFilter(1);
-            }
+
             displayOnList(lm.searchLocations(searchQuery));
         }
-        if(index!=prev_index){
+        if(index!=prev_index)
              prev_index = index;
-        }
     }
 
     @Override
     public void onLocationChanged(Location location) {
-    //    Log.i("Message: ","Location changed, " + location.getAccuracy() + " , " + location.getLatitude()+ "," + location.getLongitude());
          if(lm.setCurrentLatLng(location.getLatitude(),location.getLongitude())){
              ArrayList<HealthyLocation> loc = lm.searchLocations(searchQuery);
              displayOnMap(loc);

@@ -21,57 +21,33 @@ import java.text.DecimalFormat;
 
 
 public class SearchAndSlide extends Fragment  {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    DecimalFormat f = new DecimalFormat("##.0");
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    SearchView searchView;
-    SeekBar seek;
+    private DecimalFormat f = new DecimalFormat("##.0");
+
+    private SearchView searchView;
+    private SeekBar seek;
     private double seekBarValue = 0;
-    private static final int MAX_SEEKBAR_VALUE = 50000;
+    private Spinner spinner;
+
     private ILocationListener locListener;
-   Spinner spinner;
+
 
 
     public SearchAndSlide() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SearchAndSlide.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SearchAndSlide newInstance(String param1, String param2) {
-        SearchAndSlide fragment = new SearchAndSlide();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public int getSpinnerValue(){
         return spinner.getSelectedItemPosition();
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
 
@@ -87,20 +63,16 @@ public class SearchAndSlide extends Fragment  {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
-                if (locListener != null) {
+                if (locListener != null)
                     locListener.searchSubmit(newText);
-                }
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-
-
-                if (locListener != null) {
+                if (locListener != null)
                     locListener.searchSubmit(query);
-                }
 
                 return false;
             }
@@ -109,11 +81,9 @@ public class SearchAndSlide extends Fragment  {
 
         SeekBar sk = (SeekBar) v.findViewById(R.id.seekBar2);
         sk.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 TextView t=(TextView)v.findViewById(R.id.textView4);
-                //t.setText(String.valueOf(i));
 
                 int val = (i * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
                 double dis = (double)i/1000.0;
@@ -124,30 +94,18 @@ public class SearchAndSlide extends Fragment  {
                 t.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
                 seekBarValue = dis;
 
-
-
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
-                if (locListener != null) {
+                if (locListener != null)
                     locListener.onSliderHoldDown();
-                }
-
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Log.d("Slider1","Release");
-
-
-                if (locListener != null) {
+                if (locListener != null)
                     locListener.onSliderRelease(seekBarValue);
-                }
-
-
             }
         });
 
@@ -162,27 +120,15 @@ public class SearchAndSlide extends Fragment  {
         spinner.setAdapter(adapter);
 
         spinner.setSelection(0,false);
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-//                Toast.makeText(parent.getContext(),
-//                        "OnItemSelectedListener : " + "Check " + pos + "Check " + parent.getItemAtPosition(pos).toString(), Toast.LENGTH_SHORT).show();
-
-
-
-
-                if (locListener != null) {
+                if (locListener != null)
                     locListener.onSpinnerChange(pos);
-                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
-
         return v;
     }
 
@@ -206,15 +152,7 @@ public class SearchAndSlide extends Fragment  {
     public void setSearchBoxText(String s){
         searchView.setQuery(s,true);
     }
-
-
     public void setSpinnerValue(int index){
         spinner.setSelection(index);
     }
-
-
-
-
-
-
 }

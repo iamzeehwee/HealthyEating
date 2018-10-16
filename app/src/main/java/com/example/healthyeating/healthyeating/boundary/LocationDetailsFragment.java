@@ -21,53 +21,27 @@ import java.util.ArrayList;
 
 public class LocationDetailsFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    TextView pageText;
-    ImageButton btnLeft,btnRight;
-    Button btn_save,btn_close;
-
     private int current_pageNumber= 0 ;
-    private int max_pageNumber = 0;
-    TextView address,name;
-    ArrayList<HealthyLocation> loc;
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private RelativeLayout relativeLayout;
+    private ArrayList<HealthyLocation> loc;
 
+    //Interface
     private ILocationListener locListener;
+
+    //UI elements
+    private TextView pageText;
+    private TextView address,name;
+    private ImageButton btnLeft,btnRight;
+    private Button btn_save,btn_close;
+    private RelativeLayout relativeLayout;
 
     public LocationDetailsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LocationDetailsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LocationDetailsFragment newInstance(String param1, String param2) {
-        LocationDetailsFragment fragment = new LocationDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
 
     }
 
@@ -102,7 +76,6 @@ public class LocationDetailsFragment extends Fragment {
 
         btnRight.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 if(current_pageNumber==loc.size()-1)
                     current_pageNumber= 0;
                 else
@@ -115,28 +88,18 @@ public class LocationDetailsFragment extends Fragment {
         btn_close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 loc = null;
-
-                if (locListener != null) {
+                if (locListener != null)
                     locListener.onCloseBtnPress();
-                }
-
             }
         });
-
 
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                if (locListener != null) {
-                    locListener.onSaveButtonPressed(loc.get(current_pageNumber));;
-                }
-
+                if (locListener != null)
+                    locListener.onSaveButtonPressed(loc.get(current_pageNumber));
             }
         });
-
-
-
 
         return v;
     }
@@ -170,7 +133,6 @@ public class LocationDetailsFragment extends Fragment {
         this.loc = loc;
         current_pageNumber = 0;
         displayInfo(current_pageNumber);//Display the very first one
-
     }
 
     public void reset(){
@@ -198,14 +160,10 @@ public class LocationDetailsFragment extends Fragment {
     public void show(){
         if(relativeLayout!=null) {
             relativeLayout.setVisibility(View.VISIBLE);
-
-            if(loc.size()>1){
+            if(loc.size()>1)
                 togglePageButton(true,true);
-            }
-            else{
-
+            else
                 togglePageButton(false,false);
-            }
         }
     }
 

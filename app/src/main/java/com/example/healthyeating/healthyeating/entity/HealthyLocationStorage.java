@@ -15,7 +15,6 @@ public class HealthyLocationStorage implements DAO<HealthyLocation> {
     private int location_sortFilter = -1; //0 = A-Z, 1 = Z-A
 
     public HealthyLocationStorage(){
-       // listOfHealthyLocation = sortList(listOfHealthyLocation);
     }
 
     public ArrayList<HealthyLocation> sortList(ArrayList<HealthyLocation> loc){
@@ -124,7 +123,6 @@ public class HealthyLocationStorage implements DAO<HealthyLocation> {
           listOfHealthyLocation.add(healthyLocation);
 
     }
-
 
 
     @Override

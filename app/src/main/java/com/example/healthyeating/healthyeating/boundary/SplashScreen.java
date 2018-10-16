@@ -203,8 +203,6 @@ public class SplashScreen extends AppCompatActivity {
        lm.initFavouriteList(this);
 
 
-
-
    }
 
 

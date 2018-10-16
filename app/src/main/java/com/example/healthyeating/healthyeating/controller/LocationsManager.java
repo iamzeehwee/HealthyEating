@@ -251,7 +251,6 @@ public void setSortFilter(int sortFilter){
 
     public void initFavouriteList(Context c){
         context = c;
-
         //check if file existes
         File file = new File( context.getFilesDir(), favFileName);
         if(!file.exists()){
