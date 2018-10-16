@@ -1,4 +1,4 @@
-package com.example.healthyeating.healthyeating.Controller;
+package com.example.healthyeating.healthyeating.controller;
 
 
 

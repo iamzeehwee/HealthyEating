@@ -1,27 +1,23 @@
-package com.example.healthyeating.healthyeating.Boundary;
+package com.example.healthyeating.healthyeating.boundary;
 
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.example.healthyeating.healthyeating.Controller.LocationsManager;
-import com.example.healthyeating.healthyeating.Controller.SingletonManager;
-import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
+import com.example.healthyeating.healthyeating.controller.LocationsManager;
+import com.example.healthyeating.healthyeating.entity.HealthyLocation;
 import com.example.healthyeating.healthyeating.R;
 
 import java.util.ArrayList;

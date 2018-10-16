@@ -1,6 +1,8 @@
-package com.example.healthyeating.healthyeating.Entity;
+package com.example.healthyeating.healthyeating.entity;
 
-import com.example.healthyeating.healthyeating.Interfaces.DAO;
+import android.util.Log;
+
+import com.example.healthyeating.healthyeating.interfaces.DAO;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -102,9 +104,9 @@ public class HealthyLocationStorage implements DAO<HealthyLocation> {
 
         for(int i = 0; i< listOfHealthyLocation.size(); i++){
             if(listOfHealthyLocation.get(i).getLocationType().equals(locationType)) {
-               // if(isWithinRange(listOfHealthyLocation.get(i))){
+
                     res.add(listOfHealthyLocation.get(i));
-               // }
+
 
             }
         }
@@ -120,6 +122,7 @@ public class HealthyLocationStorage implements DAO<HealthyLocation> {
     public void add(HealthyLocation healthyLocation) {
         healthyLocation.setId(listOfHealthyLocation.size());
           listOfHealthyLocation.add(healthyLocation);
+
     }
 
 

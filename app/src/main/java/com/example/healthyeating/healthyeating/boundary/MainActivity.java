@@ -1,4 +1,4 @@
-package com.example.healthyeating.healthyeating.Boundary;
+package com.example.healthyeating.healthyeating.boundary;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -32,11 +32,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.healthyeating.healthyeating.Controller.SingletonManager;
-import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
-import com.example.healthyeating.healthyeating.Interfaces.IFavouriteListener;
-import com.example.healthyeating.healthyeating.Interfaces.IHCSListener;
-import com.example.healthyeating.healthyeating.Interfaces.ILocationListener;
+import com.example.healthyeating.healthyeating.controller.SingletonManager;
+import com.example.healthyeating.healthyeating.entity.HealthyLocation;
+import com.example.healthyeating.healthyeating.interfaces.IFavouriteListener;
+import com.example.healthyeating.healthyeating.interfaces.IHCSListener;
+import com.example.healthyeating.healthyeating.interfaces.ILocationListener;
 import com.example.healthyeating.healthyeating.R;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -52,7 +52,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.example.healthyeating.healthyeating.Controller.LocationsManager;
+import com.example.healthyeating.healthyeating.controller.LocationsManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -378,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     private void getBestView(){
         //This method will zoom the camera out till you can see your current location and the markers on the map.
-        int padding = 200; // offset from edges of the map in pixels
+        int padding = 100; // offset from edges of the map in pixels
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         ArrayList<Marker> markers = new ArrayList<Marker>();

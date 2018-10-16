@@ -1,9 +1,11 @@
-package com.example.healthyeating.healthyeating.Controller;
+package com.example.healthyeating.healthyeating.controller;
 
-import com.example.healthyeating.healthyeating.Boundary.MainActivity;
-import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
-import com.example.healthyeating.healthyeating.Entity.HealthyLocationStorage;
-import com.example.healthyeating.healthyeating.Interfaces.DAO;
+import com.example.healthyeating.healthyeating.R;
+import com.example.healthyeating.healthyeating.entity.HealthyLocation;
+import com.example.healthyeating.healthyeating.entity.HealthyLocationStorage;
+import com.example.healthyeating.healthyeating.interfaces.DAO;
+import com.example.healthyeating.healthyeating.interfaces.IFileReader;
+import com.example.healthyeating.healthyeating.utilities.ReadKMLImpl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,22 +14,20 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import android.content.Context;
 import android.location.Location;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 
 public class LocationsManager {
-    private DAO<HealthyLocation> locationDAO;
+
     private Context context;
-    //private ArrayList<HealthyLocation> listOfHealthyLocation;
+
     private int sortFilter = 0; //0 = A-Z, 1 = Z-A
     private double limitDistance = 50000.0;
     private String locationType = "Eateries";
@@ -35,41 +35,49 @@ public class LocationsManager {
     private double current_long = -1;
     private boolean isLatLngSet = false;
     private String favFileName = "FavouriteListData";
-   private ArrayList<HealthyLocation> favouriteList;
+    private ArrayList<HealthyLocation> favouriteList;
+
+    //Interface
+    private IFileReader fileReader;
+    private DAO<HealthyLocation> locationDAO;
+
 
     public LocationsManager(){
-     //   listOfHealthyLocation = new ArrayList<>();
+
         favouriteList = new ArrayList<>();
         locationDAO = new HealthyLocationStorage();
+
     }
 
 
+    public void initHealthyLocationList(Context context){
+        ArrayList<ArrayList<String>> fullData;
+        if(this.context==null)
+            this.context = context;
 
+        fileReader = new ReadKMLImpl(); //Strategy pattern, I want to read data file that is in KML format
+
+        fullData = fileReader.readFile(context,""+R.raw.eateries);
+
+          for(int i = 0; i<fullData.size();i++)
+              createLocation(fullData.get(i),"Eateries");
+
+          fullData = fileReader.readFile(context,""+R.raw.caterers);
+
+          for(int i = 0; i<fullData.size();i++)
+            createLocation(fullData.get(i),"Caterers");
+
+    }
 
 
     public double getCurrent_lat() {
         return current_lat;
     }
-
     public double getCurrent_long() {
         return current_long;
     }
 
-//    public ArrayList<HealthyLocation> sortList(ArrayList<HealthyLocation> loc){
-//        ArrayList<HealthyLocation> sortedList = new ArrayList<HealthyLocation>();
-//        Collections.sort(loc, new Comparator<HealthyLocation>() {
-//            public int compare(HealthyLocation o1, HealthyLocation o2) {
-//                if(sortFilter==0)
-//                    return o1.getName().compareTo(o2.getName());
-//                else if(sortFilter==1)
-//                    return o2.getName().compareTo(o1.getName());
-//                else
-//                    return o1.getName().compareTo(o2.getName());
-//            }
-//        });
-//
-//        return loc;
-//    }
+
 
     private String extractDetails(String msg,String searchTag, String endTag){
         String tempData = "";
@@ -157,7 +165,6 @@ public class LocationsManager {
         if(address.startsWith(","))
             address = address.substring(1);
 
-
         HealthyLocation loc = new HealthyLocation(name,address,postal_code,  floor,  unit,  longitude,  latitude, locationType);
         locationDAO.add(loc);
 
@@ -233,30 +240,9 @@ public class LocationsManager {
                     locList.remove(locList.get(i));
                     i--;
                 }
-
         }
-
-
-
         return locList;
     }
-
-//    public int searchLocationIDByAddress (String address){
-//
-//        address = address.toLowerCase();
-//        for(int i = 0; i< listOfHealthyLocation.size(); i++){
-//            if(listOfHealthyLocation.get(i).getLocationType().equals(locationType)) {
-//                String concat = listOfHealthyLocation.get(i).getName();
-//                concat = concat.toLowerCase();
-//
-//                if (address.equals(concat)) {
-//                    return listOfHealthyLocation.get(i).getId();
-//                }
-//            }
-//        }
-//        return -1;
-//    }
-
 
 
 public void setSortFilter(int sortFilter){

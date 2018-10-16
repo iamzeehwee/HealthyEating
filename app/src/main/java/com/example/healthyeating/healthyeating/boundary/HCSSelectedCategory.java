@@ -1,4 +1,4 @@
-package com.example.healthyeating.healthyeating.Boundary;
+package com.example.healthyeating.healthyeating.boundary;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

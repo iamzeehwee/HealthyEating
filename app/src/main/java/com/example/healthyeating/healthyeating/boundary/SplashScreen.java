@@ -1,4 +1,4 @@
-package com.example.healthyeating.healthyeating.Boundary;
+package com.example.healthyeating.healthyeating.boundary;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,9 +10,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.healthyeating.healthyeating.Controller.LocationsManager;
-import com.example.healthyeating.healthyeating.Controller.SingletonManager;
-import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
+import com.example.healthyeating.healthyeating.controller.LocationsManager;
+import com.example.healthyeating.healthyeating.controller.SingletonManager;
 import com.example.healthyeating.healthyeating.R;
 
 import java.io.BufferedReader;
@@ -200,63 +199,12 @@ public class SplashScreen extends AppCompatActivity {
 
        //Init controller here first
        lm = SingletonManager.getLocationManagerInstance();
-
-       //I am doing read here because in Controller, I can't do a getResource without passing a Context,
-       // I do not want to pass Context to controller just to read the file
-       initLocationList();
        lm.initFavouriteList(this);
+       lm.initHealthyLocationList(this);
+
 
 
    }
-
-    private void initLocationList(){
-        readKMLFile(R.raw.eateries,"<SchemaData schemaUrl=\"#kml_schema_ft_HEALTHIERDINING\">","Eateries");
-        readKMLFile(R.raw.caterers,"<SchemaData schemaUrl=\"#kml_schema_ft_HEALTHIERCATERERS\">","Caterers");
-    }
-
-    private void readKMLFile(int file, String tag, String locationType){
-
-        boolean start = false;
-        ArrayList<String> data = new ArrayList();
-        try {
-            InputStream inputStream =  getResources().openRawResource(file);
-            try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                try {
-                    StringBuilder result = new StringBuilder();
-                    String line;
-
-                    while ((line = reader.readLine()) != null) {
-                        if(!start && line.equals(tag))
-                        {
-
-                            start = true;
-                            line = reader.readLine();
-                        }
-                        if(start && line.equals("</Point>"))
-                        {
-                            start = false;
-                            lm.createLocation(data,locationType);
-                            data.clear();
-                        }
-
-                        if(start){
-                            data.add(line);
-                        }
-                        result.append(line);
-                    }
-
-                } finally {
-                    reader.close();
-                }
-            } finally {
-                inputStream.close();
-            }
-        } catch (IOException e) {
-            // process exception
-        }
-
-    }
 
 
 

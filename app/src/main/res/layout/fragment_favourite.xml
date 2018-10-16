@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f0eef0"
-    tools:context=".Boundary.FavouriteFragment">
+    tools:context=".boundary.FavouriteFragment">
 
     <TextView
         android:id="@+id/choiceTextView"

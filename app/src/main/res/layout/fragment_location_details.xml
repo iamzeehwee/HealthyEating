@@ -7,7 +7,7 @@
     android:layout_gravity="bottom"
 
     android:layout_above="@+id/navigation"
-    tools:context=".Boundary.LocationDetailsFragment">
+    tools:context=".boundary.LocationDetailsFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

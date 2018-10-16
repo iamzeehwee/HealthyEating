@@ -1,6 +1,6 @@
-package com.example.healthyeating.healthyeating.Interfaces;
+package com.example.healthyeating.healthyeating.interfaces;
 
-import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
+import com.example.healthyeating.healthyeating.entity.HealthyLocation;
 
 
 //This interface will allow communication between LocationUI Fragments and MainActivity

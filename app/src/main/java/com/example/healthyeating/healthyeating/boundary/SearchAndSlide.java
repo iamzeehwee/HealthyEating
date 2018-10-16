@@ -1,4 +1,4 @@
-package com.example.healthyeating.healthyeating.Boundary;
+package com.example.healthyeating.healthyeating.boundary;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 
-import com.example.healthyeating.healthyeating.Interfaces.ILocationListener;
+import com.example.healthyeating.healthyeating.interfaces.ILocationListener;
 import com.example.healthyeating.healthyeating.R;
 
 import java.text.DecimalFormat;

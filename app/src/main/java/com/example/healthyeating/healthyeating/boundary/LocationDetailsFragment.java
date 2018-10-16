@@ -1,4 +1,4 @@
-package com.example.healthyeating.healthyeating.Boundary;
+package com.example.healthyeating.healthyeating.boundary;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,8 +11,8 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
-import com.example.healthyeating.healthyeating.Interfaces.ILocationListener;
+import com.example.healthyeating.healthyeating.entity.HealthyLocation;
+import com.example.healthyeating.healthyeating.interfaces.ILocationListener;
 import com.example.healthyeating.healthyeating.R;
 
 import java.util.ArrayList;

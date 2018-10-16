@@ -1,4 +1,4 @@
-package com.example.healthyeating.healthyeating.Interfaces;
+package com.example.healthyeating.healthyeating.interfaces;
 
 
 //This interface will allow communication between HCSProductUI Fragments and MainActivity
