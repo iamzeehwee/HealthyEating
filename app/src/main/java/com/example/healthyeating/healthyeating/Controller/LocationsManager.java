@@ -333,4 +333,21 @@ public class LocationsManager {
         return favouriteList;
     }
 
+    public ArrayList<HealthyLocation> getFavouriteEateries() {
+        ArrayList<HealthyLocation> favouriteEateries = new ArrayList<HealthyLocation>();
+        for (HealthyLocation favourite : getFavouriteList()) {
+            if (favourite.getLocationType().equals("Eateries"))
+                favouriteEateries.add(favourite);
+        }
+        return favouriteEateries;
+    }
+
+    public ArrayList<HealthyLocation> getFavouriteCaterers() {
+        ArrayList<HealthyLocation> favouriteCaterers = new ArrayList<HealthyLocation>();
+        for (HealthyLocation favourite : getFavouriteList()) {
+            if (favourite.getLocationType().equals("Caterers"))
+                favouriteCaterers.add(favourite);
+        }
+        return favouriteCaterers;
+    }
 }

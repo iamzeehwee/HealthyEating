@@ -1,34 +1,31 @@
 package com.example.healthyeating.healthyeating.Boundary;
 
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.example.healthyeating.healthyeating.Controller.LocationsManager;
 import com.example.healthyeating.healthyeating.Controller.SingletonManager;
 import com.example.healthyeating.healthyeating.Entity.HealthyLocation;
 import com.example.healthyeating.healthyeating.R;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -52,7 +49,7 @@ public class FavouriteFragment extends Fragment implements LocationDetailsFragme
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favourite, container, false);
 
@@ -65,10 +62,10 @@ public class FavouriteFragment extends Fragment implements LocationDetailsFragme
         String[] categoryArray = {"Favourite Eateries", "Favourite Caterers", "All Favourite"};
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
                 android.R.layout.simple_spinner_item, categoryArray);
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categoryAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryAdapter);
 
-        // get input from dropdown menu
+        // get input from dropdown menu and adjust favourites shown
         categoryChosen = "All Favourite";
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -76,29 +73,19 @@ public class FavouriteFragment extends Fragment implements LocationDetailsFragme
 
                 // put locations into list view depending on chosen location category
                 LocationsManager lm = ((MainActivity)getActivity()).getLocationsManager();
-                ArrayList<HealthyLocation> favouritesList = lm.getFavourites();
-                ArrayList<HealthyLocation> displayedList = new ArrayList<HealthyLocation>();
+                ArrayList<HealthyLocation> favouritesList = lm.getFavouriteList();
 
                 // show only favourite eateries
                 if (categoryChosen.equals("Favourite Eateries")) {
-                    for (HealthyLocation favourite : favouritesList) {
-                        if (favourite.getLocationType().equals("Eateries"))
-                            displayedList.add(favourite);
-                    }
+                    favouritesList = lm.getFavouriteEateries();
                 // show only favourite caterers
                 } else if (categoryChosen.equals("Favourite Caterers")) {
-                    for (HealthyLocation favourite : favouritesList) {
-                        if (favourite.getLocationType().equals("Caterers"))
-                            displayedList.add(favourite);
-                    }
-                // show all favourite
-                } else {
-                    displayedList = favouritesList;
+                    favouritesList = lm.getFavouriteCaterers();
                 }
 
-                ArrayAdapter<HealthyLocation> favouritesAdapter = new ArrayAdapter<HealthyLocation>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, displayedList);
+                // set adapter for list view
+                CustomListAdapter favouritesAdapter = new CustomListAdapter(getActivity().getApplicationContext(), R.layout.list_item, favouritesList);
                 favouritesView.setAdapter(favouritesAdapter);
-
                 categoryTextView.setText(categoryChosen);
             }
 
@@ -140,4 +127,44 @@ public class FavouriteFragment extends Fragment implements LocationDetailsFragme
 
     @Override
     public void onFragmentInteraction(Uri uri) { }
+
+    // custom adapter for complex views
+    private class CustomListAdapter extends ArrayAdapter<HealthyLocation> {
+        private int layout;
+        private List<HealthyLocation> locationList;
+        private CustomListAdapter(Context context, int resource, List<HealthyLocation> locationList) {
+            super(context, resource, locationList);
+            this.locationList = locationList;
+            layout = resource;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            ViewHolder mainViewholder = null;
+            if(convertView == null) {
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                convertView = inflater.inflate(layout, parent, false);
+                ViewHolder viewHolder = new ViewHolder();
+                viewHolder.title = (TextView) convertView.findViewById(R.id.list_item_text);
+                viewHolder.button = (Button) convertView.findViewById(R.id.list_item_btn);
+                convertView.setTag(viewHolder);
+            }
+            mainViewholder = (ViewHolder) convertView.getTag();
+            mainViewholder.button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(), "Button was clicked for list item " + getItem(position).getName(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            mainViewholder.title.setText(getItem(position).toString());
+            return convertView;
+        }
+    }
+
+    public class ViewHolder {
+        TextView title;
+        Button button;
+    }
 }
+
