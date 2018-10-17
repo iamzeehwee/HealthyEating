@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.example.healthyeating.healthyeating.controller.LocationsManager;
 import com.example.healthyeating.healthyeating.entity.HealthyLocation;
 import com.example.healthyeating.healthyeating.R;
+import com.example.healthyeating.healthyeating.interfaces.IFavouriteListener;
+import com.example.healthyeating.healthyeating.interfaces.ILocationListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,7 @@ public class FavouriteFragment extends Fragment {
     private ListView favouritesView;
 
     private String categoryChosen; // input from dropdown menu
+    private IFavouriteListener favListener; // interface for interaction with main activity
 
     public FavouriteFragment() {
         // Required empty public constructor
@@ -66,63 +69,38 @@ public class FavouriteFragment extends Fragment {
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 categoryChosen = parent.getItemAtPosition(position).toString();
-
-                // put locations into list view depending on chosen location category
-                LocationsManager lm = ((MainActivity)getActivity()).getLocationsManager();
-                ArrayList<HealthyLocation> favouritesList = lm.getFavouriteList();
-
-                // show only favourite eateries
-                if (categoryChosen.equals("Favourite Eateries")) {
-                    favouritesList = lm.getFavouriteEateries();
-                // show only favourite caterers
-                } else if (categoryChosen.equals("Favourite Caterers")) {
-                    favouritesList = lm.getFavouriteCaterers();
-                }
-
-                CustomListAdapter favouritesAdapter = new CustomListAdapter(getActivity().getApplicationContext(), R.layout.list_item, favouritesList);
-                favouritesView.setAdapter(favouritesAdapter);
-
+                refreshListView(categoryChosen, favouritesView);
                 categoryTextView.setText(categoryChosen);
             }
 
             public void onNothingSelected(AdapterView<?> parent){}
         });
 
-        // failed attempt to make items show on map
-        /*favouritesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                // Get the information of 1 eatery
-                Object listItem = favouritesView.getItemAtPosition(pos);
-
-                String locationDetails = listItem.toString().trim();
-                int endIndex =  locationDetails.indexOf("\r\nAddress: ");//locationDetails.indexOf(":") + 1;
-                String address = locationDetails.substring(0, endIndex);
-                int selectedLocID = ((MainActivity)getActivity()).lm.searchLocationIDByAddress(address);
-
-                ArrayList<HealthyLocation> loc = new ArrayList<HealthyLocation>();
-                HealthyLocation clickLoc = ((MainActivity)getActivity()).lm.getLocation(selectedLocID);
-                loc.add(clickLoc);
-                ((MainActivity)getActivity()).displayOnMap(loc);
-
-                String name = clickLoc.getName();
-                Log.e("NAME ", name);
-                ((MainActivity)getActivity()).searchSlide.setSpinnerValue(0);
-
-                ((MainActivity)getActivity()).ldf.setInformation(loc);
-
-                //((MainActivity)getActivity()).searchSlide.setSearchBoxText(name);
-                ((MainActivity)getActivity()).toggleInformationBox(true);
-                ((MainActivity)getActivity()).getBestView();
-
-            }
-        });*/
-
         return view;
     }
 
-//    @Override
-//    public void onFragmentInteraction(Uri uri) { }
+    // refreshes the list view with favourites
+    public void refreshListView(String categoryChosen, ListView favouritesView) {
+        ArrayList<HealthyLocation> displayedList = favListener.getFavsByCategory(categoryChosen);
+        CustomListAdapter favouritesAdapter = new CustomListAdapter(getActivity().getApplicationContext(), R.layout.list_item, displayedList);
+        favouritesView.setAdapter(favouritesAdapter);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof IFavouriteListener) {
+            favListener = (IFavouriteListener) context;
+        } else {
+            throw new RuntimeException(context.toString());
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        favListener = null;
+    }
 
     // custom adapter for complex views in favourite tab
     private class CustomListAdapter extends ArrayAdapter<HealthyLocation> {
@@ -149,7 +127,8 @@ public class FavouriteFragment extends Fragment {
             mainViewholder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "Button was clicked for list item " + getItem(position).getName(), Toast.LENGTH_SHORT).show();
+                    favListener.removeFavourite(getItem(position));
+                    refreshListView(categoryChosen, favouritesView);
                 }
             });
 

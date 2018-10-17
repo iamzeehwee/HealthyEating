@@ -612,8 +612,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             Log.d("ERROR", "failed to save");
     }
 
-    // return the instance of LocationsManager
-    public LocationsManager getLocationsManager() {
-        return this.lm;
+    @Override
+    // return list of favourites based on chosen category
+    public ArrayList<HealthyLocation> getFavsByCategory(String categoryChosen) {
+        if (categoryChosen.equals("Favourite Eateries"))
+            return lm.getFavouriteEateries();
+        else if (categoryChosen.equals("Favourite Caterers"))
+            return lm.getFavouriteCaterers();
+        else
+            return lm.getFavouriteList();
+    }
+
+    @Override
+    public void removeFavourite(HealthyLocation location) {
+        lm.removeFavourite(location);
     }
 }
