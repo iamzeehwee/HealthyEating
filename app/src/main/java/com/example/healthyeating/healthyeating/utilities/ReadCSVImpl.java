@@ -15,5 +15,4 @@ public class ReadCSVImpl implements IFileReader {
         return null;
     }
 
-
 }
