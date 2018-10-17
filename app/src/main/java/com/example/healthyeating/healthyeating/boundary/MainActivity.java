@@ -638,6 +638,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     public void onFavListItemClicked(String name, int spinnerValue) {
         Log.d("Favourite", "HERE " + name);
         searchSlide = new SearchAndSlide();
+        favouriteLocName=name;
         loadFragment(searchSlide);
         favClicked = true;
     }
