@@ -59,7 +59,7 @@ public class FavouriteFragment extends Fragment {
 
         // set up the dropdown menu
         String[] categoryArray = {"Favourite Eateries", "Favourite Caterers", "All Favourite"};
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>((Context) favListener,
                 android.R.layout.simple_spinner_item, categoryArray);
         categoryAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryAdapter);
@@ -82,7 +82,7 @@ public class FavouriteFragment extends Fragment {
     // refreshes the list view with favourites
     public void refreshListView(String categoryChosen, ListView favouritesView) {
         ArrayList<HealthyLocation> displayedList = favListener.getFavsByCategory(categoryChosen);
-        CustomListAdapter favouritesAdapter = new CustomListAdapter(getActivity().getApplicationContext(), R.layout.list_item, displayedList);
+        CustomListAdapter favouritesAdapter = new CustomListAdapter((Context) favListener, R.layout.list_item, displayedList);
         favouritesView.setAdapter(favouritesAdapter);
     }
 
