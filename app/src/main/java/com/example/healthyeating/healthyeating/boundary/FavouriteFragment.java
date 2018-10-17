@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class FavouriteFragment extends Fragment {
 
     private static final String TAG = "Favourite";
 
+    private int spinnerValue = 0;
     // declare the layout elements
     private Spinner categorySpinner;
     private TextView categoryTextView;
@@ -57,6 +59,31 @@ public class FavouriteFragment extends Fragment {
         categoryTextView = (TextView) view.findViewById(R.id.categoryTextView);
         favouritesView = (ListView) view.findViewById(R.id.favouritesView);
 
+        favouritesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                // Get the information of 1 eatery
+                Object listItem = favouritesView.getItemAtPosition(pos);
+
+                String locationDetails = listItem.toString().trim();
+                int endIndex =  locationDetails.indexOf("\r\nAddress: ");//locationDetails.indexOf(":") + 1;
+                String name = locationDetails.substring(0, endIndex);
+//                int addressStartIndex = locationDetails.substring(endIndex+11).indexOf("\r\n");
+//                String address = locationDetails.substring(addressStartIndex);
+//                int addressEndIndex = address.indexOf("\r\n");
+
+
+//                Log.d("Favourite","@@"+name+"@@ "+locationDetails.substring(addressStartIndex,addressEndIndex));
+
+
+               favListener.onFavListItemClicked(name,spinnerValue );
+
+
+
+            }
+        });
+
+
         // set up the dropdown menu
         String[] categoryArray = {"Favourite Eateries", "Favourite Caterers", "All Favourite"};
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>((Context) favListener,
@@ -71,6 +98,7 @@ public class FavouriteFragment extends Fragment {
                 categoryChosen = parent.getItemAtPosition(position).toString();
                 refreshListView(categoryChosen, favouritesView);
                 categoryTextView.setText(categoryChosen);
+                spinnerValue = position;
             }
 
             public void onNothingSelected(AdapterView<?> parent){}
@@ -99,7 +127,7 @@ public class FavouriteFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        favListener = null;
+       // favListener = null;
     }
 
     // custom adapter for complex views in favourite tab

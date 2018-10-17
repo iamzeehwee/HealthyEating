@@ -13,6 +13,7 @@ public interface IFavouriteListener {
     // return list of favourites based on chosen category
     ArrayList<HealthyLocation> getFavsByCategory(String categoryChosen);
 
+    void onFavListItemClicked(String name,int spinnerValue);
     // delete a location from favourites
     void removeFavourite(HealthyLocation favourite);
 }

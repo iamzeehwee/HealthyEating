@@ -120,7 +120,7 @@ public class LocationDetailsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        locListener = null;
+        //locListener = null;
     }
 
     public void displayInfo(int index){

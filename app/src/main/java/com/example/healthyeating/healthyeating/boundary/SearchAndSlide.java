@@ -120,10 +120,12 @@ public class SearchAndSlide extends Fragment  {
         spinner.setAdapter(adapter);
 
         spinner.setSelection(0,false);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                if (locListener != null)
+                if (locListener != null) {
                     locListener.onSpinnerChange(pos);
+                }
             }
 
             @Override
@@ -135,6 +137,7 @@ public class SearchAndSlide extends Fragment  {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if(locListener==null)
         if (context instanceof ILocationListener) {
             locListener = (ILocationListener) context;
         } else {
@@ -146,13 +149,19 @@ public class SearchAndSlide extends Fragment  {
     @Override
     public void onDetach() {
         super.onDetach();
-        locListener = null;
+        Log.d("Spinner","DETACHED");
+       // locListener = null;
     }
 
     public void setSearchBoxText(String s){
         searchView.setQuery(s,true);
     }
     public void setSpinnerValue(int index){
-        spinner.setSelection(index);
+        Log.d("Spinner","Set spinner "+index);
+        if (locListener != null)
+            locListener.onSpinnerChange(index);
+        spinner.setSelection(index,false);
+
+
     }
 }

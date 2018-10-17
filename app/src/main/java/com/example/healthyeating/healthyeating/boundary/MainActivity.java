@@ -154,21 +154,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 int endIndex =  locationDetails.indexOf("\r\nAddress: ");//locationDetails.indexOf(":") + 1;
                 String address = locationDetails.substring(0, endIndex);
                 //int selectedLocID = lm.searchLocationIDByAddress(address);
+                listViewToMap(address);
 
-                ArrayList<HealthyLocation> loc = lm.searchLocations(address);//new ArrayList<HealthyLocation>();
-               // HealthyLocation clickLoc = lm.searchLocations(address);
-                //HealthyLocation clickLoc = lm.getLocation(selectedLocID);
-                //loc.add(clickLoc);
-                displayOnMap(loc);
-
-                String name = loc.get(0).getName();
-                searchSlide.setSpinnerValue(0);
-
-                ldf.setInformation(loc);
-
-                searchSlide.setSearchBoxText(name);
-                toggleInformationBox(true);
-                getBestView();
 
             }
         });
@@ -176,6 +163,25 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         //Load the searchAndSlide fragment by default
         loadFragment(searchSlide);
 
+    }
+
+
+    private void listViewToMap(String address){
+        ArrayList<HealthyLocation> loc = lm.searchLocations(address);//new ArrayList<HealthyLocation>();
+        // HealthyLocation clickLoc = lm.searchLocations(address);
+        //HealthyLocation clickLoc = lm.getLocation(selectedLocID);
+        //loc.add(clickLoc);
+        displayOnMap(loc);
+
+        String name = loc.get(0).getName();
+        searchSlide.setSpinnerValue(0);
+
+        ldf.setInformation(loc);
+
+        searchSlide.setSearchBoxText(name);
+        toggleInformationBox(true);
+        getBestView();
+        toggleMapView(true);
     }
 
     private void initGoogleMapLocation(int time){
@@ -242,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_favourite:
+
                         return loadFragment(favouriteFragment);
 
                     case R.id.navigation_eateries:
@@ -549,7 +556,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onSpinnerChange(int index) {
-
+        Log.d("Spinner","I AM HERE CHANGED "+index);
         if(index == 0){
             toggleMapView(true);
             toggleNoResultsFound(false);
@@ -560,6 +567,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 searchSlide.setSearchBoxText("");
 
             toggleMapView(false);
+            Log.d("Spinner","I AM HERE CALLED FALSE");
             toggleInformationBox(false);
             if(index==1)
                 lm.setSortFilter(0);
@@ -621,6 +629,46 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             return lm.getFavouriteCaterers();
         else
             return lm.getFavouriteList();
+    }
+
+    @Override
+    public void onFavListItemClicked(String name, int spinnerValue) {
+        Log.d("Favourite","HERE "+name);
+        //mBottomNavigation.getMenu().getItem(1).setChecked(true);
+        //searchSlide.setSearchBoxText(name);
+//        lm.setLocationType("Eateries");
+//        ArrayList<HealthyLocation> loc = lm.searchLocations(name);
+//        if(loc.size()==0) {
+//            lm.setLocationType("Caterers");
+//            loc = lm.searchLocations(name);
+//        }
+//        HealthyLocation clickLoc = loc.get(0);
+//        if(clickLoc.getLocationType().equals("Eateries")){
+//
+//            mBottomNavigation.getMenu().getItem(1).setChecked(true);
+//
+//        }
+//        else if(clickLoc.getLocationType().equals("Caterers")){
+//            mBottomNavigation.getMenu().getItem(2).setChecked(true);
+//
+//        }
+//
+//
+//        reset();
+//        loadFragment(searchSlide);
+//        searchSlide.setSpinnerValue(0);
+//        //prev_index = 0 ;
+//        Log.d("Spinner","Value "+searchSlide.getSpinnerValue());
+//        //if(name == null)
+//          //  Log.d("Favourite","@@NULL");
+////        searchSlide.setSearchBoxText(name);
+//
+//
+//       // listViewToMap(name);
+//
+//
+//        toggleMapView(true);
+
     }
 
     @Override
