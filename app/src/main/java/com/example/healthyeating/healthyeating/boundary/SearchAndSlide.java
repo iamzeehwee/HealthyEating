@@ -26,6 +26,7 @@ public class SearchAndSlide extends Fragment  {
     private static final String ARG_PARAM2 = "param2";
     private DecimalFormat f = new DecimalFormat("##.0");
 
+    private static int spinnerValue = 0;
     private SearchView searchView;
     private SeekBar seek;
     private double seekBarValue = 0;
@@ -48,6 +49,7 @@ public class SearchAndSlide extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
 
 
@@ -55,6 +57,7 @@ public class SearchAndSlide extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.d("Spinner","HERE CALLED");
         final View v = inflater.inflate(R.layout.fragment_search_and_slide, container, false);
         seek = (SeekBar) v.findViewById(R.id.seekBar2);
          searchView = (SearchView) v.findViewById(R.id.searchBar);
@@ -119,27 +122,35 @@ public class SearchAndSlide extends Fragment  {
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-        spinner.setSelection(0,false);
+
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 if (locListener != null) {
                     locListener.onSpinnerChange(pos);
                 }
+              spinnerValue = pos;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
+
+        setSpinnerValue(0);
+
         return v;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.d("Spinner","ATTAC");
+        if(spinner!=null)
+            spinner.setSelection(getSpinnerValue());
         if(locListener==null)
         if (context instanceof ILocationListener) {
             locListener = (ILocationListener) context;
+
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement ILocationListener");
@@ -158,10 +169,28 @@ public class SearchAndSlide extends Fragment  {
     }
     public void setSpinnerValue(int index){
         Log.d("Spinner","Set spinner "+index);
+        spinnerValue=index;
+        spinner.setSelection(index,true);
         if (locListener != null)
             locListener.onSpinnerChange(index);
-        spinner.setSelection(index,false);
 
 
     }
+
+
+    @Override
+    public void onResume() {
+        Log.e("Spinner", "onResume of HomeFragment");
+        super.onResume();
+
+        locListener.searchSlideOnResume();
+
+    }
+
+    @Override
+    public void onPause() {
+        Log.e("Spinner", "OnPause of HomeFragment");
+        super.onPause();
+    }
+
 }

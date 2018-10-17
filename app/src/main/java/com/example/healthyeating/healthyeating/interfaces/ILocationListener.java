@@ -15,6 +15,6 @@ public interface ILocationListener {
     void onSliderRelease(double dis);
     void onSliderHoldDown();
     void onSpinnerChange(int index);
-
+    void searchSlideOnResume();
 
 }

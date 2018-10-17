@@ -93,6 +93,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     ArrayAdapter<HealthyLocation> adapter;
     private LinearLayout resultLayout;
 
+
+    //For favourite Transition
+    private String favouriteLocName= "";
+    private boolean favClicked = false;
     //Screen related
     static int height = 0;
     int width = 0;
@@ -248,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_favourite:
-
+                        searchSlide.setSpinnerValue(0);
                         return loadFragment(favouriteFragment);
 
                     case R.id.navigation_eateries:
@@ -633,46 +637,46 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onFavListItemClicked(String name, int spinnerValue) {
-        Log.d("Favourite","HERE "+name);
-        //mBottomNavigation.getMenu().getItem(1).setChecked(true);
-        //searchSlide.setSearchBoxText(name);
-//        lm.setLocationType("Eateries");
-//        ArrayList<HealthyLocation> loc = lm.searchLocations(name);
-//        if(loc.size()==0) {
-//            lm.setLocationType("Caterers");
-//            loc = lm.searchLocations(name);
-//        }
-//        HealthyLocation clickLoc = loc.get(0);
-//        if(clickLoc.getLocationType().equals("Eateries")){
-//
-//            mBottomNavigation.getMenu().getItem(1).setChecked(true);
-//
-//        }
-//        else if(clickLoc.getLocationType().equals("Caterers")){
-//            mBottomNavigation.getMenu().getItem(2).setChecked(true);
-//
-//        }
-//
-//
-//        reset();
-//        loadFragment(searchSlide);
-//        searchSlide.setSpinnerValue(0);
-//        //prev_index = 0 ;
-//        Log.d("Spinner","Value "+searchSlide.getSpinnerValue());
-//        //if(name == null)
-//          //  Log.d("Favourite","@@NULL");
-////        searchSlide.setSearchBoxText(name);
-//
-//
-//       // listViewToMap(name);
-//
-//
-//        toggleMapView(true);
-
+        Log.d("Favourite", "HERE " + name);
+        searchSlide = new SearchAndSlide();
+        loadFragment(searchSlide);
+        favClicked = true;
     }
+
 
     @Override
     public void removeFavourite(HealthyLocation location) {
         lm.removeFavourite(location);
     }
+
+    @Override
+    public void searchSlideOnResume() {
+        if (favClicked) {
+            favClicked = false;
+            searchSlide.setSearchBoxText(favouriteLocName);
+            lm.setLocationType("Eateries");
+            ArrayList<HealthyLocation> loc = lm.searchLocations(favouriteLocName);
+            if (loc.size() == 0) {
+                lm.setLocationType("Caterers");
+                loc = lm.searchLocations(favouriteLocName);
+            }
+
+            listViewToMap(favouriteLocName);
+
+            HealthyLocation clickLoc = loc.get(0);
+            if (clickLoc.getLocationType().equals("Eateries")) {
+
+                mBottomNavigation.getMenu().getItem(1).setChecked(true);
+
+            } else if (clickLoc.getLocationType().equals("Caterers")) {
+                mBottomNavigation.getMenu().getItem(2).setChecked(true);
+
+            }
+
+            Log.d("Spinner", "Value " + searchSlide.getSpinnerValue());
+            toggleMapView(true);
+        }
+
+    }
+
 }
