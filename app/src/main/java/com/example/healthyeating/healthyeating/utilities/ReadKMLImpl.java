@@ -67,5 +67,4 @@ public class ReadKMLImpl implements IFileReader {
 
        return fullData;
     }
-
 }

@@ -5,23 +5,15 @@ import com.example.healthyeating.healthyeating.entity.HealthyLocation;
 import com.example.healthyeating.healthyeating.entity.HealthyLocationStorage;
 import com.example.healthyeating.healthyeating.interfaces.DAO;
 import com.example.healthyeating.healthyeating.interfaces.IFileReader;
+import com.example.healthyeating.healthyeating.interfaces.IFileWriter;
 import com.example.healthyeating.healthyeating.utilities.ReadKMLImpl;
+import com.example.healthyeating.healthyeating.utilities.StorageImpl;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 
 
 public class LocationsManager {
@@ -202,9 +194,6 @@ public class LocationsManager {
         return res;
     }
 
-
-
-
     public void setLimitDistance(double limitDistance) {
         this.limitDistance = limitDistance;
     }
@@ -245,56 +234,33 @@ public class LocationsManager {
     }
 
 
-public void setSortFilter(int sortFilter){
+    public void setSortFilter(int sortFilter){
         this.sortFilter = sortFilter;
 }
 
     public void initFavouriteList(Context c){
         context = c;
-        //check if file existes
-        File file = new File( context.getFilesDir(), favFileName);
-        if(!file.exists()){
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
-        //read file
-        FileInputStream inputStream;
-        try{
-            inputStream = context.openFileInput(favFileName);
-            BufferedReader bR = new BufferedReader(new InputStreamReader(inputStream));
-            for (String line; (line = bR.readLine()) != null; ) {
-                favouriteList.add(getLocation(Integer.parseInt(line)));     //add location to favourite list
-            }
-            bR.close();
-            inputStream.close();
+        //Read local storage
+        fileReader = new StorageImpl();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        ArrayList<String> favouritesData = fileReader.readFile(c,favFileName);
+
+        for(String s: favouritesData){
+            favouriteList.add(getLocation(Integer.parseInt(s)));
         }
     }
 
     private boolean saveFavouriteList(){
-        FileOutputStream outputStream;
-        try {
-            outputStream = context.openFileOutput(favFileName, Context.MODE_PRIVATE);
-            BufferedWriter bW = new BufferedWriter(new OutputStreamWriter(outputStream));
-            for (HealthyLocation fav: favouriteList) {
-                bW.write(Integer.toString(fav.getId()));
-                bW.newLine();
-            }
-            bW.close();
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+
+        IFileWriter fileWriter = new StorageImpl();
+
+        ArrayList<String> list = new ArrayList<>();
+        for (HealthyLocation fav: favouriteList){
+            list.add(Integer.toString(fav.getId()));
         }
-        return true;
+
+        return fileWriter.writeFile(context, favFileName, list);
     }
 
     public boolean addToFavourite(HealthyLocation location){

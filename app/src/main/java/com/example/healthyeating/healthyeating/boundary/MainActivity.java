@@ -60,8 +60,7 @@ import java.util.HashMap;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity implements LocationListener,
-        ILocationListener,IFavouriteListener,IHCSListener,
-                                                               OnMapReadyCallback {
+        ILocationListener,IFavouriteListener,IHCSListener,OnMapReadyCallback {
 
     private BottomNavigationView mBottomNavigation;
     private FrameLayout mMainFrame;
