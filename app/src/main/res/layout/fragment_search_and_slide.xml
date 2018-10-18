@@ -84,7 +84,7 @@
             android:layout_marginStart="337dp"
             android:layout_marginLeft="340dp"
             android:layout_weight="1"
-            android:text="30.0km"
+            android:text="Max"
             android:textColorLink="@color/colorPrimaryDark" />
     </RelativeLayout>
 

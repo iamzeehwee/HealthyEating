@@ -1,8 +1,11 @@
 package com.example.healthyeating.healthyeating.boundary;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +19,6 @@ import com.example.healthyeating.healthyeating.interfaces.ILocationListener;
 import com.example.healthyeating.healthyeating.R;
 
 import java.util.ArrayList;
-
 
 
 public class LocationDetailsFragment extends Fragment {
@@ -33,6 +35,7 @@ public class LocationDetailsFragment extends Fragment {
     private ImageButton btnLeft,btnRight;
     private Button btn_save,btn_close;
     private RelativeLayout relativeLayout;
+    //Drawable d = getResources().getDrawable(R.drawable.custom_button_round_rect_border_disabled);
 
     public LocationDetailsFragment() {
         // Required empty public constructor
@@ -96,8 +99,12 @@ public class LocationDetailsFragment extends Fragment {
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (locListener != null)
+                if (locListener != null) {
                     locListener.onSaveButtonPressed(loc.get(current_pageNumber));
+
+                    Snackbar.make(v, "Added to Favourite.", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
+                }
             }
         });
 
@@ -124,6 +131,15 @@ public class LocationDetailsFragment extends Fragment {
     }
 
     public void displayInfo(int index){
+        ArrayList<HealthyLocation> displayedList = locListener.getFavsByCategory("All Favourite");
+        //Log.d("myTag", "This is my message" + displayedList.get(0).getName());
+        for (int i = 0; i < displayedList.size(); i++) {
+            if (loc.get(index).getName() == displayedList.get(i).getName()) {
+                btn_save.setEnabled(false);
+                //btn_save.setBackgroundDrawable(d);
+            }
+        }
+
         this.name.setText(loc.get(index).getName());
         this.address.setText(loc.get(index).getAddress());
         pageText.setText((index+1)+"/"+loc.size()+" result(s) shown");
@@ -132,6 +148,7 @@ public class LocationDetailsFragment extends Fragment {
     public void setInformation(ArrayList<HealthyLocation> loc){
         this.loc = loc;
         current_pageNumber = 0;
+
         displayInfo(current_pageNumber);//Display the very first one
     }
 
@@ -153,7 +170,8 @@ public class LocationDetailsFragment extends Fragment {
             relativeLayout.setVisibility(View.INVISIBLE);
                 togglePageButton(false,false);
 
-
+                // Always set back to true if hide, otherwise button will always be disabled
+                btn_save.setEnabled(true);
         }
     }
 

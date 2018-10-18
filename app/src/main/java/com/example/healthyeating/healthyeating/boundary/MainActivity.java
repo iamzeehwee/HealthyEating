@@ -617,8 +617,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onSaveButtonPressed(HealthyLocation location) {
-        if(lm.addToFavourite(location))
+        if(lm.addToFavourite(location)) {
+            // Close information box after saving to favourite
+            toggleInformationBox(false);
             Log.d("SUCCESS", "successfully saved");
+        }
         else
             Log.d("ERROR", "failed to save");
     }
