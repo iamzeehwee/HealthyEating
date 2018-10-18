@@ -3,7 +3,6 @@ package com.example.healthyeating.healthyeating.entity;
 import android.util.Log;
 
 import com.example.healthyeating.healthyeating.interfaces.DAO;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,7 +40,6 @@ public class HealthyLocationStorage implements DAO<HealthyLocation> {
         }
         return null;
     }
-
 
 
     @Override
@@ -116,6 +114,27 @@ public class HealthyLocationStorage implements DAO<HealthyLocation> {
     public ArrayList<HealthyLocation> getListOfFavourites() {
         return favouriteList;
     }
+
+    @Override
+    public boolean addToFavourite(HealthyLocation loc){
+        if(!favouriteList.contains(loc)){
+            favouriteList.add(loc);
+        }else{
+            return false; //already added
+        }
+        return true;
+    }
+
+    @Override
+    public boolean removeFavourite(HealthyLocation loc){
+        if(favouriteList.contains(loc)){
+            favouriteList.remove(loc);
+        }else{
+            return false;  //the item is not saved yet
+        }
+        return true;
+    }
+
 
     @Override
     public void add(HealthyLocation healthyLocation) {

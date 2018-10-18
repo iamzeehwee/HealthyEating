@@ -2,7 +2,6 @@ package com.example.healthyeating.healthyeating.utilities;
 
 import android.content.Context;
 
-import com.example.healthyeating.healthyeating.entity.HealthyLocation;
 import com.example.healthyeating.healthyeating.interfaces.IFileReader;
 import com.example.healthyeating.healthyeating.interfaces.IFileWriter;
 

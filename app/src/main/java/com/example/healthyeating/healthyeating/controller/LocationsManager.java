@@ -9,7 +9,6 @@ import com.example.healthyeating.healthyeating.interfaces.IFileWriter;
 import com.example.healthyeating.healthyeating.utilities.ReadKMLImpl;
 import com.example.healthyeating.healthyeating.utilities.StorageImpl;
 
-import java.io.FileWriter;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -27,7 +26,6 @@ public class LocationsManager {
     private double current_long = -1;
     private boolean isLatLngSet = false;
     private String favFileName = "FavouriteListData";
-    private ArrayList<HealthyLocation> favouriteList;
 
     //Interface
     private IFileReader fileReader;
@@ -35,8 +33,6 @@ public class LocationsManager {
 
 
     public LocationsManager(){
-
-        favouriteList = new ArrayList<>();
         locationDAO = new HealthyLocationStorage();
 
     }
@@ -246,8 +242,9 @@ public class LocationsManager {
 
         ArrayList<String> favouritesData = fileReader.readFile(c,favFileName);
 
+
         for(String s: favouritesData){
-            favouriteList.add(getLocation(Integer.parseInt(s)));
+            locationDAO.addToFavourite(getLocation(Integer.parseInt(s)));
         }
     }
 
@@ -256,7 +253,7 @@ public class LocationsManager {
         IFileWriter fileWriter = new StorageImpl();
 
         ArrayList<String> list = new ArrayList<>();
-        for (HealthyLocation fav: favouriteList){
+        for (HealthyLocation fav: locationDAO.getListOfFavourites()){
             list.add(Integer.toString(fav.getId()));
         }
 
@@ -264,25 +261,17 @@ public class LocationsManager {
     }
 
     public boolean addToFavourite(HealthyLocation location){
-        if(!favouriteList.contains(location)){
-            favouriteList.add(location);
-        }else{
-            return false; //already added
-        }
-        return saveFavouriteList();
+
+        return locationDAO.addToFavourite(location);
     }
 
     public boolean removeFavourite(HealthyLocation location){
-        if(favouriteList.contains(location)){
-            favouriteList.remove(location);
-        }else{
-            return false;  //the item is not saved yet
-        }
-        return saveFavouriteList();
+
+        return locationDAO.removeFavourite(location);
     }
 
     public ArrayList<HealthyLocation> getFavouriteList(){
-        return favouriteList;
+        return locationDAO.getListOfFavourites();
     }
 
     public ArrayList<HealthyLocation> getFavouriteEateries() {
