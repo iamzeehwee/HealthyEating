@@ -65,17 +65,11 @@ public class FavouriteFragment extends Fragment {
                 Object listItem = favouritesView.getItemAtPosition(pos);
 
                 String locationDetails = listItem.toString().trim();
-                int endIndex =  locationDetails.indexOf("\r\nAddress: ");//locationDetails.indexOf(":") + 1;
+                int endIndex =  locationDetails.indexOf("\r\nAddress: ");
                 String name = locationDetails.substring(0, endIndex);
-//                int addressStartIndex = locationDetails.substring(endIndex+11).indexOf("\r\n");
-//                String address = locationDetails.substring(addressStartIndex);
-//                int addressEndIndex = address.indexOf("\r\n");
 
 
-//                Log.d("Favourite","@@"+name+"@@ "+locationDetails.substring(addressStartIndex,addressEndIndex));
-
-
-               favListener.onFavListItemClicked(name,spinnerValue );
+               favListener.onFavListItemClicked(name,spinnerValue);
 
 
 
@@ -126,7 +120,6 @@ public class FavouriteFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-       // favListener = null;
     }
 
     // custom adapter for complex views in favourite tab

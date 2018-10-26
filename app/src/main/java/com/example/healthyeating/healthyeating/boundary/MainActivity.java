@@ -152,14 +152,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
                 // Get the information of 1 eatery
                 Object listItem = list.getItemAtPosition(pos);
-
                 String locationDetails = listItem.toString().trim();
-                int endIndex =  locationDetails.indexOf("\r\nAddress: ");//locationDetails.indexOf(":") + 1;
+                int endIndex =  locationDetails.indexOf("\r\nAddress: ");
                 String address = locationDetails.substring(0, endIndex);
-                //int selectedLocID = lm.searchLocationIDByAddress(address);
                 listViewToMap(address);
-
-
             }
         });
 
@@ -170,15 +166,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
 
     private void listViewToMap(String address){
-        ArrayList<HealthyLocation> loc = lm.searchLocations(address);//new ArrayList<HealthyLocation>();
-        // HealthyLocation clickLoc = lm.searchLocations(address);
-        //HealthyLocation clickLoc = lm.getLocation(selectedLocID);
-        //loc.add(clickLoc);
+        ArrayList<HealthyLocation> loc = lm.searchLocations(address);
         displayOnMap(loc);
 
         String name = loc.get(0).getName();
         searchSlide.setSpinnerValue(0);
-
         ldf.setInformation(loc);
 
         searchSlide.setSearchBoxText(name);
@@ -219,9 +211,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         ldf = new LocationDetailsFragment();
 
         //Find layout
-        resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
-        mMainFrame = (FrameLayout) findViewById(R.id.main_frame);
-        list = (ListView) mMainFrame.findViewById(R.id.listViewTest);
+        resultLayout = findViewById(R.id.resultLayout);
+        mMainFrame = findViewById(R.id.main_frame);
+        list = mMainFrame.findViewById(R.id.listViewTest);
 
         //Hide information box
         toggleInformationBox(false);
@@ -253,7 +245,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                     case R.id.navigation_favourite:
                         searchSlide.setSpinnerValue(0);
                         return loadFragment(favouriteFragment);
-
                     case R.id.navigation_eateries:
                         if(!lm.getLocationType().equals("Eateries")){
                             //Changing from other tab to eateries, reload the markers
@@ -284,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
   private void reset(){
       //We do not want to reset the seekbar as it is troublesome for the user to set it again.
-      ArrayList<HealthyLocation> loc = lm.getListOfLocation();
+
       toggleInformationBox(false);
       searchSlide.setSearchBoxText("");
       removeAllMarkersFromMap();
@@ -295,6 +286,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
       toggleNoResultsFound(false);
       ldf.reset();
       lm.setSortFilter(0);
+      ArrayList<HealthyLocation> loc = lm.getListOfLocation();
       displayOnMap(loc);
       displayOnList(loc);
 
@@ -525,7 +517,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void searchSubmit(String query) {
-
         searchQuery = query;
         ArrayList<HealthyLocation> loc = lm.searchLocations(searchQuery);
         displayOnMap(loc);
@@ -639,7 +630,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onFavListItemClicked(String name, int spinnerValue) {
-        Log.d("Favourite", "HERE " + name);
         searchSlide = new SearchAndSlide();
         favouriteLocName=name;
         loadFragment(searchSlide);
@@ -675,8 +665,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 mBottomNavigation.getMenu().getItem(2).setChecked(true);
 
             }
-
-            Log.d("Spinner", "Value " + searchSlide.getSpinnerValue());
             toggleMapView(true);
         }
 

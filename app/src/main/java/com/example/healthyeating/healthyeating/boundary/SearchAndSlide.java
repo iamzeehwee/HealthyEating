@@ -22,8 +22,7 @@ import java.text.DecimalFormat;
 
 public class SearchAndSlide extends Fragment  {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     private DecimalFormat f = new DecimalFormat("##.0");
 
     private static int spinnerValue = 0;
@@ -57,7 +56,6 @@ public class SearchAndSlide extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Log.d("Spinner","HERE CALLED");
         final View v = inflater.inflate(R.layout.fragment_search_and_slide, container, false);
         seek = (SeekBar) v.findViewById(R.id.seekBar2);
          searchView = (SearchView) v.findViewById(R.id.searchBar);
@@ -147,7 +145,6 @@ public class SearchAndSlide extends Fragment  {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d("Spinner","ATTAC");
         if(spinner!=null)
             spinner.setSelection(getSpinnerValue());
         if(locListener==null)
@@ -163,36 +160,29 @@ public class SearchAndSlide extends Fragment  {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d("Spinner","DETACHED");
-       // locListener = null;
     }
 
     public void setSearchBoxText(String s){
         searchView.setQuery(s,true);
     }
     public void setSpinnerValue(int index){
-        Log.d("Spinner","Set spinner "+index);
         spinnerValue=index;
         spinner.setSelection(index,true);
         if (locListener != null)
             locListener.onSpinnerChange(index);
-
 
     }
 
 
     @Override
     public void onResume() {
-        Log.e("Spinner", "onResume of HomeFragment");
         super.onResume();
-
         locListener.searchSlideOnResume();
 
     }
 
     @Override
     public void onPause() {
-        Log.e("Spinner", "OnPause of HomeFragment");
         super.onPause();
     }
 

@@ -35,7 +35,7 @@ public class LocationDetailsFragment extends Fragment {
     private ImageButton btnLeft,btnRight;
     private Button btn_save,btn_close;
     private RelativeLayout relativeLayout;
-    //Drawable d = getResources().getDrawable(R.drawable.custom_button_round_rect_border_disabled);
+
 
     public LocationDetailsFragment() {
         // Required empty public constructor
@@ -54,14 +54,14 @@ public class LocationDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_location_details, container, false);
 
-        relativeLayout = (RelativeLayout) v.findViewById(R.id.rel_layout);
-        address = (TextView) v.findViewById(R.id.address);
-        name = (TextView) v.findViewById(R.id.textView);
-        pageText = (TextView) v.findViewById(R.id.emptyTextView);
-        btnLeft =(ImageButton) v.findViewById(R.id.button_left);
-        btnRight =(ImageButton) v.findViewById(R.id.button_right);
-        btn_save =(Button) v.findViewById(R.id.button_save);
-        btn_close =(Button) v.findViewById(R.id.button_close);
+        relativeLayout =  v.findViewById(R.id.rel_layout);
+        address =  v.findViewById(R.id.address);
+        name =  v.findViewById(R.id.textView);
+        pageText = v.findViewById(R.id.emptyTextView);
+        btnLeft = v.findViewById(R.id.button_left);
+        btnRight = v.findViewById(R.id.button_right);
+        btn_save = v.findViewById(R.id.button_save);
+        btn_close =v.findViewById(R.id.button_close);
 
         hide();
 
@@ -127,16 +127,14 @@ public class LocationDetailsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        //locListener = null;
     }
 
     public void displayInfo(int index){
         ArrayList<HealthyLocation> displayedList = locListener.getFavsByCategory("All Favourite");
-        //Log.d("myTag", "This is my message" + displayedList.get(0).getName());
         for (int i = 0; i < displayedList.size(); i++) {
             if (loc.get(index).getName() == displayedList.get(i).getName()) {
                 btn_save.setEnabled(false);
-                //btn_save.setBackgroundDrawable(d);
+
             }
         }
 

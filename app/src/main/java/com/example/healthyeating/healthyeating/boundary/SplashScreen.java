@@ -197,6 +197,8 @@ public class SplashScreen extends AppCompatActivity {
        //This is like the start-up class but it is in the form of Activity as we need to read the KML file from res/raw
        // by using getResource() which is only available in Activity .
 
+
+
        //Init controller here first
        lm = SingletonManager.getLocationManagerInstance();
        lm.initHealthyLocationList(this);
