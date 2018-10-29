@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     //Fragments
     private FavouriteFragment favouriteFragment;
     private HCSProductsFragment hcsProductsFragment;
-    private SearchAndSlide searchSlide;
+    private LocationSearchAndSlide searchSlide;
     private LocationDetailsFragment ldf;
 
     //Controller
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         //Init fragments
         favouriteFragment = new FavouriteFragment();
         hcsProductsFragment = new HCSProductsFragment();
-        searchSlide = new SearchAndSlide();
+        searchSlide = new LocationSearchAndSlide();
         ldf = new LocationDetailsFragment();
 
         //Find layout
@@ -630,7 +630,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     @Override
     public void onFavListItemClicked(String name, int spinnerValue) {
-        searchSlide = new SearchAndSlide();
+        searchSlide = new LocationSearchAndSlide();
         favouriteLocName=name;
         loadFragment(searchSlide);
         favClicked = true;

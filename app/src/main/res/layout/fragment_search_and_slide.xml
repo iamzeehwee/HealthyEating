@@ -6,7 +6,7 @@
     android:focusableInTouchMode="true"
     android:background="#CBD"
 
-    tools:context=".boundary.SearchAndSlide">
+    tools:context=".boundary.LocationSearchAndSlide">
 
     <!-- TODO: Update blank fragment layout -->
 

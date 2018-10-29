@@ -13,7 +13,7 @@ public interface ILocationListener {
     void onSaveButtonPressed(HealthyLocation location);
     ArrayList<HealthyLocation> getFavsByCategory(String categoryChosen);
 
-    //SearchAndSlide
+    //LocationSearchAndSlide
     void searchSubmit(String query);
     void onSliderRelease(double dis);
     void onSliderHoldDown();

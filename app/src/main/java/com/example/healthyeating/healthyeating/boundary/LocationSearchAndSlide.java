@@ -20,7 +20,7 @@ import com.example.healthyeating.healthyeating.R;
 import java.text.DecimalFormat;
 
 
-public class SearchAndSlide extends Fragment  {
+public class LocationSearchAndSlide extends Fragment  {
 
 
     private DecimalFormat f = new DecimalFormat("##.0");
@@ -35,7 +35,7 @@ public class SearchAndSlide extends Fragment  {
 
 
 
-    public SearchAndSlide() {
+    public LocationSearchAndSlide() {
         // Required empty public constructor
     }
 
