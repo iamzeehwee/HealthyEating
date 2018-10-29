@@ -91,56 +91,67 @@ public class HealthyLocationStorage implements DAO<HealthyLocation> {
     }
 
     @Override
-    public ArrayList<HealthyLocation> getListOfHealthyLocation(int sort, String locationType) {
-
+    public ArrayList<HealthyLocation> getList(int index, int sort, String locationType) {
         ArrayList<HealthyLocation> res = new ArrayList<>();
-        if(sort!=location_sortFilter){
-            location_sortFilter = sort;
-            listOfHealthyLocation = sortList(listOfHealthyLocation);
-        }
+        if(index == 0) {
 
-        for(int i = 0; i< listOfHealthyLocation.size(); i++){
-            if(listOfHealthyLocation.get(i).getLocationType().equals(locationType)) {
+
+            if (sort != location_sortFilter) {
+                location_sortFilter = sort;
+                listOfHealthyLocation = sortList(listOfHealthyLocation);
+            }
+
+            for (int i = 0; i < listOfHealthyLocation.size(); i++) {
+                if (listOfHealthyLocation.get(i).getLocationType().equals(locationType)) {
 
                     res.add(listOfHealthyLocation.get(i));
 
 
+                }
             }
+
+        }
+        else if(index == 1){
+            res = favouriteList;
         }
         return res;
+
     }
 
-    @Override
-    public ArrayList<HealthyLocation> getListOfFavourites() {
-        return favouriteList;
-    }
+
+
+
 
     @Override
-    public boolean addToFavourite(HealthyLocation loc){
-        if(!favouriteList.contains(loc)){
-            favouriteList.add(loc);
-        }else{
-            return false; //already added
+    public boolean delete(int index, HealthyLocation loc){
+        if(index == 1) {
+            if (favouriteList.contains(loc)) {
+                favouriteList.remove(loc);
+            } else {
+                return false;  //the item is not saved yet
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
+
     @Override
-    public boolean removeFavourite(HealthyLocation loc){
-        if(favouriteList.contains(loc)){
-            favouriteList.remove(loc);
-        }else{
-            return false;  //the item is not saved yet
+    public boolean add(int index, HealthyLocation healthyLocation) {
+        if(index == 0) {
+            healthyLocation.setId(listOfHealthyLocation.size());
+            listOfHealthyLocation.add(healthyLocation);
+            return true;
         }
-        return true;
-    }
-
-
-    @Override
-    public void add(HealthyLocation healthyLocation) {
-        healthyLocation.setId(listOfHealthyLocation.size());
-          listOfHealthyLocation.add(healthyLocation);
-
+        else if(index == 1){
+            if(!favouriteList.contains(healthyLocation)){
+                favouriteList.add(healthyLocation);
+            }else{
+                return false; //already added
+            }
+            return true;
+        }
+        return false;
     }
 
 
@@ -149,8 +160,5 @@ public class HealthyLocationStorage implements DAO<HealthyLocation> {
 
     }
 
-    @Override
-    public void delete(HealthyLocation healthyLocation) {
 
-    }
 }

@@ -154,7 +154,7 @@ public class LocationsManager {
             address = address.substring(1);
 
         HealthyLocation loc = new HealthyLocation(name,address,postal_code,  floor,  unit,  longitude,  latitude, locationType);
-        locationDAO.add(loc);
+        locationDAO.add(0,loc);
 
     }
 
@@ -177,7 +177,7 @@ public class LocationsManager {
 
     public ArrayList<HealthyLocation> getListOfLocation() {
 
-        ArrayList<HealthyLocation> res = locationDAO.getListOfHealthyLocation(sortFilter, locationType);
+        ArrayList<HealthyLocation> res = locationDAO.getList(0,sortFilter, locationType);
 
         if(!isLatLngSet)
             return res;
@@ -244,7 +244,7 @@ public class LocationsManager {
 
 
         for(String s: favouritesData){
-            locationDAO.addToFavourite(getLocation(Integer.parseInt(s)));
+            locationDAO.add(1,getLocation(Integer.parseInt(s)));
         }
     }
 
@@ -253,7 +253,7 @@ public class LocationsManager {
         IFileWriter fileWriter = new StorageImpl();
 
         ArrayList<String> list = new ArrayList<>();
-        for (HealthyLocation fav: locationDAO.getListOfFavourites()){
+        for (HealthyLocation fav: locationDAO.getList(1,0,"")){
             list.add(Integer.toString(fav.getId()));
         }
 
@@ -262,16 +262,16 @@ public class LocationsManager {
 
     public boolean addToFavourite(HealthyLocation location){
 
-        return locationDAO.addToFavourite(location);
+        return locationDAO.add(1,location);
     }
 
     public boolean removeFavourite(HealthyLocation location){
 
-        return locationDAO.removeFavourite(location);
+        return locationDAO.delete(1,location);
     }
 
     public ArrayList<HealthyLocation> getFavouriteList(){
-        return locationDAO.getListOfFavourites();
+        return locationDAO.getList(1,0,"");
     }
 
     public ArrayList<HealthyLocation> getFavouriteEateries() {
