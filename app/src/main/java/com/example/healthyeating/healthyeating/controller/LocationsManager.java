@@ -2,7 +2,7 @@ package com.example.healthyeating.healthyeating.controller;
 
 import com.example.healthyeating.healthyeating.R;
 import com.example.healthyeating.healthyeating.entity.HealthyLocation;
-import com.example.healthyeating.healthyeating.entity.HealthyStorage;
+import com.example.healthyeating.healthyeating.entity.HealthyLocationStorage;
 import com.example.healthyeating.healthyeating.interfaces.DAO;
 import com.example.healthyeating.healthyeating.interfaces.IFileReader;
 import com.example.healthyeating.healthyeating.interfaces.IFileWriter;
@@ -33,7 +33,7 @@ public class LocationsManager {
 
 
     public LocationsManager(){
-        locationDAO = new HealthyStorage();
+        locationDAO = new HealthyLocationStorage();
 
     }
 
