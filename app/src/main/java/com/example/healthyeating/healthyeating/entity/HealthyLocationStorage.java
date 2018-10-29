@@ -146,6 +146,7 @@ public class HealthyLocationStorage implements DAO<HealthyLocation> {
         else if(index == 1){
             if(!favouriteList.contains(healthyLocation)){
                 favouriteList.add(healthyLocation);
+
             }else{
                 return false; //already added
             }

@@ -393,8 +393,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         for (Marker marker : markers) {
             builder.include(marker.getPosition());
         }
+        CameraUpdate cu = null;
+        if(lm.getLatLngSet())
+            cu = CameraUpdateFactory.newLatLngBounds(builder.build(), padding);
+        else
+            cu = CameraUpdateFactory.newLatLngZoom(listOfMarkers.get(0).getPosition(),12);
 
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(builder.build(), padding);
+
         mMap.animateCamera(cu);
 
     }

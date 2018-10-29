@@ -261,15 +261,24 @@ public class LocationsManager {
     }
 
     public boolean addToFavourite(HealthyLocation location){
-
-        return locationDAO.add(1,location);
+             if(locationDAO.add(1,location)) {
+                 saveFavouriteList();
+            return true;}
+        else
+            return false;
     }
 
     public boolean removeFavourite(HealthyLocation location){
+        if(locationDAO.delete(1,location)) {
+            saveFavouriteList();
+            return true;}
+        else
+            return false;
 
-        return locationDAO.delete(1,location);
     }
-
+    public boolean getLatLngSet(){
+        return isLatLngSet;
+    }
     public ArrayList<HealthyLocation> getFavouriteList(){
         return locationDAO.getList(1,0,"");
     }
