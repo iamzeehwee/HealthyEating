@@ -132,6 +132,7 @@ public class FavouriteFragment extends Fragment {
             layout = resource;
         }
 
+        // build list item view
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder mainViewholder = null;
@@ -139,12 +140,19 @@ public class FavouriteFragment extends Fragment {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(layout, parent, false);
                 ViewHolder viewHolder = new ViewHolder();
-                viewHolder.title = (TextView) convertView.findViewById(R.id.list_item_text);
-                viewHolder.button = (Button) convertView.findViewById(R.id.list_item_btn);
+
+                // establish links to layout elements
+                viewHolder.locationName = (TextView) convertView.findViewById(R.id.list_item_name);
+                viewHolder.locationDetails = (TextView) convertView.findViewById(R.id.list_item_details);
+                viewHolder.deleteButton = (Button) convertView.findViewById(R.id.list_item_delete_btn);
+
                 convertView.setTag(viewHolder);
             }
+
             mainViewholder = (ViewHolder) convertView.getTag();
-            mainViewholder.button.setOnClickListener(new View.OnClickListener() {
+
+            // removal button code
+            mainViewholder.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     favListener.removeFavourite(getItem(position));
@@ -152,14 +160,18 @@ public class FavouriteFragment extends Fragment {
                 }
             });
 
-            mainViewholder.title.setText(getItem(position).toString());
+            // set variable text into text views
+            mainViewholder.locationName.setText(getItem(position).getName());
+            mainViewholder.locationDetails.setText(getItem(position).detailsString());
+
             return convertView;
         }
     }
 
     public class ViewHolder {
-        TextView title;
-        Button button;
+        TextView locationName;    // location's name
+        TextView locationDetails; // location's address, floor and unit
+        Button deleteButton;      // button for item deletion
     }
 }
 
