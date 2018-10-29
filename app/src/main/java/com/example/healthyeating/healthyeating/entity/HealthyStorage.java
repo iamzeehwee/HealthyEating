@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class HealthyLocationStorage implements DAO<HealthyLocation> {
+public class HealthyStorage implements DAO<HealthyLocation> {
 
     private ArrayList<HealthyLocation> listOfHealthyLocation = new ArrayList<HealthyLocation>();
     private ArrayList<HealthyLocation> favouriteList = new ArrayList<HealthyLocation>();
     private int location_sortFilter = -1; //0 = A-Z, 1 = Z-A
 
-    public HealthyLocationStorage(){
+    public HealthyStorage(){
     }
 
     public ArrayList<HealthyLocation> sortList(ArrayList<HealthyLocation> loc){

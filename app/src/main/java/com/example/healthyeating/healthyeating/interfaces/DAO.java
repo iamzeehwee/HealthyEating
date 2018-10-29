@@ -10,6 +10,7 @@ public interface DAO<T> {
     ArrayList<T> getListOfHealthyLocation(int sort, String locationType);
     ArrayList<T> getListOfFavourites();
 
+
     void add(T t);
     boolean addToFavourite(T favs);
     boolean removeFavourite(T fav);
