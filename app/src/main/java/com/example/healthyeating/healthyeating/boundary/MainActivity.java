@@ -721,7 +721,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
 
     }
-
+/*
     @Override
     public void onCatButtonPressed(String catName) {
 
@@ -740,5 +740,5 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @Override
     public void onSortSpinnerChange(int sortIndex) {
 
-    }
+    } */
 }
