@@ -113,10 +113,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     @Override
+
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         ArrayList<HealthyLocation> loc = lm.getListOfLocation();
-        displayOnMap(loc);
+        ArrayList<HealthyLocation> nearbyLocations = new ArrayList<HealthyLocation>();
+        for (HealthyLocation location : loc) {
+            if (lm.isWithinRange(location))
+                nearbyLocations.add(location);
+        }
+        displayOnMap(nearbyLocations);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198), 11.0f));
 
@@ -153,12 +159,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                // Get the information of 1 eatery
-                Object listItem = list.getItemAtPosition(pos);
-                String locationDetails = listItem.toString().trim();
-                int endIndex =  locationDetails.indexOf("\r\nAddress: ");
-                String address = locationDetails.substring(0, endIndex);
-                listViewToMap(address);
+                // Get the information about clicked location
+                HealthyLocation clickedLocation = (HealthyLocation) list.getItemAtPosition(pos);
+                listViewToMap(clickedLocation.getName());
             }
         });
 
@@ -554,7 +557,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
             // set variable text into text views
             mainViewholder.locationName.setText(getItem(position).getName());
-            mainViewholder.locationDetails.setText(getItem(position).detailsString());
+            mainViewholder.locationDetails.setText(getItem(position).getAddress() + "\n");
 
             return convertView;
         }

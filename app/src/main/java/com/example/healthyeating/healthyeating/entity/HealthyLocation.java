@@ -99,26 +99,8 @@ public class HealthyLocation {
         this.id = id;
     }
 
-    // return string with this location's address, floor and unit, but not its name
-    public String detailsString() {
-//        String floor;
-//        String unit;
-//
-//        if (!this.floor.equals("")) {
-//            floor = "\r\nFloor: " + this.floor;
-//        }
-//        else floor = "";
-//
-//        if (!this.unit.equals("")) {
-//            unit = "\r\nUnit: " + this.unit;
-//        }
-//        else unit = "";
-
-        return "Address: " + this.address+"\n";// + floor + unit+"\n";
-    }
-
     @Override
     public String toString() {
-        return "\n" + this.name + "\r\n" + this.detailsString();
+        return "\n" + this.name + "\r\n" + this.getAddress() + "\n";
     }
 }
