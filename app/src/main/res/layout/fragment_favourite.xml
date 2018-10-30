@@ -56,12 +56,12 @@
         android:id="@+id/favouritesView"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom = "1dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoryTextView"
-        app:layout_constraintVertical_bias="0.047" >
+        app:layout_constraintVertical_bias="0.047">
 
     </ListView>
 

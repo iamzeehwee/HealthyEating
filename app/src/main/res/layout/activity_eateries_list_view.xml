@@ -28,7 +28,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:layout_below="@+id/searchView"
             android:text="Sort By:" />
@@ -40,6 +42,7 @@
             android:layout_below="@+id/searchView"
             android:layout_marginTop="10dp"
             android:layout_marginStart="70dp"
+            android:layout_marginLeft="70dp"
             android:spinnerMode="dropdown" />
 
         <TextView
@@ -48,7 +51,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvSortSpinner"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:text="Distance" />
 
@@ -58,8 +63,10 @@
             android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="60dp"
+            android:layout_marginLeft="60dp"
             android:layout_marginTop="100dp"
             android:layout_weight="10"
             android:max="30000"
@@ -72,9 +79,9 @@
             android:layout_width="58dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/seekBar2"
-            android:layout_marginTop="-10dp"
-            android:layout_marginStart="337dp"
             android:layout_marginLeft="340dp"
+            android:layout_marginStart="337dp"
+            android:layout_marginTop="-10dp"
             android:layout_weight="1"
             android:text="30.0km"
             android:textColorLink="@color/colorPrimaryDark" />
