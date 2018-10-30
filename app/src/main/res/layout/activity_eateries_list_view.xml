@@ -21,7 +21,6 @@
             android:layout_marginRight="0dp"
             android:iconifiedByDefault="false"
             android:queryHint="Tap here to search"
-            android:background="@drawable/sort_customshape"
             android:focusableInTouchMode="true"/>
 
         <TextView
@@ -41,8 +40,7 @@
             android:layout_below="@+id/searchView"
             android:layout_marginTop="10dp"
             android:layout_marginStart="70dp"
-            android:spinnerMode="dropdown"
-            android:background="@drawable/sort_customshape" />
+            android:spinnerMode="dropdown" />
 
         <TextView
             android:id="@+id/textView3"
@@ -83,9 +81,9 @@
 
         <ListView
             android:id="@+id/eateriesListView"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/seekBar2"
+            android:layout_below="@+id/categoryTextView"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"

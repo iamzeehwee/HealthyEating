@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="140dp"
     android:focusableInTouchMode="true"
-    android:background="#CBD"
-
+    android:background="#f0eef0"
     tools:context=".boundary.LocationSearchAndSlide">
 
     <!-- TODO: Update blank fragment layout -->
@@ -26,7 +25,6 @@
             android:layout_marginRight="0dp"
             android:iconifiedByDefault="false"
             android:queryHint="Tap here to search"
-            android:background="@drawable/sort_customshape"
             android:focusableInTouchMode="true">
         </SearchView>
 
@@ -47,8 +45,7 @@
             android:layout_below="@+id/searchBar"
             android:layout_marginTop="10dp"
             android:layout_marginStart="70dp"
-            android:spinnerMode="dropdown"
-            android:background="@drawable/sort_customshape" />
+            android:spinnerMode="dropdown" />
 
         <TextView
             android:id="@+id/textView3"

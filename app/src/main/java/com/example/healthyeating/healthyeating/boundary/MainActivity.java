@@ -22,14 +22,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.healthyeating.healthyeating.controller.SingletonManager;
@@ -56,6 +60,7 @@ import com.example.healthyeating.healthyeating.controller.LocationsManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import android.view.View;
 
@@ -92,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     ArrayAdapter<HealthyLocation> adapter;
     private LinearLayout resultLayout;
 
-
     //For favourite Transition
     private String favouriteLocName= "";
     private boolean favClicked = false;
@@ -107,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -506,8 +509,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     private void displayOnList(ArrayList<HealthyLocation> loc){
-        adapter = new ArrayAdapter<HealthyLocation>(getApplicationContext(), android.R.layout.simple_list_item_1, loc);
-        list.setAdapter(adapter);
+        CustomListAdapter locAdapter = new CustomListAdapter(getApplicationContext(), R.layout.list_item_eateries, loc);
+        list.setAdapter(locAdapter);
+
+        //adapter = new ArrayAdapter<HealthyLocation>(getApplicationContext(), android.R.layout.simple_list_item_1, loc);
+        //list.setAdapter(adapter);
         if(searchSlide.getSpinnerValue()!=0) { //We want to show in List View only
             if (loc.size() == 0) {
                 toggleNoResultsFound(true);
@@ -518,7 +524,46 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
 
+    // custom adapter for complex views in favourite tab
+    private class CustomListAdapter extends ArrayAdapter<HealthyLocation> {
+        private int layout;
+        private List<HealthyLocation> locationList;
+        private CustomListAdapter(Context context, int resource, List<HealthyLocation> locationList) {
+            super(context, resource, locationList);
+            this.locationList = locationList;
+            layout = resource;
+        }
 
+        // build list item view
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            MainActivity.ViewHolder mainViewholder = null;
+            if(convertView == null) {
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                convertView = inflater.inflate(layout, parent, false);
+                MainActivity.ViewHolder viewHolder = new MainActivity.ViewHolder();
+
+                // establish links to layout elements
+                viewHolder.locationName = (TextView) convertView.findViewById(R.id.eateries_list_item_name);
+                viewHolder.locationDetails = (TextView) convertView.findViewById(R.id.eateries_list_item_details);
+
+                convertView.setTag(viewHolder);
+            }
+
+            mainViewholder = (MainActivity.ViewHolder) convertView.getTag();
+
+            // set variable text into text views
+            mainViewholder.locationName.setText(getItem(position).getName());
+            mainViewholder.locationDetails.setText(getItem(position).detailsString());
+
+            return convertView;
+        }
+    }
+
+    public class ViewHolder {
+        TextView locationName;    // location's name
+        TextView locationDetails; // location's address, floor and unit
+    }
 
     @Override
     public void searchSubmit(String query) {
@@ -677,4 +722,23 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     }
 
+    @Override
+    public void onCatButtonPressed(String catName) {
+
+    }
+
+    @Override
+    public void onCatSearchSubmit(String search) {
+
+    }
+
+    @Override
+    public void onCatSpinnerChange(int catIndex) {
+
+    }
+
+    @Override
+    public void onSortSpinnerChange(int sortIndex) {
+
+    }
 }
