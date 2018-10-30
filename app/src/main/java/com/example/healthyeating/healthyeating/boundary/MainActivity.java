@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
       // - eateries map view -> caterer list view or vice versa
       toggleNoResultsFound(false);
       ldf.reset();
-      lm.setSortFilter(0);
+      //lm.setSortFilter(0);
       ArrayList<HealthyLocation> loc = lm.getListOfLocation();
       displayOnMap(loc);
       displayOnList(loc);
@@ -568,7 +568,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     @Override
     public void searchSubmit(String query) {
         searchQuery = query;
-        ArrayList<HealthyLocation> loc = lm.searchLocations(searchQuery);
+        ArrayList<HealthyLocation> loc = lm.searchLocations(query);
         displayOnMap(loc);
         displayOnList(loc);
 
