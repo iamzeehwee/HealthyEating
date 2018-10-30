@@ -5,8 +5,10 @@ package com.example.healthyeating.healthyeating.interfaces;
 
 public interface IHCSListener {
 
+    /*
     void onCatButtonPressed(String catName);
     void onCatSearchSubmit(String search);
     void onCatSpinnerChange(int catIndex);
     void onSortSpinnerChange(int sortIndex);
+    */
 }
