@@ -9,7 +9,7 @@ public class HCSProducts {
     private String brandName;
     private String productWeight;
 
-    public HCSProducts(int id, String category, String companyName, String productName, String brandName, String productWeight){
+    public HCSProducts(int id, String category, String companyName, String productName, String brandName, String productWeight) {
         this.id = id;
         this.category = category;
         this.companyName = companyName;
@@ -55,9 +55,20 @@ public class HCSProducts {
         return productWeight;
     }
 
-    public void setProductWeight(String productWeight) {this.productWeight = productWeight;}
-
+    public void setProductWeight(String productWeight) {
+        this.productWeight = productWeight;
     }
 
-
+    @Override
+    public String toString() {
+        return "HCSProducts{" +
+                "id=" + id +
+                ", category='" + category + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", productName='" + productName + '\'' +
+                ", brandName='" + brandName + '\'' +
+                ", productWeight='" + productWeight + '\'' +
+                '}';
+    }
+}
 
