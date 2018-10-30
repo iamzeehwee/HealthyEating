@@ -9,8 +9,7 @@ public class HCSProducts {
     private String brandName;
     private String productWeight;
 
-    public HCSProducts(int id, String category, String companyName, String productName, String brandName, String productWeight) {
-        this.id = id;
+    public HCSProducts(String category, String companyName, String productName, String brandName, String productWeight) {
         this.category = category;
         this.companyName = companyName;
         this.productName = productName;
