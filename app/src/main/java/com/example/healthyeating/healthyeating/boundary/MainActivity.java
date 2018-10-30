@@ -579,12 +579,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         lm.setLimitDistance(dis);
         ArrayList<HealthyLocation> loc = lm.searchLocations(searchQuery);
         HealthyLocation getSelectedLocation = ldf.getInformation();
-
+boolean near = false;
         if(searchSlide.getSpinnerValue()==0) { //We want to do this in Map View only
             if (searchQuery.length() > 0)
-                    toggleInformationBox(loc.size() == 0? false:true);
-            if(getSelectedLocation!=null)
-                toggleInformationBox(lm.isWithinRange(getSelectedLocation));
+                toggleInformationBox(loc.size() == 0 ? false : true);
+            if (getSelectedLocation != null) {
+                near = lm.isWithinRange(getSelectedLocation);
+                toggleInformationBox(near);
+            }
         }
         displayOnMap(loc);
         displayOnList(loc);
