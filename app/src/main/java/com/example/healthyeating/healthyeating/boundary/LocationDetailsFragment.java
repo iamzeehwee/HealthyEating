@@ -36,18 +36,31 @@ public class LocationDetailsFragment extends Fragment {
     private Button btn_save,btn_close;
     private ConstraintLayout relativeLayout;
 
-
+    /**
+     * This method is a public constructor
+     */
     public LocationDetailsFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     * This method is used to initialize the fragment
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * This method is used when a fragment inflate a view
+     * This method also handles the event when different buttons are selected by user
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,6 +79,10 @@ public class LocationDetailsFragment extends Fragment {
         hide();
 
         btnLeft.setOnClickListener(new View.OnClickListener() {
+            /**
+             * This method changes the view of the location information when the left button is selected
+             * @param v
+             */
             public void onClick(View v) {
                 if(current_pageNumber==0)
                     current_pageNumber= loc.size()-1;
@@ -77,6 +94,9 @@ public class LocationDetailsFragment extends Fragment {
             }
         });
 
+        /**
+         * This method changes the view of the location information when the right button is selected
+         */
         btnRight.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(current_pageNumber==loc.size()-1)
@@ -87,8 +107,10 @@ public class LocationDetailsFragment extends Fragment {
             }
         });
 
-
         btn_close.setOnClickListener(new View.OnClickListener() {
+            /**
+             * This method call the onCloseBtnPress when the close button in the location information is selected
+             */
             public void onClick(View v) {
                 loc = null;
                 if (locListener != null)
@@ -98,6 +120,9 @@ public class LocationDetailsFragment extends Fragment {
 
 
         btn_save.setOnClickListener(new View.OnClickListener() {
+            /**
+             * This method call the method for saving a location to favourite list
+             */
             public void onClick(View v) {
                 if (locListener != null) {
                     locListener.onSaveButtonPressed(loc.get(current_pageNumber));
@@ -111,8 +136,10 @@ public class LocationDetailsFragment extends Fragment {
         return v;
     }
 
-
-
+    /**
+     * This method is called once when the fragment is associated with its activity
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -124,11 +151,18 @@ public class LocationDetailsFragment extends Fragment {
         }
     }
 
+    /**
+     *  This method is called when the fragment is removed its association with its activity
+     */
     @Override
     public void onDetach() {
         super.onDetach();
     }
 
+    /**
+     * This method is used to display the location information when user select a location from the favourite list
+     * @param index
+     */
     public void displayInfo(int index){
         ArrayList<HealthyLocation> displayedList = locListener.getFavsByCategory("All Favourite");
         for (int i = 0; i < displayedList.size(); i++) {
@@ -143,6 +177,10 @@ public class LocationDetailsFragment extends Fragment {
         pageText.setText((index+1)+"/"+loc.size()+" result(s) shown");
     }
 
+    /**
+     * This method is to set the information into the location information box
+     * @param loc
+     */
     public void setInformation(ArrayList<HealthyLocation> loc){
         this.loc = loc;
         current_pageNumber = 0;
@@ -150,12 +188,18 @@ public class LocationDetailsFragment extends Fragment {
         displayInfo(current_pageNumber);//Display the very first one
     }
 
+    /**
+     * This method is for resetting the location and page number
+     */
     public void reset(){
         loc = null;
         current_pageNumber = 0;
-
     }
 
+    /**
+     * This method is to retrieve the location information
+     * @return first item in ArrayList<HealthyLocation> loc if it is not null, else return null
+     */
     public HealthyLocation getInformation(){
         if(loc!=null)
         return loc.get(0);
@@ -163,6 +207,9 @@ public class LocationDetailsFragment extends Fragment {
             return null;
     }
 
+    /**
+     * This method is to hide the location information view
+     */
     public void hide(){
         if(relativeLayout!=null) {
             relativeLayout.setVisibility(View.INVISIBLE);
@@ -174,6 +221,9 @@ public class LocationDetailsFragment extends Fragment {
         }
     }
 
+    /**
+     * This method is to show the location information view
+     */
     public void show(){
         if(relativeLayout!=null) {
             relativeLayout.setVisibility(View.VISIBLE);
@@ -184,13 +234,13 @@ public class LocationDetailsFragment extends Fragment {
         }
     }
 
+    /**
+     * This method is to determine the visibility of left and right buttons
+     * @param left
+     * @param right
+     */
     public void togglePageButton(boolean left, boolean right){
         btnLeft.setVisibility(left ? View.VISIBLE:View.INVISIBLE);
         btnRight.setVisibility(right ? View.VISIBLE:View.INVISIBLE);
-
     }
-
-
-
-
 }
