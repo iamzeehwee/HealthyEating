@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,6 +127,7 @@ public class LocationDetailsFragment extends Fragment {
 
     public int toggleSaveButton(){
         //if (btn_save.getTag() != null) {
+        Log.d("HAHA",""+btn_save.getTag());
             if (btn_save.getTag().equals(R.drawable.ic_star_full)) {
                 btn_save.setImageResource(R.drawable.ic_star_border);
                 btn_save.setTag(R.drawable.ic_star_border);
@@ -157,13 +159,12 @@ public class LocationDetailsFragment extends Fragment {
 
     public void displayInfo(int index){
         ArrayList<HealthyLocation> displayedList = locListener.getFavsByCategory("All Favourite");
+        btn_save.setTag(R.drawable.ic_star_border); //default tag value in case displayList.size == 0
         for (int i = 0; i < displayedList.size(); i++) {
             if (loc.get(index).getName().equals(displayedList.get(i).getName())) {
-                //btn_save.setEnabled(false);
                 btn_save.setImageResource(R.drawable.ic_star_full);
                 btn_save.setTag(R.drawable.ic_star_full);
             } else {
-                // btn_save.setEnabled(true);
                 btn_save.setImageResource(R.drawable.ic_star_border);
                 btn_save.setTag(R.drawable.ic_star_border);
 

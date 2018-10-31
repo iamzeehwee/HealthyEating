@@ -749,6 +749,7 @@ boolean near = false;
      */
     @Override
     public void onCloseBtnPress() {
+
         toggleInformationBox(false);
         searchSlide.setSearchBoxText("");
         if(prev_marker!=null)
