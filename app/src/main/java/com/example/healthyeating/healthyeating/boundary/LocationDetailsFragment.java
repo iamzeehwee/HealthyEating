@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,8 @@ public class LocationDetailsFragment extends Fragment {
     private TextView pageText;
     private TextView address,name;
     private ImageButton btnLeft,btnRight;
-    private Button btn_save,btn_close;
+    private ImageButton btn_save;
+    private Button btn_close;
     private ConstraintLayout relativeLayout;
 
 
@@ -100,10 +102,22 @@ public class LocationDetailsFragment extends Fragment {
         btn_save.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (locListener != null) {
+                    int res = toggleSaveButton();
+                    if(res==0){
+                        Snackbar.make(v, "Removed from Favourite.", Snackbar.LENGTH_SHORT)
+                                .setAction("Action", null).show();
+                    }
+                    else if(res==1){
+                        Snackbar.make(v, "Added to Favourite.", Snackbar.LENGTH_SHORT)
+                                .setAction("Action", null).show();
+                    }
+
+                    //btn_save.setEnabled(false);
+
+
                     locListener.onSaveButtonPressed(loc.get(current_pageNumber));
 
-                    Snackbar.make(v, "Added to Favourite.", Snackbar.LENGTH_SHORT)
-                            .setAction("Action", null).show();
+
                 }
             }
         });
@@ -111,7 +125,22 @@ public class LocationDetailsFragment extends Fragment {
         return v;
     }
 
+   public int toggleSaveButton(){
+       if(btn_save.getTag().equals(""+R.drawable.ic_star_full)) {
+           btn_save.setImageResource((R.drawable.ic_star_border));
 
+           btn_save.setTag(""+(R.drawable.ic_star_border));
+          return 0;
+       }
+       else if(btn_save.getTag().equals(""+R.drawable.ic_star_border)) {
+
+           btn_save.setImageResource((R.drawable.ic_star_full));
+
+           btn_save.setTag(""+(R.drawable.ic_star_full));
+           return 1;
+       }
+       return -1;
+   }
 
     @Override
     public void onAttach(Context context) {
@@ -132,9 +161,16 @@ public class LocationDetailsFragment extends Fragment {
     public void displayInfo(int index){
         ArrayList<HealthyLocation> displayedList = locListener.getFavsByCategory("All Favourite");
         for (int i = 0; i < displayedList.size(); i++) {
-            if (loc.get(index).getName() == displayedList.get(i).getName()) {
-                btn_save.setEnabled(false);
-                btn_save.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_star_full));
+            if (loc.get(index).getName().equals(displayedList.get(i).getName())) {
+                //btn_save.setEnabled(false);
+                btn_save.setImageResource((R.drawable.ic_star_full));
+                btn_save.setTag(""+R.drawable.ic_star_full);
+            }
+            else{
+               // btn_save.setEnabled(true);
+                btn_save.setImageResource((R.drawable.ic_star_border));
+                btn_save.setTag(""+R.drawable.ic_star_border);
+
             }
         }
 

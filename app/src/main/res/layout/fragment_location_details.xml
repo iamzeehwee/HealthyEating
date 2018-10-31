@@ -73,7 +73,7 @@
             app:layout_constraintStart_toEndOf="@+id/button_left"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_save"
             android:layout_width="30dp"
             android:layout_height="30dp"

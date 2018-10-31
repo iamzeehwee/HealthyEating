@@ -665,11 +665,15 @@ boolean near = false;
     public void onSaveButtonPressed(HealthyLocation location) {
         if(lm.addToFavourite(location)) {
             // Close information box after saving to favourite
-            toggleInformationBox(false);
+
+
             Log.d("SUCCESS", "successfully saved");
         }
-        else
-            Log.d("ERROR", "failed to save");
+        else {
+            lm.removeFavourite(location);
+            //Log.d("ERROR", "failed to save");
+
+        }
     }
 
     @Override
@@ -697,6 +701,8 @@ boolean near = false;
     @Override
     public void removeFavourite(HealthyLocation location) {
         lm.removeFavourite(location);
+        ldf.toggleSaveButton();
+        //toggleInformationBox(false);
     }
 
     @Override
