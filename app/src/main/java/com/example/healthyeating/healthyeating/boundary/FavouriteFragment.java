@@ -61,18 +61,9 @@ public class FavouriteFragment extends Fragment {
         favouritesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                // Get the information of 1 eatery
-                Object listItem = favouritesView.getItemAtPosition(pos);
-
-                String locationDetails = listItem.toString().trim();
-                int endIndex =  locationDetails.indexOf("\r\nAddress: ");
-                String name = locationDetails.substring(0, endIndex);
-
-
-               favListener.onFavListItemClicked(name,spinnerValue);
-
-
-
+                // Get the information about clicked location
+                HealthyLocation clickedFavourite = (HealthyLocation) favouritesView.getItemAtPosition(pos);
+                favListener.onFavListItemClicked(clickedFavourite.getName(),spinnerValue);
             }
         });
 
@@ -162,7 +153,7 @@ public class FavouriteFragment extends Fragment {
 
             // set variable text into text views
             mainViewholder.locationName.setText(getItem(position).getName());
-            mainViewholder.locationDetails.setText(getItem(position).detailsString());
+            mainViewholder.locationDetails.setText(getItem(position).getAddress() + "\n");
 
             return convertView;
         }

@@ -3,16 +3,16 @@ package com.example.healthyeating.healthyeating.boundary;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 
 import com.example.healthyeating.healthyeating.entity.HealthyLocation;
 import com.example.healthyeating.healthyeating.interfaces.ILocationListener;
@@ -34,7 +34,7 @@ public class LocationDetailsFragment extends Fragment {
     private TextView address,name;
     private ImageButton btnLeft,btnRight;
     private Button btn_save,btn_close;
-    private RelativeLayout relativeLayout;
+    private ConstraintLayout relativeLayout;
 
 
     public LocationDetailsFragment() {
@@ -134,7 +134,7 @@ public class LocationDetailsFragment extends Fragment {
         for (int i = 0; i < displayedList.size(); i++) {
             if (loc.get(index).getName() == displayedList.get(i).getName()) {
                 btn_save.setEnabled(false);
-
+                btn_save.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_star_full));
             }
         }
 
@@ -170,6 +170,7 @@ public class LocationDetailsFragment extends Fragment {
 
                 // Always set back to true if hide, otherwise button will always be disabled
                 btn_save.setEnabled(true);
+                btn_save.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_star_border));
         }
     }
 

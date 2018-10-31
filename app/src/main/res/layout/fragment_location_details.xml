@@ -3,163 +3,152 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="210dp"
-    android:layout_gravity="bottom"
-
+    android:layout_height="170dp"
     android:layout_above="@+id/navigation"
+
+    android:layout_gravity="bottom"
     tools:context=".boundary.LocationDetailsFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/rel_layout"
         android:layout_width="match_parent"
-        android:background="#F0eeF0"
         android:layout_height="match_parent"
-        >
+        android:background="#F0eeF0">
 
+
+        <ImageView
+            android:id="@+id/backgroundImageView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:src="#075e54"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="#30b6cf"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="45dp"
             android:gravity="center"
-            android:textSize="18sp"
+            android:padding="5dp"
+            android:text="Subway - NTU"
             android:textColor="#ffffff"
-
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:text="Subway - NTU"/>
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="3.2dp"
-            android:id="@+id/separator_top"
-            android:visibility="visible"
-            android:background="#4fa6b6"/>
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="3.2dp"
-            android:id="@+id/separator_btm"
-            android:layout_above="@+id/textView_addr"
-            android:visibility="visible"
-            android:background="#4fa6b6"/>
+            app:layout_constraintBottom_toBottomOf="@+id/backgroundImageView"
+            app:layout_constraintEnd_toStartOf="@+id/button_close"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/backgroundImageView" />
 
-
-
-            <TextView
-                android:id="@+id/textView_addr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_centerInParent="true"
-                android:paddingLeft = "3dp"
-                android:paddingTop="18dp"
-                android:paddingBottom="6dp"
-                android:textSize="14sp"
-
-                android:text="ADDRESS"
-                android:layout_below="@+id/textView"/>
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-             android:layout_toLeftOf="@id/textView_addr"
-            android:layout_alignBottom="@id/textView_addr"
-            android:layout_alignTop="@id/textView_addr"
-            android:drawableStart="@drawable/ic_location"
-            android:drawableLeft="@drawable/ic_location"
-            android:src="@drawable/ic_location" />
 
         <TextView
             android:id="@+id/address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="3dp"
-            android:paddingLeft="41dp"
-            android:paddingRight="41dp"
-
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:drawableLeft="@drawable/ic_location_green"
+            android:drawableStart="@drawable/ic_location_green"
             android:gravity="center"
-            android:layout_below="@+id/textView_addr"
-            android:textSize="16sp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:text="66 Nanyang Cresent"
             android:textColor="#000000"
-
-            android:text="66 Nanyang Cresent" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/emptyTextView"
+            app:layout_constraintEnd_toStartOf="@+id/button_right"
+            app:layout_constraintStart_toEndOf="@+id/button_left"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <Button
             android:id="@+id/button_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:minHeight="38dp"
-            android:background="@drawable/custom_button_round_rect_border"
-            android:layout_alignParentRight="true"
-            android:layout_alignBaseline="@id/emptyTextView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@+id/emptyTextView"
+            android:layout_alignStart="@+id/button_close"
+            android:layout_alignLeft="@+id/button_close"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:text="Save" />
+            android:background="@drawable/ic_star_border"
+            android:minHeight="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/button_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="38dp"
-            android:background="@drawable/custom_button_round_rect_border"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:layout_alignBaseline="@id/emptyTextView"
-            android:text="Close" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textView"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/ic_custom_delete"
+            android:minHeight="25dp"
+            app:layout_constraintBottom_toBottomOf="@+id/backgroundImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/backgroundImageView" />
 
         <TextView
             android:id="@+id/emptyTextView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
             android:gravity="center"
-            android:layout_alignParentBottom="true"
+            android:text="1/1 result(s) shown"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/address"
+            app:layout_constraintStart_toStartOf="@+id/address" />
+
+        <ImageButton
+            android:id="@+id/button_left"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/ic_left_location"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/emptyTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <ImageButton
+            android:id="@+id/button_right"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="18dp"
-            android:text="1/1 result(s) shown" />
-
-        <ImageButton
-            android:id="@+id/button_left"
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="80dp"
-            android:background="@null"
-            android:src="@drawable/ic_left_location" />
-
-        <!--Button
-            android:id="@+id/button_left"
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="66dp"
-            android:text="Button" /-->
-
-        <!--Button
-            android:id="@+id/button_right"
-            android:layout_width="34dp"
-            android:layout_height="67dp"
-
-            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="0dp"
-            android:text="Button" /-->
-
-        <ImageButton
-            android:id="@+id/button_right"
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="0dp"
-            android:background="@null"
-            android:src="@drawable/ic_next_location" />
-    </RelativeLayout>
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/ic_next_location"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/emptyTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+    </android.support.constraint.ConstraintLayout>
 </FrameLayout>
