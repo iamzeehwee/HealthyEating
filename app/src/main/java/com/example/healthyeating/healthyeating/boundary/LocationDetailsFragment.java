@@ -125,19 +125,17 @@ public class LocationDetailsFragment extends Fragment {
     }
 
     public int toggleSaveButton(){
-        if(btn_save.getTag().equals(""+R.drawable.ic_star_full)) {
-            btn_save.setImageResource((R.drawable.ic_star_border));
-
-            btn_save.setTag(""+(R.drawable.ic_star_border));
-            return 0;
-        }
-        else if(btn_save.getTag().equals(""+R.drawable.ic_star_border)) {
-
-            btn_save.setImageResource((R.drawable.ic_star_full));
-
-            btn_save.setTag(""+(R.drawable.ic_star_full));
-            return 1;
-        }
+        //if (btn_save.getTag() != null) {
+            if (btn_save.getTag().equals(R.drawable.ic_star_full)) {
+                btn_save.setImageResource(R.drawable.ic_star_border);
+                btn_save.setTag(R.drawable.ic_star_border);
+                return 0;
+            } else if (btn_save.getTag().equals(R.drawable.ic_star_border)) {
+                btn_save.setImageResource(R.drawable.ic_star_full);
+                btn_save.setTag(R.drawable.ic_star_full);
+                return 1;
+            }
+        //}
         return -1;
     }
 
@@ -162,13 +160,12 @@ public class LocationDetailsFragment extends Fragment {
         for (int i = 0; i < displayedList.size(); i++) {
             if (loc.get(index).getName().equals(displayedList.get(i).getName())) {
                 //btn_save.setEnabled(false);
-                btn_save.setImageResource((R.drawable.ic_star_full));
-                btn_save.setTag(""+R.drawable.ic_star_full);
-            }
-            else{
+                btn_save.setImageResource(R.drawable.ic_star_full);
+                btn_save.setTag(R.drawable.ic_star_full);
+            } else {
                 // btn_save.setEnabled(true);
-                btn_save.setImageResource((R.drawable.ic_star_border));
-                btn_save.setTag(""+R.drawable.ic_star_border);
+                btn_save.setImageResource(R.drawable.ic_star_border);
+                btn_save.setTag(R.drawable.ic_star_border);
 
             }
         }
