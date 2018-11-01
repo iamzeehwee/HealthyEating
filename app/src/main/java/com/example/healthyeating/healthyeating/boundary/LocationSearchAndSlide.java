@@ -120,12 +120,9 @@ public class LocationSearchAndSlide extends Fragment  {
                 double dis = (double)i/1000.0;
                 if(dis<1.0)
                     t.setText(i+"m");
-                else if (dis == 30.0) {
-                    t.setText("Max");
-                }
                 else
                     t.setText(f.format((double)i/1000.0)+"km");
-                t.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
+                t.setX(seekBar.getX() + val - 15);
                 seekBarValue = dis;
             }
 

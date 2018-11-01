@@ -104,6 +104,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     static int height = 0;
     int width = 0;
 
+    //For favourite selection
+    private static final int FAV_EATERIES = 0;
+    private static final int FAV_CATERERS = 1;
+    private static final int ALL_FAVS = 2;
+
     /**
      * This method inflates the menu and adds items to the action bar if it is present.
      * @param menu
@@ -776,10 +781,10 @@ boolean near = false;
     }
 
     @Override
-    public ArrayList<HealthyLocation> getFavsByCategory(String categoryChosen) {
-        if (categoryChosen.equals("Favourite Eateries"))
+    public ArrayList<HealthyLocation> getFavsByCategory(int favType) {
+        if (favType == FAV_EATERIES)
             return lm.getFavouriteEateries();
-        else if (categoryChosen.equals("Favourite Caterers"))
+        else if (favType == FAV_CATERERS)
             return lm.getFavouriteCaterers();
         else
             return lm.getFavouriteList();

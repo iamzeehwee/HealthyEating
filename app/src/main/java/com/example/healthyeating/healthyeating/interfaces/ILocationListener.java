@@ -11,7 +11,7 @@ public interface ILocationListener {
     //LocationDetailsFragment
     void onCloseBtnPress();
     void onSaveButtonPressed(HealthyLocation location);
-    ArrayList<HealthyLocation> getFavsByCategory(String categoryChosen);
+    ArrayList<HealthyLocation> getFavsByCategory(int favType);
 
     //LocationSearchAndSlide
     void searchSubmit(String query);

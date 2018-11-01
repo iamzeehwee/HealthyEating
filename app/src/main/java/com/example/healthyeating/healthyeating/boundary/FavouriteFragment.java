@@ -4,6 +4,7 @@ package com.example.healthyeating.healthyeating.boundary;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,13 +36,16 @@ public class FavouriteFragment extends Fragment {
     private static final String TAG = "Favourite";
 
     private int spinnerValue = 0;
-    // declare the layout elements
-    private Spinner categorySpinner;
-    private TextView categoryTextView;
-    private ListView favouritesView;
 
-    private String categoryChosen; // input from dropdown menu
+    // declare the layout elements
+    private ListView favouritesView;
+    private TabLayout categoryTabLayout;
     private IFavouriteListener favListener; // interface for interaction with main activity
+
+    // constants for favourite selection
+    private static final int FAV_EATERIES = 0;
+    private static final int FAV_CATERERS = 1;
+    private static final int ALL_FAVS = 2;
 
     public FavouriteFragment() {
         // Required empty public constructor
@@ -54,9 +58,31 @@ public class FavouriteFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_favourite, container, false);
 
         // bind the layout elements to variables
-        categorySpinner = (Spinner) view.findViewById(R.id.categorySpinner);
-        categoryTextView = (TextView) view.findViewById(R.id.categoryTextView);
         favouritesView = (ListView) view.findViewById(R.id.favouritesView);
+        categoryTabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
+        categoryTabLayout.addTab(categoryTabLayout.newTab().setText("Eateries"), 0);
+        categoryTabLayout.addTab(categoryTabLayout.newTab().setText("Caterers"), 1);
+        categoryTabLayout.addTab(categoryTabLayout.newTab().setText("All"), 2);
+
+        refreshListView(FAV_EATERIES, favouritesView);
+
+        // show favourites based on chosen tab
+        categoryTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                refreshListView(tab.getPosition(), favouritesView);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         favouritesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -67,33 +93,12 @@ public class FavouriteFragment extends Fragment {
             }
         });
 
-
-        // set up the dropdown menu
-        String[] categoryArray = {"Favourite Eateries", "Favourite Caterers", "All Favourite"};
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>((Context) favListener,
-                android.R.layout.simple_spinner_item, categoryArray);
-        categoryAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        categorySpinner.setAdapter(categoryAdapter);
-
-        // get input from dropdown menu and display favourites depending on chosen category
-        categoryChosen = "All Favourite";
-        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                categoryChosen = parent.getItemAtPosition(position).toString();
-                refreshListView(categoryChosen, favouritesView);
-                categoryTextView.setText(categoryChosen);
-                spinnerValue = position;
-            }
-
-            public void onNothingSelected(AdapterView<?> parent){}
-        });
-
         return view;
     }
 
-    // refreshes the list view with favourites
-    public void refreshListView(String categoryChosen, ListView favouritesView) {
-        ArrayList<HealthyLocation> displayedList = favListener.getFavsByCategory(categoryChosen);
+    // refresh the list view with favourites
+    public void refreshListView(int favType, ListView favouritesView) {
+        ArrayList<HealthyLocation> displayedList = favListener.getFavsByCategory(favType);
         CustomListAdapter favouritesAdapter = new CustomListAdapter((Context) favListener, R.layout.list_item, displayedList);
         favouritesView.setAdapter(favouritesAdapter);
     }
@@ -147,7 +152,8 @@ public class FavouriteFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     favListener.removeFavourite(getItem(position));
-                    refreshListView(categoryChosen, favouritesView);
+                    int favType = categoryTabLayout.getSelectedTabPosition();
+                    refreshListView(favType, favouritesView);
                 }
             });
 

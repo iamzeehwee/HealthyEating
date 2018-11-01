@@ -38,6 +38,10 @@ public class LocationDetailsFragment extends Fragment {
     private ImageButton btn_save;
     private ConstraintLayout relativeLayout;
 
+    // favourite selection constants
+    private static final int FAV_EATERIES = 0;
+    private static final int FAV_CATERERS = 1;
+    private static final int ALL_FAVS = 2;
 
     public LocationDetailsFragment() {
         // Required empty public constructor
@@ -72,7 +76,7 @@ public class LocationDetailsFragment extends Fragment {
                 if(current_pageNumber==0)
                     current_pageNumber= loc.size()-1;
                 else
-                 current_pageNumber--;
+                    current_pageNumber--;
 
                 displayInfo(current_pageNumber);
 
@@ -128,15 +132,15 @@ public class LocationDetailsFragment extends Fragment {
     public int toggleSaveButton(){
         //if (btn_save.getTag() != null) {
         Log.d("HAHA",""+btn_save.getTag());
-            if (btn_save.getTag().equals(R.drawable.ic_star_full)) {
-                btn_save.setImageResource(R.drawable.ic_star_border);
-                btn_save.setTag(R.drawable.ic_star_border);
-                return 0;
-            } else if (btn_save.getTag().equals(R.drawable.ic_star_border)) {
-                btn_save.setImageResource(R.drawable.ic_star_full);
-                btn_save.setTag(R.drawable.ic_star_full);
-                return 1;
-            }
+        if (btn_save.getTag().equals(R.drawable.ic_star_full)) {
+            btn_save.setImageResource(R.drawable.ic_star_border);
+            btn_save.setTag(R.drawable.ic_star_border);
+            return 0;
+        } else if (btn_save.getTag().equals(R.drawable.ic_star_border)) {
+            btn_save.setImageResource(R.drawable.ic_star_full);
+            btn_save.setTag(R.drawable.ic_star_full);
+            return 1;
+        }
         //}
         return -1;
     }
@@ -158,16 +162,15 @@ public class LocationDetailsFragment extends Fragment {
     }
 
     public void displayInfo(int index){
-        ArrayList<HealthyLocation> displayedList = locListener.getFavsByCategory("All Favourite");
+        ArrayList<HealthyLocation> displayedList = locListener.getFavsByCategory(ALL_FAVS);
         btn_save.setTag(R.drawable.ic_star_border); //default tag value in case displayList.size == 0
-        for (int i = 0; i < displayedList.size(); i++) {
-            if (loc.get(index).getName().equals(displayedList.get(i).getName())) {
+        for (HealthyLocation displayedLocation : displayedList) {
+            if (loc.contains(displayedLocation)) {
                 btn_save.setImageResource(R.drawable.ic_star_full);
                 btn_save.setTag(R.drawable.ic_star_full);
             } else {
                 btn_save.setImageResource(R.drawable.ic_star_border);
                 btn_save.setTag(R.drawable.ic_star_border);
-
             }
         }
 
@@ -191,7 +194,7 @@ public class LocationDetailsFragment extends Fragment {
 
     public HealthyLocation getInformation(){
         if(loc!=null)
-        return loc.get(0);
+            return loc.get(0);
         else
             return null;
     }
@@ -199,11 +202,11 @@ public class LocationDetailsFragment extends Fragment {
     public void hide(){
         if(relativeLayout!=null) {
             relativeLayout.setVisibility(View.INVISIBLE);
-                togglePageButton(false,false);
+            togglePageButton(false,false);
 
-                // Always set back to true if hide, otherwise button will always be disabled
-                btn_save.setEnabled(true);
-                btn_save.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_star_border));
+            // Always set back to true if hide, otherwise button will always be disabled
+            btn_save.setEnabled(true);
+            btn_save.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_star_border));
         }
     }
 
@@ -222,8 +225,4 @@ public class LocationDetailsFragment extends Fragment {
         btnRight.setVisibility(right ? View.VISIBLE:View.INVISIBLE);
 
     }
-
-
-
-
 }

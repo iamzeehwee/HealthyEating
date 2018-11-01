@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public interface IFavouriteListener {
 
     // return list of favourites based on chosen category
-    ArrayList<HealthyLocation> getFavsByCategory(String categoryChosen);
+    ArrayList<HealthyLocation> getFavsByCategory(int favType);
 
     void onFavListItemClicked(String name,int spinnerValue);
     // delete a location from favourites
