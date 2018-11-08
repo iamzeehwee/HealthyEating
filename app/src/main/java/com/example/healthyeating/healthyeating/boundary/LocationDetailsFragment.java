@@ -43,17 +43,31 @@ public class LocationDetailsFragment extends Fragment {
     private static final int FAV_CATERERS = 1;
     private static final int ALL_FAVS = 2;
 
+    /**
+     * This method is a public constructor
+     */
     public LocationDetailsFragment() {
-        // Required empty public constructor
     }
 
 
+    /**
+     * This method is used to initialize the fragment
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * This method is used when a fragment inflate a view
+     * This method also handles the event when user click on the left and right button
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,7 +85,12 @@ public class LocationDetailsFragment extends Fragment {
 
         hide();
 
+
         btnLeft.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Handles the event when left button is selected
+             * @param v
+             */
             public void onClick(View v) {
                 if(current_pageNumber==0)
                     current_pageNumber= loc.size()-1;
@@ -84,6 +103,10 @@ public class LocationDetailsFragment extends Fragment {
         });
 
         btnRight.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Handles the event when right button is selected
+             * @param v
+             */
             public void onClick(View v) {
                 if(current_pageNumber==loc.size()-1)
                     current_pageNumber= 0;
@@ -95,6 +118,10 @@ public class LocationDetailsFragment extends Fragment {
 
 
         btn_close.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Handles the event when close button is selected
+             * @param v
+             */
             public void onClick(View v) {
                 loc = null;
                 if (locListener != null)
@@ -104,6 +131,10 @@ public class LocationDetailsFragment extends Fragment {
 
 
         btn_save.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Handles the event when save button is selected
+             * @param v
+             */
             public void onClick(View v) {
                 if (locListener != null) {
                     int res = toggleSaveButton();
@@ -129,6 +160,10 @@ public class LocationDetailsFragment extends Fragment {
         return v;
     }
 
+    /**
+     * To toggle between different states when save button is selected
+     * @return
+     */
     public int toggleSaveButton(){
         //if (btn_save.getTag() != null) {
         Log.d("HAHA",""+btn_save.getTag());
@@ -145,6 +180,10 @@ public class LocationDetailsFragment extends Fragment {
         return -1;
     }
 
+    /**
+     * This method is called once when the fragment is associated with its activity
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -156,11 +195,18 @@ public class LocationDetailsFragment extends Fragment {
         }
     }
 
+    /**
+     * This method is called when the fragment removed itself from the association with its activity
+     */
     @Override
     public void onDetach() {
         super.onDetach();
     }
 
+    /**
+     * This method is used to display the location details
+     * @param index
+     */
     public void displayInfo(int index){
         ArrayList<HealthyLocation> displayedList = locListener.getFavsByCategory(ALL_FAVS);
         btn_save.setTag(R.drawable.ic_star_border); //default tag value in case displayList.size == 0
@@ -179,6 +225,10 @@ public class LocationDetailsFragment extends Fragment {
         pageText.setText((index+1)+"/"+loc.size()+" result(s) shown");
     }
 
+    /**
+     * This method sets the information of the location
+     * @param loc
+     */
     public void setInformation(ArrayList<HealthyLocation> loc){
         this.loc = loc;
         current_pageNumber = 0;
@@ -186,12 +236,19 @@ public class LocationDetailsFragment extends Fragment {
         displayInfo(current_pageNumber);//Display the very first one
     }
 
+    /**
+     * This method resets the page number of the information fragment
+     */
     public void reset(){
         loc = null;
         current_pageNumber = 0;
 
     }
 
+    /**
+     * This method gets the information of the location
+     * @return HealthyLocation if loc is not null, else return null
+     */
     public HealthyLocation getInformation(){
         if(loc!=null)
             return loc.get(0);
@@ -199,6 +256,9 @@ public class LocationDetailsFragment extends Fragment {
             return null;
     }
 
+    /**
+     * Hide the layout of the information details
+     */
     public void hide(){
         if(relativeLayout!=null) {
             relativeLayout.setVisibility(View.INVISIBLE);
@@ -210,6 +270,9 @@ public class LocationDetailsFragment extends Fragment {
         }
     }
 
+    /**
+     * Show the layout of the information details
+     */
     public void show(){
         if(relativeLayout!=null) {
             relativeLayout.setVisibility(View.VISIBLE);
@@ -220,6 +283,11 @@ public class LocationDetailsFragment extends Fragment {
         }
     }
 
+    /**
+     * Changes the view when user select left or right button
+     * @param left
+     * @param right
+     */
     public void togglePageButton(boolean left, boolean right){
         btnLeft.setVisibility(left ? View.VISIBLE:View.INVISIBLE);
         btnRight.setVisibility(right ? View.VISIBLE:View.INVISIBLE);

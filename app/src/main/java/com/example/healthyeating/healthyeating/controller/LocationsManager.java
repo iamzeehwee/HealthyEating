@@ -34,10 +34,12 @@ public class LocationsManager {
 
     public LocationsManager(){
         locationDAO = new HealthyLocationStorage();
-
     }
 
-
+    /**
+     * Read the data file that is in KML format and store into ArrayList
+     * @param context
+     */
     public void initHealthyLocationList(Context context){
         ArrayList<ArrayList<String>> fullData;
         if(this.context==null)
@@ -57,16 +59,29 @@ public class LocationsManager {
 
     }
 
-
+    /**
+     * Get current latitude value
+     * @return double current_lat
+     */
     public double getCurrent_lat() {
         return current_lat;
     }
+
+    /**
+     * Get current longitute value
+     * @return current_long
+     */
     public double getCurrent_long() {
         return current_long;
     }
 
-
-
+    /**
+     *
+     * @param msg
+     * @param searchTag
+     * @param endTag
+     * @return
+     */
     private String extractDetails(String msg,String searchTag, String endTag){
         String tempData = "";
         String result = "";
@@ -80,17 +95,36 @@ public class LocationsManager {
             return "";
     }
 
+    /**
+     * Get a location details by its id
+     * @param id
+     * @return HealthyLocation
+     */
     public HealthyLocation getLocation(int id){
         return locationDAO.retrieveByID(id);
     }
 
+    /**
+     * Set a location type based on the parameter passed in
+     * @param locationType
+     */
     public void setLocationType(String locationType){
         this.locationType = locationType;
     }
+
+    /**
+     * Get location type
+     * @return locationType
+     */
     public String getLocationType(){
         return locationType;
     }
 
+    /**
+     * Create locations, format the data and add in ArrayList
+     * @param data
+     * @param locationType
+     */
     public void createLocation(ArrayList<String> data, String locationType){
         //We assume that there is not much changes to the KML data format
         String address_building_name="";
@@ -158,6 +192,12 @@ public class LocationsManager {
 
     }
 
+    /**
+     * Set current latitude and longitude
+     * @param lat
+     * @param longitude
+     * @return changed
+     */
     public boolean setCurrentLatLng(double lat, double longitude){
         //Validation of lat long.
        boolean changed = false;
@@ -175,6 +215,10 @@ public class LocationsManager {
         return changed;
    }
 
+    /**
+     * Get a list of Location within a range of distance
+     * @return ArrayList<HealthyLocation>
+     */
     public ArrayList<HealthyLocation> getListOfLocation() {
 
         ArrayList<HealthyLocation> res = locationDAO.getList(0,sortFilter, locationType);
@@ -190,10 +234,19 @@ public class LocationsManager {
         return res;
     }
 
+    /**
+     * Set the distance limit
+     * @param limitDistance
+     */
     public void setLimitDistance(double limitDistance) {
         this.limitDistance = limitDistance;
     }
 
+    /**
+     * Check if location is within the range
+     * @param h_loc2
+     * @return true if within range, else return false
+     */
     public boolean isWithinRange(HealthyLocation h_loc2){
 
         Location loc1 = new Location("currentLoc");
@@ -211,6 +264,11 @@ public class LocationsManager {
         return false;
     }
 
+    /**
+     * Search location based on location name
+     * @param name
+     * @return ArrayList<HealthyLocation> locList
+     */
     public ArrayList<HealthyLocation> searchLocations(String name){
 
         ArrayList<HealthyLocation> locList = locationDAO.retrieveByName(name,sortFilter,locationType);
@@ -230,6 +288,10 @@ public class LocationsManager {
     }
 
 
+    /**
+     * Set the sort filter
+     * @param sortFilter
+     */
     public void setSortFilter(int sortFilter){
         this.sortFilter = sortFilter;
 }
@@ -276,9 +338,15 @@ public class LocationsManager {
             return false;
 
     }
+
+    /**
+     * Check if latitude and longitude are set
+     * @return isLatLngSet
+     */
     public boolean getLatLngSet(){
         return isLatLngSet;
     }
+
     public ArrayList<HealthyLocation> getFavouriteList(){
         return locationDAO.getList(1,0,"");
     }
