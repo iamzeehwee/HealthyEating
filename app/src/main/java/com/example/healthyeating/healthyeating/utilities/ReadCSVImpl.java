@@ -13,9 +13,11 @@ import java.util.ArrayList;
 
 public class ReadCSVImpl implements IFileReader {
 
-
     /**
-     * This method is for reading of the hcs.csv file.
+     * This method is used for Strategy pattern to read file  .
+     * @param c
+     * @param fileName
+     * @return prodData Data extracted from the csv file
      */
     @Override
     public ArrayList readFile(Context c, String fileName) {
@@ -27,6 +29,12 @@ public class ReadCSVImpl implements IFileReader {
         return prodData;
     }
 
+    /**
+     * This method is for reading of the hcs.csv file.
+     * @param c
+     * @param file
+     * @return Data extracted from the csv file
+     */
     public ArrayList<String[]> readCSVFile(Context c, int file) {
 
         InputStream inputStream = c.getApplicationContext().getResources().openRawResource(file);

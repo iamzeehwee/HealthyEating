@@ -28,7 +28,6 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
 import android.widget.LinearLayout;
@@ -103,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     //For favourite Transition
     private String favouriteLocName= "";
     private boolean favClicked = false;
+
     //Screen related
     static int height = 0;
     int width = 0;
@@ -840,20 +840,11 @@ boolean near = false;
 
     }
 
-    //HCS
-
-    /**
-     * This method is for searching of HCS products.
-     */
-    @Override
-    public ArrayList<HCSProducts> hcsSearch(String query) {
-
-        return hm.searchProducts(query);
-
-    }
+    //HCS Section
 
     /**
      * This method is for sorting the HCS products from A-Z or Z-A in list view.
+     * @param sortIndex 0 = A-Z, 1 = Z-A
      */
     @Override
     public void onSortSpinnerChange(int sortIndex) {
@@ -862,11 +853,12 @@ boolean near = false;
             hm.setSortFilter(0);
         else if(sortIndex == 1)
             hm.setSortFilter(1);
-        getAllHCSList(sortIndex);
+        getHCSList(sortIndex);
     }
 
     /**
-     * This method is for changing the HCS products categories.
+     * This method is for displaying the HCS according to their categories.
+     * @param catIndex
      */
     public void onCatSpinnerChange(int catIndex) {
         Log.d("Spinner","I AM HERE CHANGED "+catIndex);
@@ -902,10 +894,24 @@ boolean near = false;
 
     /**
      * This method is for getting the HCS products list.
+     * @param sortType User selected sorting filter
+     * @return Sorted HCS list according to sorting filter
      */
     @Override
-    public ArrayList<HCSProducts> getAllHCSList(int sortType) {
+    public ArrayList<HCSProducts> getHCSList(int sortType) {
         return hm.getProductList();
+    }
+
+    /**
+     * This method is for searching of HCS products.
+     * @param query
+     * @return Search results from User input
+     */
+    @Override
+    public ArrayList<HCSProducts> hcsSearch(String query) {
+
+        return hm.searchProducts(query);
+
     }
 
 }

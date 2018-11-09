@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public interface IHCSListener {
 
-    void onSortSpinnerChange(int sortIndex);
-    void onCatSpinnerChange(int sortIndex);
-    ArrayList<HCSProducts> getAllHCSList(int sortType);
-    ArrayList<HCSProducts> hcsSearch(String query);
+    void onSortSpinnerChange(int sortIndex); //Used for sorting dropdown list
+    void onCatSpinnerChange(int sortIndex); //Used for category dropdown list
+    ArrayList<HCSProducts> getHCSList(int sortType); //Used for the displaying of HCS products
+    ArrayList<HCSProducts> hcsSearch(String query); //Used for searching for HCS products
 }
