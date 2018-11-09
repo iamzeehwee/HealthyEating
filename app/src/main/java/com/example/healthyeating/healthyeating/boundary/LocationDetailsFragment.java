@@ -166,7 +166,6 @@ public class LocationDetailsFragment extends Fragment {
      */
     public int toggleSaveButton(){
         //if (btn_save.getTag() != null) {
-        Log.d("HAHA",""+btn_save.getTag());
         if (btn_save.getTag().equals(R.drawable.ic_star_full)) {
             btn_save.setImageResource(R.drawable.ic_star_border);
             btn_save.setTag(R.drawable.ic_star_border);

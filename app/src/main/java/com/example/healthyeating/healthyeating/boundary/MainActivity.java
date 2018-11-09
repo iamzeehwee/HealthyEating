@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private static final int ALL_FAVS = 2;
 
     /**
-     * This method inflates the menu and adds items to the action bar if it is present.
+     * Inflates the menu and adds items to the action bar if it is present.
      * @param menu
      * @return true
      */
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     /**
      * This method is called when the map is ready to be used.
-     * It will call the displayOnMap method where markers will be allocated on the map
+     * Calls displayOnMap where markers will be allocated on the map.
      * @param googleMap
      */
     @Override
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method is used to initialize the activity
+     * Initializes this activity.
      * @param savedInstanceState
      */
     @Override
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method calls the toggleInformationBox method to display the location of a specific eatery/caterer when a location is selected
+     * Calls toggleInformationBox to display the location of a specific eatery/caterer when a location is selected.
      * @param address
      */
     private void listViewToMap(String address){
@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method is used to place a map in the activity
+     * Places a map in the activity.
      * @param time
      */
     private void initGoogleMapLocation(int time){
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
 
     /**
-     * This method is used for initializing fragments, variables, layout etc, and hiding some fragment that should not be shown when the app first starts up
+     * Initializes fragments, variables and layout; hides fragments that should not be shown when the app first starts up.
      */
     private void init(){
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method is for customizing the navigation bar and handle the changes when a one of the navigation selection is selected
+     * Customizes the navigation bar and handles transition between navigation elements.
      */
     private void initNavigationBar(){
         //Find btm navigation bar
@@ -322,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method is to handle the change when the user switch from eatery to caterers
+     * Handles transition between eateries and caterers views.
      */
     private void reset(){
       //We do not want to reset the seekbar as it is troublesome for the user to set it again.
@@ -343,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
   }
 
     /**
-     * This method is to display an error message that indicates no search results found when user search for a location
+     * Displays an error message indicating failed location search.
      * @param toggle
      */
    private void toggleNoResultsFound(boolean toggle){
@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
    }
 
     /**
-     * This method is used to hide the fragment that displays the information of a specific location
+     * Hides the fragment that displays the information about a specific location.
      * @param toggle
      */
     private void toggleInformationBox(boolean toggle){
@@ -362,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method is used to switch between list view and the map when user selects the Sort by filter
+     * Handles transitions between list view and the map when user selects the Sort by filter.
      * Sort by filter can vary from Map to List View A-Z and List View Z-A
      * @param toggle
      */
@@ -372,7 +372,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method is used to remove all markers from the map
+     * Removes all markers from the map.
      */
    private void removeAllMarkersFromMap(){
         //Created this function because if we use mMap.clear(), the current location circle will be cleared too.
@@ -385,8 +385,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
 
     /**
-     * This method is used to display specific locations on the map
-     * This method also handles the display of information when one marker is selected from the map
+     * Displays specific locations and their details on the map.
      * @param loc
      */
     private void displayOnMap(ArrayList<HealthyLocation> loc){
@@ -455,7 +454,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method will zoom the camera out till the current location and the markers can be seen on the map.
+     * Zooms out the camera until the current location and the markers can be seen on the map.
      */
     private void getBestView(){
         int padding = 100; // offset from edges of the map in pixels
@@ -481,7 +480,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method gets the current location of the user
+     * Gets the current location of the user.
      */
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -525,7 +524,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method displays the pop up alert message if the user did not switch on the GPS setting on the mobile
+     * Displays the pop up alert message if GPS service is disabled.
      */
     protected void buildAlertMessageNoGps() {
 
@@ -547,9 +546,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method is used for loading various fragments
+     * Loads a fragment.
      * @param fragment
-     * @return true if fragment is present, else return false
+     * @return         true if fragment is present, false otherwise
      */
     private boolean loadFragment(Fragment fragment){
         if(fragment !=null){
@@ -560,8 +559,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method is to check if googleServiceAvailable is available
-     * @return true if GooglePlayServices is available, else return false if GooglePlayServices is not available
+     * Checks if Google Play Service is available
+     * @return true if Google Play Service is available, false otherwise.
      */
     public boolean googleServiceAvailable()
     {
@@ -581,18 +580,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method display the list of location in the list view
-     * It will toggle the no search found message if there no results is returned
+     * Displays the list of locations in the list view. If the list is empty, toggles the "no results found" error message.
      * @param loc
      */
     private void displayOnList(ArrayList<HealthyLocation> loc){
         CustomListAdapter locAdapter = new CustomListAdapter(getApplicationContext(), R.layout.list_item_eateries, loc);
         list.setAdapter(locAdapter);
-
-        //adapter = new ArrayAdapter<HealthyLocation>(getApplicationContext(), android.R.layout.simple_list_item_1, loc);
-        //list.setAdapter(adapter);
         if(searchSlide.getSpinnerValue()!=0) { //We want to show in List View only
-            if (loc.size() == 0) {
+            if (loc.isEmpty()) {
                 toggleNoResultsFound(true);
             } else
                 toggleNoResultsFound(false);
@@ -601,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method is for the custom adapter for complex views in Eateries/Caterers tab
+     * Custom adapter class for complex list views in Eateries/Caterers tab.
      */
     private class CustomListAdapter extends ArrayAdapter<HealthyLocation> {
         private int layout;
@@ -613,7 +608,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
 
         /**
-         * This method is for the building the list view for the Eateries and Caterers List View
+         * Builds a list view.
          */
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
@@ -641,7 +636,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This class is for the View that is used to display Eateries / Caterers list view
+     * Holds views that constitute each item in the custom list view.
      */
     public class ViewHolder {
         TextView locationName;    // location's name
@@ -649,7 +644,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This is method that search for location via the search box
+     * Submits search query to LocationsManager.
      * @param query
      */
     @Override
@@ -661,7 +656,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     /**
-     * This method is to change the value of the distance filter, changes of the location within the distance will be displayed
+     * Handles distance filter changes.
      * @param dis
      */
     @Override
@@ -669,10 +664,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         lm.setLimitDistance(dis);
         ArrayList<HealthyLocation> loc = lm.searchLocations(searchQuery);
         HealthyLocation getSelectedLocation = ldf.getInformation();
-boolean near = false;
+        boolean near = false;
         if(searchSlide.getSpinnerValue()==0) { //We want to do this in Map View only
             if (searchQuery.length() > 0)
-                toggleInformationBox(loc.size() == 0 ? false : true);
+                toggleInformationBox(!loc.isEmpty());
             if (getSelectedLocation != null) {
                 near = lm.isWithinRange(getSelectedLocation);
                 toggleInformationBox(near);
@@ -683,7 +678,7 @@ boolean near = false;
     }
 
     /**
-     * This method is used to remove markers from the map when the user is attempting to change the distance filter
+     * Removes markers from the map when the user is attempting to change the distance filter.
      */
     @Override
     public void onSliderHoldDown() {
@@ -692,7 +687,7 @@ boolean near = false;
     }
 
     /**
-     * This method is to determine which options selected by the user when user change the sort by filter
+     * Activates when user selects an option in the list/map view drop-down menu.
      * @param index
      */
     @Override
@@ -722,7 +717,7 @@ boolean near = false;
     }
 
     /**
-     * This method search for a location based on the latitude and longitude
+     * Activates when user changes location.
      * @param location
      */
     @Override
@@ -750,7 +745,7 @@ boolean near = false;
     }
 
     /**
-     * This method closes the location information
+     * Activates when user closes location details view.
      */
     @Override
     public void onCloseBtnPress() {
@@ -762,7 +757,7 @@ boolean near = false;
     }
 
     /**
-     * This method is for saving a location to favourite list
+     * Activates when user toggles the "add to favourite" button.
      * @param location
      */
     @Override
@@ -780,6 +775,11 @@ boolean near = false;
         }
     }
 
+    /**
+     * Gets the list of favourite locations by category (eateries, caterers or both).
+     * @param favType type of favourite list to return
+     * @return        the list of all favourite locations in the chosen category.
+     */
     @Override
     public ArrayList<HealthyLocation> getFavsByCategory(int favType) {
         if (favType == FAV_EATERIES)
@@ -790,6 +790,11 @@ boolean near = false;
             return lm.getFavouriteList();
     }
 
+    /**
+     * Activates when user clicks on an item in the favourite list.
+     * @param name
+     * @param spinnerValue
+     */
     @Override
     public void onFavListItemClicked(String name, int spinnerValue) {
         lm.setLimitDistance(50000.0);
@@ -801,6 +806,10 @@ boolean near = false;
     }
 
 
+    /**
+     * Removes a location from the favourite list.
+     * @param location - location to remove
+     */
     @Override
     public void removeFavourite(HealthyLocation location) {
         lm.removeFavourite(location);

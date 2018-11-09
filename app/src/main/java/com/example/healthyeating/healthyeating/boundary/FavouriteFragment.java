@@ -51,6 +51,13 @@ public class FavouriteFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Activates on creation of this view.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -96,7 +103,11 @@ public class FavouriteFragment extends Fragment {
         return view;
     }
 
-    // refresh the list view with favourites
+    /**
+     * Refreshes favourite list.
+     * @param favType          type of favourite list to refresh (eateries, caterers or all)
+     * @param favouritesView   list view displaying favourite list
+     */
     public void refreshListView(int favType, ListView favouritesView) {
         ArrayList<HealthyLocation> displayedList = favListener.getFavsByCategory(favType);
         CustomListAdapter favouritesAdapter = new CustomListAdapter((Context) favListener, R.layout.list_item, displayedList);
@@ -118,7 +129,9 @@ public class FavouriteFragment extends Fragment {
         super.onDetach();
     }
 
-    // custom adapter for complex views in favourite tab
+    /**
+     * Custom adapter class for complex list views.
+     */
     private class CustomListAdapter extends ArrayAdapter<HealthyLocation> {
         private int layout;
         private List<HealthyLocation> locationList;
@@ -128,7 +141,9 @@ public class FavouriteFragment extends Fragment {
             layout = resource;
         }
 
-        // build list item view
+        /**
+         * Builds a list view.
+         */
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder mainViewholder = null;
@@ -165,6 +180,9 @@ public class FavouriteFragment extends Fragment {
         }
     }
 
+    /**
+     * Holds views that constitute each item in the custom list view.
+     */
     public class ViewHolder {
         TextView locationName;    // location's name
         TextView locationDetails; // location's address, floor and unit
