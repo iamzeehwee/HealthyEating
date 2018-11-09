@@ -2,20 +2,23 @@ package com.example.healthyeating.healthyeating.entity;
 
 public class HCSProducts {
 
-    private int id;
-    private String category;
-    private String companyName;
-    private String productName;
-    private String brandName;
-    private String productWeight;
+    private int ID;
+    public String category = "";
+    private String productName = "";
+    private String productWeight = "";
+    private String brandName = "";
+    private String companyName = "";
 
-    public HCSProducts(String category, String companyName, String productName, String brandName, String productWeight) {
+    public HCSProducts(String category, String productName, String productWeight, String brandName, String companyName) {
         this.category = category;
-        this.companyName = companyName;
         this.productName = productName;
-        this.brandName = brandName;
         this.productWeight = productWeight;
+        this.brandName = brandName;
+        this.companyName = companyName;
+    }
 
+    public String getProductName() {
+        return productName;
     }
 
     public String getCategory() {
@@ -32,10 +35,6 @@ public class HCSProducts {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
-    }
-
-    public String getProductName() {
-        return productName;
     }
 
     public void setProductName(String productName) {
@@ -58,16 +57,21 @@ public class HCSProducts {
         this.productWeight = productWeight;
     }
 
+    public int getID() {
+        return ID;
+    }
+
+    public void setID() {
+        this.ID = ID;
+    }
+
     @Override
     public String toString() {
-        return "HCSProducts{" +
-                "id=" + id +
-                ", category='" + category + '\'' +
-                ", companyName='" + companyName + '\'' +
-                ", productName='" + productName + '\'' +
-                ", brandName='" + brandName + '\'' +
-                ", productWeight='" + productWeight + '\'' +
-                '}';
+        return  "Brand Name:  " + brandName + '\n' +
+                "Product Weight:  " + productWeight + '\n' +
+                "Company Name:  " + companyName + '\n' +
+                "Category:  " + category + '\n';
     }
+
 }
 
