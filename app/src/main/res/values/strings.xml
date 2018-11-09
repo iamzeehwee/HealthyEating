@@ -22,4 +22,27 @@
     <string name="NoResults">No Results Found.</string>
     <string name="title_activity_hcs__selected__category">HCS_Selected_Category</string>
 
+    <string-array name="sort_hcs_array">
+        <item>List View A - Z</item>
+        <item>List View Z - A</item>
+    </string-array>
+
+    <string-array name="sort_cat_array">
+        <item>All Categories</item>
+        <item>Meat and Poultry</item>
+        <item>Seafood</item>
+        <item>Eggs and Egg Products</item>
+        <item>Dairy Products</item>
+        <item>Cereal</item>
+        <item>Fruits and Vegetables</item>
+        <item>Oil</item>
+        <item>Legumes, Nuts and Seeds</item>
+        <item>Crisps</item>
+        <item>Ice Cream</item>
+        <item>Beverages</item>
+        <item>Sauces, Soups and Recipe Mixes</item>
+        <item>Miscellaneous</item>
+
+    </string-array>
+
 </resources>

@@ -6,19 +6,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.healthyeating.healthyeating.controller.HCSManager;
 import com.example.healthyeating.healthyeating.controller.LocationsManager;
 import com.example.healthyeating.healthyeating.controller.SingletonManager;
 import com.example.healthyeating.healthyeating.R;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -27,6 +21,8 @@ import java.util.ArrayList;
 public class SplashScreen extends AppCompatActivity {
     Handler handler;
     LocationsManager lm;
+    HCSManager hm;
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -201,9 +197,10 @@ public class SplashScreen extends AppCompatActivity {
 
        //Init controller here first
        lm = SingletonManager.getLocationManagerInstance();
+       hm = SingletonManager.getHCSManagerInstance();
        lm.initHealthyLocationList(this);
        lm.initFavouriteList(this);
-
+       hm.initHCSProductList(this);
 
    }
 

@@ -36,7 +36,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.healthyeating.healthyeating.controller.HCSManager;
 import com.example.healthyeating.healthyeating.controller.SingletonManager;
+import com.example.healthyeating.healthyeating.entity.HCSProducts;
 import com.example.healthyeating.healthyeating.entity.HealthyLocation;
 import com.example.healthyeating.healthyeating.interfaces.IFavouriteListener;
 import com.example.healthyeating.healthyeating.interfaces.IHCSListener;
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     //Controller
     public LocationsManager lm; //This is our LocationsManager(Controller)
+    public HCSManager hm; // HCSManager
 
     //Google Maps
     private Marker prev_marker;
@@ -242,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         //Get LocationManager Instance
         lm = SingletonManager.getLocationManagerInstance();
+        hm = SingletonManager.getHCSManagerInstance();
 
         //Init fragments
         favouriteFragment = new FavouriteFragment();
@@ -844,24 +848,73 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
 
     }
-/*
+
+    //HCS
+
+    /**
+     * This method is for searching of HCS products.
+     */
     @Override
-    public void onCatButtonPressed(String catName) {
+    public ArrayList<HCSProducts> hcsSearch(String query) {
+
+        return hm.searchProducts(query);
 
     }
 
-    @Override
-    public void onCatSearchSubmit(String search) {
-
-    }
-
-    @Override
-    public void onCatSpinnerChange(int catIndex) {
-
-    }
-
+    /**
+     * This method is for sorting the HCS products from A-Z or Z-A in list view.
+     */
     @Override
     public void onSortSpinnerChange(int sortIndex) {
+        Log.d("Spinner","I AM HERE CHANGED "+sortIndex);
+        if(sortIndex==0)
+            hm.setSortFilter(0);
+        else if(sortIndex == 1)
+            hm.setSortFilter(1);
+        getAllHCSList(sortIndex);
+    }
 
-    } */
+    /**
+     * This method is for changing the HCS products categories.
+     */
+    public void onCatSpinnerChange(int catIndex) {
+        Log.d("Spinner","I AM HERE CHANGED "+catIndex);
+        if (catIndex == 0)
+            hm.setCatType("");
+        else if(catIndex == 1)
+            hm.setCatType("Meat and Poultry");
+        else if(catIndex == 2)
+            hm.setCatType("Seafood");
+        else if(catIndex == 3)
+            hm.setCatType("Eggs and Egg Products");
+        else if(catIndex == 4)
+            hm.setCatType("Dairy Products");
+        else if(catIndex == 5)
+            hm.setCatType("Cereal");
+        else if(catIndex == 6)
+            hm.setCatType("Fruit and Vegetables");
+        else if(catIndex == 7)
+            hm.setCatType("Fats and Oils");
+        else if(catIndex == 8)
+            hm.setCatType("Legumes, Nuts and Seeds");
+        else if(catIndex == 9)
+            hm.setCatType("Crisps");
+        else if(catIndex == 10)
+            hm.setCatType("Ice Cream");
+        else if(catIndex == 11)
+            hm.setCatType("Beverages");
+        else if(catIndex == 12)
+            hm.setCatType("Sauces, Soups and Recipe Mixes");
+        else if(catIndex == 13)
+            hm.setCatType("Miscellaneous");
+    }
+
+    /**
+     * This method is for getting the HCS products list.
+     */
+    @Override
+    public ArrayList<HCSProducts> getAllHCSList(int sortType) {
+        return hm.getProductList();
+    }
+
 }
