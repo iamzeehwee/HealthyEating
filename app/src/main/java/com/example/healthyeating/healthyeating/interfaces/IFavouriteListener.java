@@ -10,10 +10,23 @@ import java.util.ArrayList;
 
 public interface IFavouriteListener {
 
-    // return list of favourites based on chosen category
+    /**
+     * Retrieves the list of favourites by category (eatieries, caterers or both).
+     * @param favType type of category list to retrieve
+     * @return        list of favourites
+     */
     ArrayList<HealthyLocation> getFavsByCategory(int favType);
 
+    /**
+     * Activates when user clicks on an item in the favourite menu.
+     * @param name
+     * @param spinnerValue
+     */
     void onFavListItemClicked(String name,int spinnerValue);
-    // delete a location from favourites
+
+    /**
+     * Removes a location from favourite.
+     * @param favourite        location to remove
+     */
     void removeFavourite(HealthyLocation favourite);
 }

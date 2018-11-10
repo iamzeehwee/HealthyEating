@@ -33,11 +33,11 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginStart="15dp"
+        android:layout_marginTop="1dp"
         android:text="location details"
         app:layout_constraintEnd_toStartOf="@+id/list_item_delete_btn"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_item_name" />
+        app:layout_constraintTop_toBottomOf="@+id/list_item_distance" />
 
     <Button
         android:id="@+id/list_item_delete_btn"
@@ -49,4 +49,32 @@
         android:background="@drawable/ic_custom_delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/list_item_distance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="1dp"
+        android:text="n/a km away"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/list_item_delete_btn"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/iconNearMe"
+        app:layout_constraintTop_toBottomOf="@+id/list_item_name" />
+
+    <ImageView
+        android:id="@+id/iconNearMe"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_item_name"
+        app:srcCompat="@drawable/ic_action_near_me" />
 </android.support.constraint.ConstraintLayout>

@@ -14,6 +14,8 @@ import com.example.healthyeating.healthyeating.controller.LocationsManager;
 import com.example.healthyeating.healthyeating.controller.SingletonManager;
 import com.example.healthyeating.healthyeating.R;
 
+import java.io.IOException;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -188,7 +190,7 @@ public class SplashScreen extends AppCompatActivity {
 
     //======================================================================================================//
 
-   public void init(){
+   public void init() {
         //Do init here
        //This is like the start-up class but it is in the form of Activity as we need to read the KML file from res/raw
        // by using getResource() which is only available in Activity .

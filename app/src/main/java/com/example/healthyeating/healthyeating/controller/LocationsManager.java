@@ -257,8 +257,11 @@ public class LocationsManager {
         loc2.setLatitude(h_loc2.getLatitude());
         loc2.setLongitude(h_loc2.getLongitude());
 
-        float distanceInMeters = (loc1.distanceTo(loc2))/1000;
-        if(distanceInMeters<=limitDistance)
+        float distance = loc1.distanceTo(loc2);
+        h_loc2.setDistance(distance);
+        float distanceInKilometers = (loc1.distanceTo(loc2))/1000;
+
+        if(distanceInKilometers<=limitDistance)
             return true;
 
         return false;
@@ -311,14 +314,11 @@ public class LocationsManager {
     }
 
     private boolean saveFavouriteList(){
-
         IFileWriter fileWriter = new StorageImpl();
-
         ArrayList<String> list = new ArrayList<>();
         for (HealthyLocation fav: locationDAO.getList(1,0,"")){
             list.add(Integer.toString(fav.getId()));
         }
-
         return fileWriter.writeFile(context, favFileName, list);
     }
 

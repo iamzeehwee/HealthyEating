@@ -1,6 +1,8 @@
 package com.example.healthyeating.healthyeating.entity;
 
-public class HealthyLocation {
+import java.io.Serializable;
+
+public class HealthyLocation implements Comparable<HealthyLocation> {
 
     private int id;
     private String name;
@@ -10,6 +12,7 @@ public class HealthyLocation {
     private String zipCode;
     private double longitude;
     private double latitude;
+    private float distance;
 
 
 
@@ -27,10 +30,10 @@ public class HealthyLocation {
      * @param latitude
      * @param locationType
      */
-    public HealthyLocation( String name, String address, String zipCode, String floor, String unit, double longitude, double latitude, String locationType){
+    public HealthyLocation( String name, String address, String zipCode, String floor, String unit, double longitude, double latitude, String locationType) {
 
         this.name = name;
-        this.address= address;
+        this.address = address;
         this.zipCode = zipCode;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -184,11 +187,38 @@ public class HealthyLocation {
     }
 
     /**
+     * Get the last calculated distance in meters to this location.
+     * @return distance
+     */
+    public float getDistance() { return distance; }
+
+    /**
+     * Set distance in meters to this location.
+     * @param distance
+     */
+    public void setDistance(float distance) { this.distance = distance; }
+
+    /**
      * For generate listview purposes
      * @return string of name with address
      */
     @Override
     public String toString() {
         return "\n" + this.name + "\r\n" + this.getAddress() + "\n";
+    }
+
+    /**
+     * Compare locations by distance to user.
+     * @param anotherLocation
+     * @return -1 if this location is closer, 0 on equal distance, 1 if this location is further away
+     */
+    @Override
+    public int compareTo (HealthyLocation anotherLocation) {
+        if (this.getDistance() < anotherLocation.getDistance())
+            return -1;
+        else if (this.getDistance() == anotherLocation.getDistance())
+            return 0;
+        else
+            return 1;
     }
 }

@@ -1,17 +1,20 @@
 package com.example.healthyeating.healthyeating.boundary;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,7 +28,9 @@ import com.example.healthyeating.healthyeating.interfaces.IFavouriteListener;
 import com.example.healthyeating.healthyeating.interfaces.ILocationListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -63,6 +68,9 @@ public class FavouriteFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favourite, container, false);
+
+        // set action bar title to Favourite
+        ((AppCompatActivity)favListener).getSupportActionBar().setTitle("Favourite");
 
         // bind the layout elements to variables
         favouritesView = (ListView) view.findViewById(R.id.favouritesView);
@@ -110,6 +118,7 @@ public class FavouriteFragment extends Fragment {
      */
     public void refreshListView(int favType, ListView favouritesView) {
         ArrayList<HealthyLocation> displayedList = favListener.getFavsByCategory(favType);
+        Collections.sort(displayedList);
         CustomListAdapter favouritesAdapter = new CustomListAdapter((Context) favListener, R.layout.list_item, displayedList);
         favouritesView.setAdapter(favouritesAdapter);
     }
@@ -146,8 +155,9 @@ public class FavouriteFragment extends Fragment {
          */
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
+            String distanceString = "";
             ViewHolder mainViewholder = null;
-            if(convertView == null) {
+            if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(layout, parent, false);
                 ViewHolder viewHolder = new ViewHolder();
@@ -155,7 +165,22 @@ public class FavouriteFragment extends Fragment {
                 // establish links to layout elements
                 viewHolder.locationName = (TextView) convertView.findViewById(R.id.list_item_name);
                 viewHolder.locationDetails = (TextView) convertView.findViewById(R.id.list_item_details);
+                viewHolder.locationDistance = (TextView) convertView.findViewById(R.id.list_item_distance);
+                viewHolder.nearMeIcon = (ImageView) convertView.findViewById(R.id.iconNearMe);
                 viewHolder.deleteButton = (Button) convertView.findViewById(R.id.list_item_delete_btn);
+
+                // convert distance to string
+                float distance = Math.round(getItem(position).getDistance());
+                if (distance < 1 || distance > 100000) {
+                    // distance not calculated properly, hide it
+                    viewHolder.locationDistance.setVisibility(View.GONE);
+                    viewHolder.nearMeIcon.setVisibility(View.GONE);
+                } else {
+                    if (distance >= 1000)
+                        distanceString = String.format(Locale.ENGLISH, "%.1f", distance / 1000.0) + " kilometers away";
+                    else
+                        distanceString = (int) Math.round(distance) + " meters away";
+                }
 
                 convertView.setTag(viewHolder);
             }
@@ -174,6 +199,7 @@ public class FavouriteFragment extends Fragment {
 
             // set variable text into text views
             mainViewholder.locationName.setText(getItem(position).getName());
+            mainViewholder.locationDistance.setText(distanceString);
             mainViewholder.locationDetails.setText(getItem(position).getAddress() + "\n");
 
             return convertView;
@@ -184,9 +210,11 @@ public class FavouriteFragment extends Fragment {
      * Holds views that constitute each item in the custom list view.
      */
     public class ViewHolder {
-        TextView locationName;    // location's name
-        TextView locationDetails; // location's address, floor and unit
-        Button deleteButton;      // button for item deletion
+        TextView locationName;     // location's name
+        TextView locationDetails;  // location's address, floor and unit
+        TextView locationDistance; // distance to location
+        ImageView nearMeIcon;
+        Button deleteButton;       // button for item deletion
     }
 }
 

@@ -165,17 +165,17 @@ public class LocationDetailsFragment extends Fragment {
      * @return
      */
     public int toggleSaveButton(){
-        //if (btn_save.getTag() != null) {
-        if (btn_save.getTag().equals(R.drawable.ic_star_full)) {
-            btn_save.setImageResource(R.drawable.ic_star_border);
-            btn_save.setTag(R.drawable.ic_star_border);
-            return 0;
-        } else if (btn_save.getTag().equals(R.drawable.ic_star_border)) {
-            btn_save.setImageResource(R.drawable.ic_star_full);
-            btn_save.setTag(R.drawable.ic_star_full);
-            return 1;
+        if (btn_save.getTag() != null) {
+            if (btn_save.getTag().equals(R.drawable.ic_star_full)) {
+                btn_save.setImageResource(R.drawable.ic_star_border);
+                btn_save.setTag(R.drawable.ic_star_border);
+                return 0;
+            } else if (btn_save.getTag().equals(R.drawable.ic_star_border)) {
+                btn_save.setImageResource(R.drawable.ic_star_full);
+                btn_save.setTag(R.drawable.ic_star_full);
+                return 1;
+            }
         }
-        //}
         return -1;
     }
 
@@ -207,16 +207,14 @@ public class LocationDetailsFragment extends Fragment {
      * @param index
      */
     public void displayInfo(int index){
-        ArrayList<HealthyLocation> displayedList = locListener.getFavsByCategory(ALL_FAVS);
+        ArrayList<HealthyLocation> allFavourites = locListener.getFavsByCategory(ALL_FAVS);
         btn_save.setTag(R.drawable.ic_star_border); //default tag value in case displayList.size == 0
-        for (HealthyLocation displayedLocation : displayedList) {
-            if (loc.contains(displayedLocation)) {
-                btn_save.setImageResource(R.drawable.ic_star_full);
-                btn_save.setTag(R.drawable.ic_star_full);
-            } else {
-                btn_save.setImageResource(R.drawable.ic_star_border);
-                btn_save.setTag(R.drawable.ic_star_border);
-            }
+        if (allFavourites.contains(loc.get(index))) {
+            btn_save.setImageResource(R.drawable.ic_star_full);
+            btn_save.setTag(R.drawable.ic_star_full);
+        } else {
+            btn_save.setImageResource(R.drawable.ic_star_border);
+            btn_save.setTag(R.drawable.ic_star_border);
         }
 
         this.name.setText(loc.get(index).getName());

@@ -192,6 +192,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             }
         });
 
+        // eateries tab is chosen by default, set appropriate action bar title
+        getSupportActionBar().setTitle("Eateries");
+
         //Load the searchAndSlide fragment by default
         loadFragment(searchSlide);
     }
@@ -302,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                             //Changing from other tab to eateries, reload the markers
                             lm.setLocationType("Eateries");
                             reset();
+                            getSupportActionBar().setTitle("Eateries");
                         }
                         return loadFragment(searchSlide);
 
@@ -310,9 +314,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                             //Changing from other tab to caterers, reload the markers
                             lm.setLocationType("Caterers");
                             reset();
+                            getSupportActionBar().setTitle("Caterers");
                         }
                         return loadFragment(searchSlide);
                     case R.id.navigation_HCSProduct:
+                        getSupportActionBar().setTitle("HCS Products");
                         return loadFragment(hcsProductsFragment);
                     default:
                         return loadFragment(searchSlide);
@@ -812,13 +818,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     /**
      * Removes a location from the favourite list.
-     * @param location - location to remove
+     * @param location location to remove
      */
     @Override
     public void removeFavourite(HealthyLocation location) {
         lm.removeFavourite(location);
         ldf.toggleSaveButton();
-        //toggleInformationBox(false);
     }
 
     @Override
