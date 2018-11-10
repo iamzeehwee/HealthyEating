@@ -66,6 +66,7 @@ public class HCSProducts {
     }
 
     @Override
+    //Concatenating Brand Name, Product Weight, Comapany Name and Category into 1 string
     public String toString() {
         return  "Brand Name:  " + brandName + '\n' +
                 "Product Weight:  " + productWeight + '\n' +

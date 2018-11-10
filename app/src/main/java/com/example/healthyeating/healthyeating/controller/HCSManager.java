@@ -25,14 +25,15 @@ public class HCSManager {
     }
 
     /**
-     * This method is for reading of the hcs.csv file.
+     * This method is for the loading the HCS list of products upon the app startup
+     * @param c
      */
     public void initHCSProductList(Context c) {
-        ArrayList<String[]> hcsResult;
+        ArrayList<String[]> hcsResult; //Arraylist to store HCS data
         context = c;
 
         //Read local storage
-        fileReader = new ReadCSVImpl();
+        fileReader = new ReadCSVImpl(); //Reading of csv files
 
         hcsResult = fileReader.readFile(context, "" + R.raw.hcs);
 
@@ -52,28 +53,35 @@ public class HCSManager {
         }
     }
 
-    public HCSProducts getCategory(int ID) {
-        return hcsProductsDAO.retrieveByID(ID);
-    }
-
+    /**
+     * This method is for the setting category type
+     * @param catType User selected category type
+     */
     public void setCatType(String catType) {
         this.catType = catType;
     }
 
     /**
+     * This method is for the setting sort filter
+     * @param sortFilter User selected sort filter
+     */
+    public void setSortFilter(int sortFilter) {
+        this.sortFilter = sortFilter;
+    }
+
+    /**
      * This method is for the getting the list of HCS products according to the category and sorting spinner.
+     * @return hcsList Return list of HCS products according to category and sorting spinner
      */
     public ArrayList<HCSProducts> getProductList() {
         ArrayList<HCSProducts> hcsList = hcsProductsDAO.getList(0,sortFilter,catType);
         return hcsList;
     }
 
-    public void setSortFilter(int sortFilter) {
-        this.sortFilter = sortFilter;
-    }
-
     /**
      * This method is for searching of HCS products.
+     * @param name User input
+     * @return Search result of User input
      */
     public ArrayList<HCSProducts> searchProducts(String name) {
         ArrayList<HCSProducts> prodList = hcsProductsDAO.retrieveByName(name, sortFilter, catType);
