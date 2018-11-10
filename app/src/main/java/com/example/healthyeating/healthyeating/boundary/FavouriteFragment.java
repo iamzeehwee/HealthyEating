@@ -1,9 +1,7 @@
 package com.example.healthyeating.healthyeating.boundary;
 
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -16,22 +14,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
-import com.example.healthyeating.healthyeating.controller.LocationsManager;
 import com.example.healthyeating.healthyeating.entity.HealthyLocation;
 import com.example.healthyeating.healthyeating.R;
 import com.example.healthyeating.healthyeating.interfaces.IFavouriteListener;
-import com.example.healthyeating.healthyeating.interfaces.ILocationListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
 
 /**
  * A simple {@link Fragment} subclass.
