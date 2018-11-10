@@ -69,9 +69,6 @@ public class FavouriteFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favourite, container, false);
 
-        // set action bar title to Favourite
-        ((AppCompatActivity)favListener).getSupportActionBar().setTitle("Favourite");
-
         // bind the layout elements to variables
         favouritesView = (ListView) view.findViewById(R.id.favouritesView);
         categoryTabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
@@ -104,6 +101,7 @@ public class FavouriteFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
                 // Get the information about clicked location
                 HealthyLocation clickedFavourite = (HealthyLocation) favouritesView.getItemAtPosition(pos);
+                ((AppCompatActivity)favListener).getSupportActionBar().setTitle(clickedFavourite.getLocationType());
                 favListener.onFavListItemClicked(clickedFavourite.getName(),spinnerValue);
             }
         });
@@ -155,7 +153,6 @@ public class FavouriteFragment extends Fragment {
          */
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            String distanceString = "";
             ViewHolder mainViewholder = null;
             if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -168,19 +165,6 @@ public class FavouriteFragment extends Fragment {
                 viewHolder.locationDistance = (TextView) convertView.findViewById(R.id.list_item_distance);
                 viewHolder.nearMeIcon = (ImageView) convertView.findViewById(R.id.iconNearMe);
                 viewHolder.deleteButton = (Button) convertView.findViewById(R.id.list_item_delete_btn);
-
-                // convert distance to string
-                float distance = Math.round(getItem(position).getDistance());
-                if (distance < 1 || distance > 100000) {
-                    // distance not calculated properly, hide it
-                    viewHolder.locationDistance.setVisibility(View.GONE);
-                    viewHolder.nearMeIcon.setVisibility(View.GONE);
-                } else {
-                    if (distance >= 1000)
-                        distanceString = String.format(Locale.ENGLISH, "%.1f", distance / 1000.0) + " kilometers away";
-                    else
-                        distanceString = (int) Math.round(distance) + " meters away";
-                }
 
                 convertView.setTag(viewHolder);
             }
@@ -196,6 +180,22 @@ public class FavouriteFragment extends Fragment {
                     refreshListView(favType, favouritesView);
                 }
             });
+
+            // convert distance to string
+            String distanceString = "";
+            float distance = Math.round(getItem(position).getDistance());
+            if (distance < 1 || distance > 100000) {
+                // distance not calculated properly, hide it
+                mainViewholder.locationDistance.setVisibility(View.GONE);
+                mainViewholder.nearMeIcon.setVisibility(View.GONE);
+            } else {
+                mainViewholder.locationDistance.setVisibility(View.VISIBLE);
+                mainViewholder.nearMeIcon.setVisibility(View.VISIBLE);
+                if (distance >= 1000)
+                    distanceString = String.format(Locale.ENGLISH, "%.1f", distance / 1000.0) + " kilometers away";
+                else
+                    distanceString = (int) Math.round(distance) + " meters away";
+            }
 
             // set variable text into text views
             mainViewholder.locationName.setText(getItem(position).getName());

@@ -298,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_favourite:
+                        getSupportActionBar().setTitle("Favourite");
                         searchSlide.setSpinnerValue(0);
                         return loadFragment(favouriteFragment);
                     case R.id.navigation_eateries:
@@ -305,8 +306,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                             //Changing from other tab to eateries, reload the markers
                             lm.setLocationType("Eateries");
                             reset();
-                            getSupportActionBar().setTitle("Eateries");
                         }
+                        getSupportActionBar().setTitle("Eateries");
                         return loadFragment(searchSlide);
 
                     case R.id.navigation_caterers:
@@ -314,8 +315,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                             //Changing from other tab to caterers, reload the markers
                             lm.setLocationType("Caterers");
                             reset();
-                            getSupportActionBar().setTitle("Caterers");
                         }
+                        getSupportActionBar().setTitle("Caterers");
                         return loadFragment(searchSlide);
                     case R.id.navigation_HCSProduct:
                         getSupportActionBar().setTitle("HCS Products");
@@ -809,7 +810,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     public void onFavListItemClicked(String name, int spinnerValue) {
         lm.setLimitDistance(50000.0);
         searchSlide = new LocationSearchAndSlide();
-
         favouriteLocName=name;
         loadFragment(searchSlide);
         favClicked = true;
@@ -842,12 +842,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
             HealthyLocation clickLoc = loc.get(0);
             if (clickLoc.getLocationType().equals("Eateries")) {
-
                 mBottomNavigation.getMenu().getItem(1).setChecked(true);
-
             } else if (clickLoc.getLocationType().equals("Caterers")) {
                 mBottomNavigation.getMenu().getItem(2).setChecked(true);
-
             }
             toggleMapView(true);
         }

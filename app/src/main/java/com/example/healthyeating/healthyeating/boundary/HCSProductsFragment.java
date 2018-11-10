@@ -30,6 +30,7 @@ public class HCSProductsFragment extends Fragment {
     private ListView hcsListView;
     private Spinner sortSpinner;
     private Spinner catSpinner;
+    private TextView hcsCatTypeView;
     private SearchView hcsSearchView;
 
     private IHCSListener hcsListener; //Link Interface for interaction with main activity
@@ -50,6 +51,7 @@ public class HCSProductsFragment extends Fragment {
         catSpinner = (Spinner) v.findViewById(R.id.hcsCatSpinner);
         sortSpinner = (Spinner) v.findViewById(R.id.hcsSortSpinner);
         hcsListView = (ListView) v.findViewById(R.id.hcsListView);
+        hcsCatTypeView = (TextView) v.findViewById(R.id.hcsCatTypeView);
         hcsSearchView = (SearchView) v.findViewById(R.id.hcsSearchView);
         hcsSearchView.setQuery("", false);
 
@@ -98,6 +100,8 @@ public class HCSProductsFragment extends Fragment {
                     hcsListener.onCatSpinnerChange(pos);
                 }
                 HCSListView(hcsListener.getAllHCSList(pos));
+                String[] categories = getActivity().getResources().getStringArray(R.array.sort_cat_array);
+                hcsCatTypeView.setText(categories[pos]);
             }
 
             @Override

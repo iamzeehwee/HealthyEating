@@ -73,13 +73,16 @@
             android:id="@+id/hcsCatTypeView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/hcsSearchView"
-            android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginStart="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/hcsSearchView"
             android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="130dp"
-            android:text="Category Name" />
+            android:text="Category Name"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <ListView
             android:id="@+id/hcsListView"

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -20,6 +21,7 @@ import com.example.healthyeating.healthyeating.interfaces.ILocationListener;
 import com.example.healthyeating.healthyeating.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class LocationDetailsFragment extends Fragment {
@@ -32,7 +34,8 @@ public class LocationDetailsFragment extends Fragment {
 
     //UI elements
     private TextView pageText;
-    private TextView address,name;
+    private TextView address, name, distanceText;
+    private ImageView iconNearMe;
     private ImageButton btnLeft,btnRight;
     private Button btn_close;
     private ImageButton btn_save;
@@ -77,6 +80,8 @@ public class LocationDetailsFragment extends Fragment {
         relativeLayout =  v.findViewById(R.id.rel_layout);
         address =  v.findViewById(R.id.address);
         name =  v.findViewById(R.id.textView);
+        distanceText = v.findViewById(R.id.distance_text_view);
+        iconNearMe = v.findViewById(R.id.icon_near_me);
         pageText = v.findViewById(R.id.emptyTextView);
         btnLeft = v.findViewById(R.id.button_left);
         btnRight = v.findViewById(R.id.button_right);
@@ -217,9 +222,27 @@ public class LocationDetailsFragment extends Fragment {
             btn_save.setTag(R.drawable.ic_star_border);
         }
 
+        // convert distance to string
+        String distanceString = "";
+        float distance = Math.round(loc.get(index).getDistance());
+        if (distance < 1 || distance > 100000) {
+            // distance not calculated properly, hide it
+            distanceText.setVisibility(View.GONE);
+            iconNearMe.setVisibility(View.GONE);
+        } else {
+            distanceText.setVisibility(View.VISIBLE);
+            iconNearMe.setVisibility(View.VISIBLE);
+            if (distance >= 1000)
+                distanceString = String.format(Locale.ENGLISH, "%.1f", distance / 1000.0) + " kilometers away";
+            else
+                distanceString = (int) Math.round(distance) + " meters away";
+        }
+
         this.name.setText(loc.get(index).getName());
         this.address.setText(loc.get(index).getAddress());
+        this.distanceText.setText(distanceString);
         pageText.setText((index+1)+"/"+loc.size()+" result(s) shown");
+
     }
 
     /**
@@ -273,10 +296,12 @@ public class LocationDetailsFragment extends Fragment {
     public void show(){
         if(relativeLayout!=null) {
             relativeLayout.setVisibility(View.VISIBLE);
-            if(loc.size()>1)
-                togglePageButton(true,true);
-            else
-                togglePageButton(false,false);
+            if (loc != null) {
+                if (loc.size() > 1)
+                    togglePageButton(true, true);
+                else
+                    togglePageButton(false, false);
+            }
         }
     }
 
