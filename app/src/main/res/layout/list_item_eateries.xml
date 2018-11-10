@@ -15,15 +15,41 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:text="location name"
         android:textColor="#075e54"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/eateries_list_item_delete_btn"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/eateries_near_me_icon"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="3dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eateries_list_item_name"
+        android:src="@drawable/ic_action_near_me" />
+
+    <TextView
+        android:id="@+id/distance_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="1dp"
+        android:text="n/a kilometers away"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/eateries_near_me_icon"
+        app:layout_constraintTop_toBottomOf="@+id/eateries_list_item_name" />
 
     <TextView
         android:id="@+id/eateries_list_item_details"
@@ -33,21 +59,10 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginStart="15dp"
+        android:layout_marginTop="1dp"
         android:text="location details"
-        app:layout_constraintEnd_toStartOf="@+id/eateries_list_item_delete_btn"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eateries_list_item_name" />
-
-    <Button
-        android:id="@+id/eateries_list_item_delete_btn"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/ic_custom_delete"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/distance_text_view" />
+
 </android.support.constraint.ConstraintLayout>

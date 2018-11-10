@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -63,6 +64,7 @@ import com.example.healthyeating.healthyeating.controller.LocationsManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import android.view.View;
 
@@ -632,15 +634,33 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 // establish links to layout elements
                 viewHolder.locationName = (TextView) convertView.findViewById(R.id.eateries_list_item_name);
                 viewHolder.locationDetails = (TextView) convertView.findViewById(R.id.eateries_list_item_details);
-
+                viewHolder.eateryDistance = (TextView) convertView.findViewById(R.id.distance_text_view);
+                viewHolder.iconNearMe = (ImageView) convertView.findViewById(R.id.eateries_near_me_icon);
                 convertView.setTag(viewHolder);
             }
 
             mainViewholder = (MainActivity.ViewHolder) convertView.getTag();
 
+            // convert distance to string
+            String distanceString = "";
+            float distance = Math.round(getItem(position).getDistance());
+            if (distance < 1 || distance > 100000) {
+                // distance not calculated properly, hide it
+                mainViewholder.eateryDistance.setVisibility(View.GONE);
+                mainViewholder.iconNearMe.setVisibility(View.GONE);
+            } else {
+                mainViewholder.eateryDistance.setVisibility(View.VISIBLE);
+                mainViewholder.iconNearMe.setVisibility(View.VISIBLE);
+                if (distance >= 1000)
+                    distanceString = String.format(Locale.ENGLISH, "%.1f", distance / 1000.0) + " kilometers away";
+                else
+                    distanceString = (int) Math.round(distance) + " meters away";
+            }
+
             // set variable text into text views
             mainViewholder.locationName.setText(getItem(position).getName());
             mainViewholder.locationDetails.setText(getItem(position).getAddress() + "\n");
+            mainViewholder.eateryDistance.setText(distanceString);
 
             return convertView;
         }
@@ -652,6 +672,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     public class ViewHolder {
         TextView locationName;    // location's name
         TextView locationDetails; // location's address, floor and unit
+        TextView eateryDistance;  // distance to location
+        ImageView iconNearMe;     // an icon
     }
 
     /**
