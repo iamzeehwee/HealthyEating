@@ -117,7 +117,7 @@ public class LocationSearchAndSlide extends Fragment  {
                 TextView t=(TextView)v.findViewById(R.id.textView4);
 
                 int val = (i * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
-                double dis = (double)i/1000.0;
+                double dis = (double)i;
                 if(dis<1.0)
                     t.setText(i+"m");
                 else

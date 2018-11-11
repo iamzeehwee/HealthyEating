@@ -133,20 +133,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        ArrayList<HealthyLocation> loc = lm.getListOfLocation();
-        ArrayList<HealthyLocation> nearbyLocations = new ArrayList<HealthyLocation>();
-        for (HealthyLocation location : loc) {
-            if (lm.isWithinRange(location))
-                nearbyLocations.add(location);
-        }
-        displayOnMap(nearbyLocations);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198), 11.0f));
-
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        mMap = googleMap;
+        ArrayList<HealthyLocation> loc = lm.getListOfLocation();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(1.3521, 103.8198), 11.0f));
+
+
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            displayOnMap(loc);
             buildAlertMessageNoGps();
 
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -159,6 +155,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 return;
             }
             mMap.setMyLocationEnabled(true);
+
+            ArrayList<HealthyLocation> nearbyLocations = new ArrayList<HealthyLocation>();
+            for (HealthyLocation location : loc) {
+                if (lm.isWithinRange(location))
+                    nearbyLocations.add(location);
+            }
+            displayOnMap(nearbyLocations);
         }
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.setPadding(0, (int)(height*0.25), 0, (int)(height*0.293));
@@ -830,7 +833,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
      */
     @Override
     public void onFavListItemClicked(String name, int spinnerValue) {
-        lm.setLimitDistance(50000.0);
         searchSlide = new LocationSearchAndSlide();
         favouriteLocName=name;
         loadFragment(searchSlide);

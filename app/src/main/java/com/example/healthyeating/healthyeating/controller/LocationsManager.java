@@ -20,7 +20,7 @@ public class LocationsManager {
     private Context context;
 
     private int sortFilter = 0; //0 = A-Z, 1 = Z-A
-    private double limitDistance = 50000.0;
+    private double limitDistance = 10000.0;
     private String locationType = "Eateries";
     private double current_lat = -1;
     private double current_long = -1;
@@ -259,7 +259,7 @@ public class LocationsManager {
 
         float distance = loc1.distanceTo(loc2);
         h_loc2.setDistance(distance);
-        float distanceInKilometers = (loc1.distanceTo(loc2))/1000;
+        float distanceInKilometers = (loc1.distanceTo(loc2));
 
         if(distanceInKilometers<=limitDistance)
             return true;

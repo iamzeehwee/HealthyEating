@@ -178,7 +178,8 @@ public class FavouriteFragment extends Fragment {
             String distanceString = "";
             float distance = Math.round(getItem(position).getDistance());
             if (distance < 1 || distance > 100000) {
-                // distance not calculated properly, hide it
+                // distance not calculated properly, hide it and push to the end of the list
+                getItem(position).setDistance(1000000);
                 mainViewholder.locationDistance.setVisibility(View.GONE);
                 mainViewholder.nearMeIcon.setVisibility(View.GONE);
             } else {
