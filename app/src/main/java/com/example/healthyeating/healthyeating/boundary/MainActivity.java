@@ -833,6 +833,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
      */
     @Override
     public void onFavListItemClicked(String name, int spinnerValue) {
+        lm.setLimitDistance(50000);
         searchSlide = new LocationSearchAndSlide();
         favouriteLocName=name;
         loadFragment(searchSlide);
