@@ -72,9 +72,10 @@ public class HCSProductsFragment extends Fragment {
             }
         });
 
-        /**Dropdown list for catergoty and sorting
+        /**Dropdown list for category and sorting
          *Create an ArrayAdapter using the string array and a default spinner layout
          */
+        
         //Category spinner
         ArrayAdapter<CharSequence> catAdapter = ArrayAdapter.createFromResource(getActivity().getApplicationContext(),
                 R.array.sort_cat_array, android.R.layout.simple_spinner_item);
@@ -99,7 +100,7 @@ public class HCSProductsFragment extends Fragment {
                 if (hcsListener != null) {
                     hcsListener.onCatSpinnerChange(pos);
                 }
-                HCSListView(hcsListener.getAllHCSList(pos));
+                HCSListView(hcsListener.getHCSList(pos));
                 String[] categories = getActivity().getResources().getStringArray(R.array.sort_cat_array);
                 hcsCatTypeView.setText(categories[pos]);
             }
@@ -117,7 +118,7 @@ public class HCSProductsFragment extends Fragment {
                 if (hcsListener != null) {
                     hcsListener.onSortSpinnerChange(pos);
                 }
-                HCSListView(hcsListener.getAllHCSList(pos));
+                HCSListView(hcsListener.getHCSList(pos));
             }
 
             @Override
@@ -145,6 +146,7 @@ public class HCSProductsFragment extends Fragment {
 
     /**
      * This method is for putting the list that was built in the correct layout.
+     * @param pro Arraylist for HCS
      */
     public void HCSListView(ArrayList<HCSProducts> pro) {
         CustomHCSListAdapter proAdapter = new CustomHCSListAdapter((Context) hcsListener, R.layout.list_item_hcs, pro);
