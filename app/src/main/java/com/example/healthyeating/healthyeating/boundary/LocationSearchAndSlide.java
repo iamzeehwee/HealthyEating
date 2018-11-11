@@ -28,7 +28,7 @@ public class LocationSearchAndSlide extends Fragment  {
     private static int spinnerValue = 0;
     private SearchView searchView;
     private SeekBar seek;
-    private double seekBarValue = 0;
+    private double seekBarValue = 40000;
     private Spinner spinner;
 
     private ILocationListener locListener;

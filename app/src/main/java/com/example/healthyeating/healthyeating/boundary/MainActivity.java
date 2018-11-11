@@ -697,6 +697,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
      */
     @Override
     public void onSliderRelease(double dis) {
+        Log.d("Slider1",""+dis);
         lm.setLimitDistance(dis);
         ArrayList<HealthyLocation> loc = lm.searchLocations(searchQuery);
         HealthyLocation getSelectedLocation = ldf.getInformation();
