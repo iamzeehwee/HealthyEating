@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -28,6 +29,7 @@ import java.util.List;
 public class HCSProductsFragment extends Fragment {
 
     private ListView hcsListView;
+    private LinearLayout resultLayout;
     private Spinner sortSpinner;
     private Spinner catSpinner;
     private TextView hcsCatTypeView;
@@ -48,12 +50,16 @@ public class HCSProductsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_hcsproducts, container, false);
 
         // Bind the layout elements to variables
+        resultLayout = v.findViewById(R.id.resultLayout);
         catSpinner = (Spinner) v.findViewById(R.id.hcsCatSpinner);
         sortSpinner = (Spinner) v.findViewById(R.id.hcsSortSpinner);
         hcsListView = (ListView) v.findViewById(R.id.hcsListView);
         hcsCatTypeView = (TextView) v.findViewById(R.id.hcsCatTypeView);
         hcsSearchView = (SearchView) v.findViewById(R.id.hcsSearchView);
         hcsSearchView.setQuery("", false);
+
+        //Hide resultLayout
+        resultLayout.setVisibility(View.GONE);
 
         //Searching in HCS products
         hcsSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -151,6 +157,20 @@ public class HCSProductsFragment extends Fragment {
     public void HCSListView(ArrayList<HCSProducts> pro) {
         CustomHCSListAdapter proAdapter = new CustomHCSListAdapter((Context) hcsListener, R.layout.list_item_hcs, pro);
         hcsListView.setAdapter(proAdapter);
+
+        if (pro.isEmpty()){
+            toggleNoResultsFound(true);
+        }
+        else{
+            toggleNoResultsFound(false);
+        }
+    }
+
+    /**
+     * This method is for toggling the no result found page.
+     */
+    private void toggleNoResultsFound(boolean toggle){
+        resultLayout.setVisibility(toggle? View.VISIBLE: View.INVISIBLE);
     }
 
     /**
