@@ -19,7 +19,6 @@
             android:layout_marginStart="80dp"
             android:layout_marginLeft="80dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/sort_customshape"
             android:spinnerMode="dropdown" />
 
         <TextView
@@ -42,7 +41,6 @@
             android:layout_marginStart="80dp"
             android:layout_marginLeft="80dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/sort_customshape"
             android:spinnerMode="dropdown" />
 
         <TextView
@@ -64,7 +62,6 @@
             android:layout_above="@+id/hcsListView"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="-120dp"
-            android:background="@drawable/sort_customshape"
             android:focusableInTouchMode="true"
             android:iconifiedByDefault="false"
             android:queryHint="Tap here to search for HCS products" />
@@ -93,9 +90,37 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="0dp"
             android:layout_marginLeft="0dp"
-            android:layout_marginTop="162dp" />
+            android:layout_marginTop="162dp">
+        </ListView>
 
+        <LinearLayout
+            android:id="@+id/resultLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="250dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/imageViewResult"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="7"
+            android:contentDescription="@string/NoResults"
+            android:drawableStart="@drawable/ic_action_search"
+            android:drawableLeft="@drawable/ic_action_search"
+            android:src="@drawable/ic_action_search" />
+
+        <TextView
+            android:id="@+id/tvSearchResult"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:text="@string/NoResults"
+            android:textColor="#000000" />
+    </LinearLayout>
 
     </RelativeLayout>
 
